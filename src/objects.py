@@ -192,9 +192,8 @@ class Player :
         bool
             True if item is not already in player's inventory, False otherwise
         """
-        try :
-            self.items.index(item)
-        except ValueError :
+        matching = [i for i in self.items if i.name == item.name]
+        if len(matching) > 0 :
             return False
         self.items.append(item)
         return True
@@ -215,3 +214,12 @@ class Player :
             return False
         self.money += amount
         return True
+    
+    def __str__(self) -> str:
+        """Returns the string representation of this Player object
+
+        Returns
+        str
+            string representation of this object
+        """
+        return self.name + "\n".join([str(elem) for elem in self.items]) + "Money: " + str(self.money)
