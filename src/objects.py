@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 class Item :
     """A representation of an item in a gacha game
@@ -16,13 +17,13 @@ class Item :
         creates an item object
     """
 
-    def __init__(self, name, description, rarity) :
+    def __init__(self, name, description, rarity) -> None :
         """Creates an Item object
 
         Parameters
-        name : string
+        name : str
             name of the item
-        description : string
+        description : str
             description of the item
         rarity : int
             rarity of the item where the higher the numer, the higher the rarity
@@ -31,9 +32,18 @@ class Item :
         self.name = name
         self.description = description
         self.rarity = rarity
+    
+    def __str__(self) -> str :
+        """Returns the string representation of this Item object
 
-def get_random_weights(items, modifier) :
-    """Get the random weights of the items for the random function
+        Returns
+        str
+            String representation of this object
+        """
+        return self.name + "\n" + self.description + "\n" + "Rarity: " + str(self.rarity)
+
+def get_random_weights(items, modifier) -> List :
+    """Returns the random weights of the items for the random function
 
     Parameters
     items : Item list
@@ -63,7 +73,7 @@ class Banner :
         the rate modifier for the banner
     """
 
-    def __init__(self, name, item_list, modifier) :
+    def __init__(self, name, item_list, modifier) -> None :
         """Creates a Banner object
 
         Parameters
@@ -83,7 +93,7 @@ class Banner :
         self.modifier = modifier
         self.weights = get_random_weights(item_list, modifier)
 
-    def add_item(self, item) :
+    def add_item(self, item) -> None:
         """Add an item to the banner
 
         Parameters
@@ -96,7 +106,7 @@ class Banner :
         self.item_list.append(item)
         self.weights = get_random_weights(self.item_list, self.modifier)
 
-    def change_modifier(self, modifier) :
+    def change_modifier(self, modifier) -> None :
         """Change the modifier of the banner
 
         Parameters
@@ -109,7 +119,7 @@ class Banner :
         self.modifier = modifier
         self.weights = get_random_weights(self.item_list, self.modifier)
 
-    def pull(self) :
+    def pull(self) -> Item:
         """Get a random item out of a banner randomized by weight
 
         Returns
@@ -117,4 +127,7 @@ class Banner :
             the random item from the pull
         """
         return random.choices(self.item_list, weights=self.weights, k=1)[0]
+
+    def __str__(self) -> str :
+        return self.name + "\n".join([str(elem) for elem in self.item_list])
         
