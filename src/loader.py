@@ -15,10 +15,10 @@ def load_items_from_file(filename,controller) -> List[Optional[Item]] :
     List[Optional[Item]]
         the list of items loaded, elements are None if they already exist in controller
     """
-    f = open(filename)
-    j = json.load(f)
-    items_str_list = j["items"]
-    return [controller.add_new_item(i["name"],i["description"],i["rarity"]) for i in items_str_list]
+    with open(filename) as f :
+        j = json.load(f)
+        items_str_list = j["items"]
+        return [controller.add_new_item(i["name"],i["description"],i["rarity"]) for i in items_str_list]
 
 def load_banners_from_file(filename,controller) -> List[Optional[Banner]] :
     """Load banners into controller from the specified json file
@@ -33,13 +33,13 @@ def load_banners_from_file(filename,controller) -> List[Optional[Banner]] :
     List[Optional[Banner]]
         the list of banners loaded, elements are None if they already exist in controller
     """
-    f = open(filename)
-    j = json.load(f)
-    banner_str_list = j["banners"]
-    return [controller.add_new_banner(i["name"],[j["name"] for j in i["items"]],i["modifier"],i["price"]) for i in banner_str_list]
+    with open(filename) as f :
+        j = json.load(f)
+        banner_str_list = j["banners"]
+        return [controller.add_new_banner(i["name"],[j["name"] for j in i["items"]],i["modifier"],i["price"]) for i in banner_str_list]
 
 def load_players_from_file(filename,controller) -> List[Optional[Player]] :
-    f = open(filename)
-    j = json.load(f)
-    player_str_list = j["players"]
-    return [controller.add_new_player(i["name"],i["money"],[j["name"] for j in i["items"]]) for i in player_str_list]
+    with open(filename) as f :
+        j = json.load(f)
+        player_str_list = j["players"]
+        return [controller.add_new_player(i["name"],i["money"],[j["name"] for j in i["items"]]) for i in player_str_list]

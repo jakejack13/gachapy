@@ -53,7 +53,7 @@ class Item :
         str
             String representation of this object
         """
-        return self.name + "\n" + self.description + "\n" + "Rarity: " + str(self.rarity)
+        return self.name + "\n" + self.description + "\nRarity: " + str(self.rarity)
 
 def get_random_weights(items, modifier) -> List[float] :
     """Returns the random weights of the items for the random function
@@ -181,7 +181,7 @@ class Player :
         self.items = items
         self.money = money
     
-    def add_item(self,item) -> bool:
+    def add_item(self,item) -> None:
         """Adds an item to the player's inventory
 
         Parameters
@@ -189,14 +189,9 @@ class Player :
             item to add to player inventory
 
         Returns
-        bool
-            True if item is not already in player's inventory, False otherwise
+        None
         """
-        matching = [i for i in self.items if i.name == item.name]
-        if len(matching) > 0 :
-            return False
         self.items.append(item)
-        return True
 
     def change_money(self,amount) -> bool:
         """Adds or removes money from player
@@ -222,4 +217,4 @@ class Player :
         str
             string representation of this object
         """
-        return self.name + "\n" + "\n".join([str(elem) for elem in self.items]) + "Money: " + str(self.money)
+        return self.name + "\nItems:\n" + "\n".join([str(elem) for elem in self.items]) + "\nMoney: " + str(self.money)
