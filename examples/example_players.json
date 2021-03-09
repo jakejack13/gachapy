@@ -1,0 +1,9 @@
+{
+    "players":[
+        {
+            "name":"JakeJack",
+            "money":100,
+            "items":[]
+        }
+    ]
+}

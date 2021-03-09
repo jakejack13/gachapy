@@ -1,7 +1,20 @@
+"""The controller used for all high level management of the gacha game
+
+Classes
+Controller
+    A controller for an instance of a gacha game
+
+Exceptions
+PullError
+    An exception thrown when pulling from a banner
+"""
+
 from typing import Optional
 from objects import *
 
 class PullError(Exception) :
+    """An exception thrown when pulling from a banner
+    """
     pass
 
 class Controller :
@@ -14,9 +27,19 @@ class Controller :
         the list of banners that are available for the gacha
     players : List[Player]
         the list of players enrolled in the gacha
+    
+    Methods
+    find_item(item_name) : Optional[Item]
+        Returns the Item object with the given name or None if not found
+    find_banner(banner_name) : Optional[Banner]
+        Returns the Banner object with the given name or None if not found
+    find_player(player_name) : Optional[Banner]
+        Returns the Player object with the given name or None if not found
+    pull(player_name,banner_name) : Optional[Item]
+        Pulls and returns an item from the specified banner for the specified player
     """
 
-    def __init__(self,items,banners,players) -> None:
+    def __init__(self,items=[],banners=[],players=[]) -> None:
         """Creates an instance of a gacha controller
 
         Parameters
@@ -75,7 +98,7 @@ class Controller :
         Optional[player]
             the player object with the given name or None if not found 
         """
-        players = [i for i in self.player if i.name == player_name]
+        players = [i for i in self.players if i.name == player_name]
         if len(players) < 1 :
             return None
         return players[0]
@@ -107,3 +130,92 @@ class Controller :
             player.add_item(item)
             return item
         return None
+
+    def change_money_player(self,player_name,amount) -> bool :
+        """Changes the specified player's money by the amount specified
+
+        Parameters
+        player_name : str
+            the name of the player
+        amount : float
+            the amount to change the money by (positive for add, negative for subtract)
+
+        Return
+        bool
+            True if the amount was able to be added or removed from account (does not create 
+            negative money value), False otherwise
+        """
+        player = self.find_player(player_name)
+        if player == None :
+            return False
+        return player.change_money(amount)
+
+    def add_new_item(self,name,description,rarity) -> Optional[Item] :
+        """Adds a new item to the gacha game
+
+        Parameters
+        name : str
+            the name of the new item
+        description : str
+            the description of the new item
+        rarity : int
+            the rarity of the item
+
+        Returns
+        Optional[Item]
+            the Item object representing the new item or None if the item already exists
+        """
+        item = self.find_item(name)
+        if item != None :
+            return None
+        new_item = Item(name,description,rarity)
+        self.items.append(new_item)
+        return new_item
+    
+    def add_new_banner(self,name,item_list_str,modifier,price) -> Optional[Banner] :
+        """Adds a new banner to the gacha game
+
+        Parameters
+        name : str
+            the name of the new banner
+        item_list_str : List[str]
+            the list of the names of the items in the banner
+        modifier : float 
+            the rate modifier of the banner
+        price : float
+            the price of pulling from the banner
+        
+        Return
+        Optional[Banner]
+            the Banner object representing the new banner or None if the banner already exists
+        """
+        banner = self.find_banner(name)
+        if banner != None :
+            return None
+        item_list = [self.find_item(i) for i in item_list_str]
+        new_banner = Banner(name,item_list,modifier,price)
+        self.banners.append(new_banner)
+        return Banner
+
+    def add_new_player(self,name,start_money,items_str=[]) -> Optional[Player] :
+        """Adds a new player to the gacha game
+
+        Parameters
+        name : str
+            the name of the new player
+        start_money : float
+            the amount of money the new player will start with
+        items_str : List[str]
+            the list of the names of the items the player has
+        
+        Returns
+        Optional[Player]
+            the Player object representing the new player or None if the player already exists
+        """
+        player = self.find_player(name)
+        if player != None :
+            return None
+        items_list = [self.find_item(i) for i in items_str]
+        new_player = Player(name,items_list,start_money)
+        self.players.append(new_player)
+        return new_player

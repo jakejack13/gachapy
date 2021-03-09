@@ -1,0 +1,20 @@
+{
+    "banners": [
+        {
+            "name":"Demo banner",
+            "items":[
+                {
+                    "name":"Windowsill squirrel"
+                },
+                {
+                    "name":"Desk lamp"
+                },
+                {
+                    "name":"Burger"
+                }
+            ],
+            "modifier":1,
+            "price":1
+        }
+    ]
+}

@@ -162,7 +162,7 @@ class Banner :
         str
             String representation of this object
         """
-        return self.name + "\n".join([str(elem) for elem in self.item_list])
+        return self.name + "\n" + "\n".join([str(elem) for elem in self.item_list])
 
 class Player :
     """A representation of a player in the gacha game
@@ -222,4 +222,4 @@ class Player :
         str
             string representation of this object
         """
-        return self.name + "\n".join([str(elem) for elem in self.items]) + "Money: " + str(self.money)
+        return self.name + "\n" + "\n".join([str(elem) for elem in self.items]) + "Money: " + str(self.money)
