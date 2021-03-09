@@ -1,4 +1,4 @@
-"""Objects used for the gacha game
+"""Objects used for low level management and data storage of the gacha game
 
 Classes
 Item

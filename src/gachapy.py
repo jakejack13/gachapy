@@ -1,8 +1,10 @@
 """The entry point into the gachapy library
 
 Functions
-controller_factory(items_filename,banners_filename,players_filename) : Controller
-
+load_controller(items_filename,banners_filename,players_filename) : Controller
+    Creates a Controller object from the specified json files
+save_controller(controller,items_filename,banners_filename,players_filename) : None
+    Saves the controller in json format into the specified files
 """
 
 from objects import *
