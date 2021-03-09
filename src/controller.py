@@ -1,6 +1,9 @@
 from typing import Optional
 from objects import *
 
+class PullError(Exception) :
+    pass
+
 class Controller :
     """A controller for an instance of a gacha game
 
@@ -76,3 +79,31 @@ class Controller :
         if len(players) < 1 :
             return None
         return players[0]
+    
+    def pull(self,player_name,banner_name) -> Optional[Item] :
+        """Pulls and returns an item from the specified banner for the specified player
+
+        Parameters
+        player_name : str
+            the name of the selected player, must be valid
+        banner_name : str
+            the name of the selected player, must be valid
+
+        Returns
+        Optional[Item]
+            the item if the pull is successful or None if the player does not have enough money
+        
+        Raises
+        PullError if player or banner are not valid
+        """
+        player = self.find_player(player_name)
+        if player == None :
+            raise PullError("Player not found")
+        banner = self.find_banner(banner_name)
+        if banner == None :
+            raise PullError("Banner not found")
+        if player.change_money(-1 * banner.price) :
+            item = banner.pull()
+            player.add_item(item)
+            return item
+        return None
