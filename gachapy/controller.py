@@ -10,7 +10,7 @@ PullError
 """
 
 from typing import Optional
-from objects import *
+from gachapy.objects import *
 
 class PullError(Exception) :
     """An exception thrown when pulling from a banner

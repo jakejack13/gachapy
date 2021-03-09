@@ -9,8 +9,8 @@ load_players_from_file(filename,controller) : List[Optional[Player]]
     Load players into controller from the specified json file
 """
 
-from objects import *
-from controller import *
+from gachapy.objects import *
+from gachapy.controller import *
 import json
 
 def load_items_from_file(filename,controller) -> List[Optional[Item]] :

@@ -7,9 +7,9 @@ save_controller(controller,items_filename,banners_filename,players_filename) : N
     Saves the controller in json format into the specified files
 """
 
-from objects import *
-from controller import *
-from loader import *
+from gachapy.objects import *
+from gachapy.controller import *
+from gachapy.loader import *
 
 def load_controller(items_filename,banners_filename,players_filename) -> Controller :
     """Creates a Controller object from the specified json files

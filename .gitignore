@@ -130,3 +130,6 @@ dmypy.json
 
 # vscode
 .vscode/
+
+#testpypi api
+api.txt
