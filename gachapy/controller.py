@@ -37,6 +37,24 @@ class Controller :
         Returns the Player object with the given name or None if not found
     pull(player_name,banner_name) : Optional[Item]
         Pulls and returns an item from the specified banner for the specified player
+    change_money_player(player_name,amount) : bool
+        Changes the specified player's money by the amount specified
+    add_new_item(name,description,rarity) : Optional[Item]
+        Adds a new item to the gacha game
+    add_new_banner(name,item_list_str,modifier,price) : Optional[Banner]
+        Adds a new banner to the gacha game
+    add_new_player(name,start_money,items_str) : Optional[Player]
+        Adds a new player to the gacha game
+    remove_item(name) : Optional[Item]
+        Removes the specified item from the gacha game
+    remove_banner(name) : Optional[Banner]
+        Removes the specified banner from the gacha game
+    remove_player(name) : Optional[Player]
+        Removes the specified player from the gacha game
+    create_random_banner(name,num_items,modifier,price) -> Optional[Banner]
+        Creates a random banner with the given name, number of items and modifier
+    remove_all_banners() : None
+        Removes all of the banners in the game
     """
 
     def __init__(self,items=[],banners=[],players=[]) -> None:
@@ -219,3 +237,91 @@ class Controller :
         new_player = Player(name,items_list,start_money)
         self.players.append(new_player)
         return new_player
+
+    def remove_item(self,name) -> Optional[Item]:
+        """Removes the specified item from the gacha game
+
+        Parameters
+        name : str
+            the name of the item to remove
+
+        Returns
+        Optional[Item]
+            the removed item or None if item does not exist
+        """
+        for item in self.items :
+            if item.name == name :
+                self.items.remove(item)
+                return item
+        return None
+
+    
+    def remove_banner(self,name) -> Optional[Banner] :
+        """Removes the specified banner from the gacha game
+
+        Parameters
+        name : str
+            the name of the banner to remove
+
+        Returns
+        Optional[Banner]
+            the removed banner or None if banner does not exist
+        """
+        for banner in self.banners :
+            if banner.name == name :
+                self.banner.remove(banner)
+                return banner
+        return None
+    
+    def remove_player(self,name) -> Optional[Player] :
+        """Removes the specified player from the gacha game
+
+        Parameters
+        name : str
+            the name of the player to remove
+
+        Returns
+        Optional[Player]
+            the removed player or None if player does not exist
+        """
+        for player in self.players :
+            if player.name == name :
+                self.players.remove(player)
+                return player
+        return None
+    
+    def create_random_banner(self,name,num_items,modifier=2,price=-1) -> Optional[Banner] :
+        """Creates a random banner with the given name, number of items and modifier
+            The price is automatically determined by the average of the rarities of the items
+            selected if a price is not specified
+
+        Parameters
+        name : str
+            the name of the random banner
+        num_items : int
+            the number of items in the banner
+        modifier : float
+            the rate modifier of the banner
+        price : float
+            the price of the banner
+        
+        Returns
+        Optional[Banner]
+            the banner created or None if a banner with the name specified already exists
+        """
+        item_list = random.choices(self.items,k=num_items)
+        item_list_str = [item.name for item in item_list]
+        if price < 0 :
+            price = 0
+            for item in item_list :
+                price += item.rarity
+            price /= len(item_list)
+        return self.add_new_banner(name,item_list_str,modifier,price)
+    
+    def remove_all_banners(self) -> None:
+        """Removes all of the banners in the game
+
+        Returns
+        None
+        """
+        self.banners = []
