@@ -234,7 +234,7 @@ class Controller :
         if banner != None :
             return None
         item_list = [self.find_item(i) for i in item_list_str]
-        new_banner = Banner(name,item_list,price)
+        new_banner = Banner(name,item_list,price,key)
         self.banners.append(new_banner)
         return Banner
 
