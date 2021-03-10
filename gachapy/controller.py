@@ -9,8 +9,6 @@ PullError
     An exception thrown when pulling from a banner
 
 Functions
-sort_item_key(item) : int
-    The key used to sort items in a list of items
 sort_player_key(player) : int
     The key used to sort players in a list of players
 """
@@ -363,19 +361,6 @@ class Controller :
         """
         sort_list = sorted(self.players,key=sort_player_key,reverse=True)
         return sort_list[:num_players-1]
-
-def sort_item_key(item) -> int:
-    """The key used to sort items in a list of items
-
-    Parameters
-    item : Item
-        the item to extract the key from
-    
-    Returns
-    int
-        the key of the item
-    """
-    return item.rarity
 
 def sort_player_key(player) -> int :
     """The key used to sort players in a list of players

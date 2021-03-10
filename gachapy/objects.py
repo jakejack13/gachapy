@@ -9,8 +9,12 @@ Player
     A representation of a player in the gacha game
 
 Functions
-    get_random_weights(items,modifier) : List[float]
-        Returns the random weights of the items for the random function
+get_random_weights(items,modifier) : List[float]
+    Returns the random weights of the items for the random function
+sort_item_key(item) : int
+    The key used to sort items in a list of items
+player_str_net_worth(player) : str
+    The string representation of a player and their net worth
 """
 import random
 from typing import List
@@ -162,7 +166,7 @@ class Banner :
         str
             String representation of this object
         """
-        return self.name + "\nItems:" + "\n".join([str(elem) for elem in self.item_list])
+        return self.name + "\nPrice: " + str(self.price) + "\nItems:\n" + "\n".join([str(elem) for elem in self.item_list])
 
 class Player :
     """A representation of a player in the gacha game
@@ -205,10 +209,19 @@ class Player :
             True if the amount was able to be added or removed from account (does not
             create a negative money value), False otherwise
         """
-        if (self.money - amount < 0) :
+        if (amount < 0 and self.money - amount < 0) :
             return False
         self.money += amount
         return True
+
+    def get_net_worth(self) -> float :
+        """Returns the net worth of the player
+
+        Returns
+        float
+            the net worth of the player
+        """
+        return sum([i.rarity for i in self.items])
     
     def __str__(self) -> str:
         """Returns the string representation of this Player object
@@ -217,4 +230,30 @@ class Player :
         str
             string representation of this object
         """
-        return self.name + "\nMoney: " + str(self.money) + "\nNet worth: " + str(sum([i.rarity for i in self.items])) + "\nItems:\n" + "\n".join([str(elem) for elem in self.items])
+        return self.name + "\n\nMoney: " + str(self.money) + "\n\nNet worth: " + str(self.get_net_worth()) + "\n\nTop 10 items:\n" + "\n".join([str(elem) for elem in sorted(self.items,key=sort_item_key,reverse=True)[:10]])
+
+def sort_item_key(item) -> int:
+    """The key used to sort items in a list of items
+
+    Parameters
+    item : Item
+        the item to extract the key from
+    
+    Returns
+    int
+        the key of the item
+    """
+    return item.rarity
+
+def player_str_net_worth(player) -> str :
+    """The string representation of a player and their net worth
+
+    Parameters
+    player : Player
+        the player
+    
+    Returns
+    str
+        the string representation of a player and their net work
+    """
+    return player.name + " (Net worth " + str(player.get_net_worth()) + ")"
