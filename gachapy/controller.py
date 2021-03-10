@@ -45,7 +45,7 @@ class Controller :
         Changes the specified player's money by the amount specified
     add_new_item(name,description,rarity) : Optional[Item]
         Adds a new item to the gacha game
-    add_new_banner(name,item_list_str,modifier,price) : Optional[Banner]
+    add_new_banner(name,item_list_str,price) : Optional[Banner]
         Adds a new banner to the gacha game
     add_new_player(name,start_money,items_str) : Optional[Player]
         Adds a new player to the gacha game
@@ -55,8 +55,8 @@ class Controller :
         Removes the specified banner from the gacha game
     remove_player(name) : Optional[Player]
         Removes the specified player from the gacha game
-    create_random_banner(name,num_items,modifier,price) -> Optional[Banner]
-        Creates a random banner with the given name, number of items and modifier
+    create_random_banner(name,num_items,price) -> Optional[Banner]
+        Creates a random banner with the given name and number of items
     remove_all_banners() : None
         Removes all of the banners in the game
     top_items(num_items) : List[Item]
@@ -198,7 +198,7 @@ class Controller :
         self.items.append(new_item)
         return new_item
     
-    def add_new_banner(self,name,item_list_str,modifier,price) -> Optional[Banner] :
+    def add_new_banner(self,name,item_list_str,price) -> Optional[Banner] :
         """Adds a new banner to the gacha game
 
         Parameters
@@ -206,8 +206,6 @@ class Controller :
             the name of the new banner
         item_list_str : List[str]
             the list of the names of the items in the banner
-        modifier : float 
-            the rate modifier of the banner
         price : float
             the price of pulling from the banner
         
@@ -219,7 +217,7 @@ class Controller :
         if banner != None :
             return None
         item_list = [self.find_item(i) for i in item_list_str]
-        new_banner = Banner(name,item_list,modifier,price)
+        new_banner = Banner(name,item_list,price)
         self.banners.append(new_banner)
         return Banner
 
@@ -298,8 +296,8 @@ class Controller :
                 return player
         return None
     
-    def create_random_banner(self,name,num_items,modifier=2,price=-1) -> Optional[Banner] :
-        """Creates a random banner with the given name, number of items and modifier
+    def create_random_banner(self,name,num_items,price=-1) -> Optional[Banner] :
+        """Creates a random banner with the given name and number of items
             The price is automatically determined by the average of the rarities of the items
             selected if a price is not specified
 
@@ -308,8 +306,6 @@ class Controller :
             the name of the random banner
         num_items : int
             the number of items in the banner
-        modifier : float
-            the rate modifier of the banner
         price : float
             the price of the banner
         
@@ -324,7 +320,7 @@ class Controller :
             for item in item_list :
                 price += item.rarity
             price /= len(item_list)
-        return self.add_new_banner(name,item_list_str,modifier,price)
+        return self.add_new_banner(name,item_list_str,price)
     
     def remove_all_banners(self) -> None:
         """Removes all of the banners in the game

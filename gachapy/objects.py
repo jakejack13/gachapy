@@ -9,7 +9,7 @@ Player
     A representation of a player in the gacha game
 
 Functions
-get_random_weights(items,modifier) : List[float]
+get_random_weights(items) : List[float]
     Returns the random weights of the items for the random function
 sort_item_key(item) : int
     The key used to sort items in a list of items
@@ -18,6 +18,7 @@ player_str_net_worth(player) : str
 """
 import random
 from typing import List
+import math
 
 class Item :
     """A representation of an item in the gacha game
@@ -59,14 +60,12 @@ class Item :
         """
         return self.name + " (Rarity: " + str(self.rarity) + ")"
 
-def get_random_weights(items, modifier) -> List[float] :
+def get_random_weights(items) -> List[float] :
     """Returns the random weights of the items for the random function
 
     Parameters
     items : List[Item]
         list of items to find weights of
-    modifier : float
-        weight modifier of the items
 
     Returns
     List[float]
@@ -74,7 +73,7 @@ def get_random_weights(items, modifier) -> List[float] :
     """
     weights = []
     for i in range(len(items)) :
-        weights.append(1 / items[i].rarity / modifier)
+        weights.append(1 / math.log(items[i].rarity))
     return weights
 
 
@@ -86,21 +85,17 @@ class Banner :
         name of the banner
     item_list : List[Item]
         the list of items in the banner 
-    modifier: float
-        the rate modifier for the banner
     price : float
         the price of pulling from the banner
 
     Methods
     add_item(item) : None
         Adds an item to the banner
-    change_modifier(modifier) : None
-        Changes the modifier of the banner
     pull() : Item
         Returns a random item out of a banner randomized by weight
     """
 
-    def __init__(self, name, item_list, modifier, price) -> None :
+    def __init__(self, name, item_list, price) -> None :
         """Creates a Banner object
 
         Parameters
@@ -110,8 +105,6 @@ class Banner :
         item_list : List[Item]
             the list of items in the banner
             Invariant: all items must be unique
-        modifier : float
-            the rate modifier for the banner
         weights : List[float]
             the list of drop weights
             Invariant: weights[i] is the drop weight for item_list[i]
@@ -120,8 +113,7 @@ class Banner :
         """
         self.name = name
         self.item_list = item_list
-        self.modifier = modifier
-        self.weights = get_random_weights(item_list, modifier)
+        self.weights = get_random_weights(item_list)
         self.price = price
 
     def add_item(self, item) -> None:
@@ -135,20 +127,7 @@ class Banner :
             None
         """
         self.item_list.append(item)
-        self.weights = get_random_weights(self.item_list, self.modifier)
-
-    def change_modifier(self, modifier) -> None :
-        """Changes the modifier of the banner
-
-        Parameters
-        modifier : float
-            the new modifier of the banner
-
-        Returns
-            None
-        """
-        self.modifier = modifier
-        self.weights = get_random_weights(self.item_list, self.modifier)
+        self.weights = get_random_weights(self.item_list)
 
     def pull(self) -> Item:
         """Returns a random item out of a banner randomized by weight
