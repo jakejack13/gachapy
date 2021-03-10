@@ -7,6 +7,12 @@ Controller
 Exceptions
 PullError
     An exception thrown when pulling from a banner
+
+Functions
+sort_item_key(item) : int
+    The key used to sort items in a list of items
+sort_player_key(player) : int
+    The key used to sort players in a list of players
 """
 
 from typing import Optional
@@ -55,6 +61,10 @@ class Controller :
         Creates a random banner with the given name, number of items and modifier
     remove_all_banners() : None
         Removes all of the banners in the game
+    top_items(num_items) : List[Item]
+        Returns the top specified number of items in the game in terms of rarity
+    top_players(num_players) : List[Player]
+        Returns the top specified number of players in the game in terms of net worth
     """
 
     def __init__(self,items=[],banners=[],players=[]) -> None:
@@ -325,3 +335,57 @@ class Controller :
         None
         """
         self.banners = []
+
+    def top_items(self,num_items) -> List[Item] :
+        """Returns the top specified number of items in the game in terms of rarity
+
+        Parameters
+        num_items : int
+            the number of items to return
+        
+        Return 
+        List[Item]
+            the list of top items
+        """
+        sort_list = sorted(self.items,key=sort_item_key,reverse=True)
+        return sort_list[:num_items-1]
+
+    def top_players(self,num_players) -> List[Player] :
+        """Returns the top specified number of players in the game in terms of net worth
+
+        Parameters
+        num_players : int
+            the number of players to return
+        
+        Return 
+        List[Player]
+            the list of top players
+        """
+        sort_list = sorted(self.players,key=sort_player_key,reverse=True)
+        return sort_list[:num_players-1]
+
+def sort_item_key(item) -> int:
+    """The key used to sort items in a list of items
+
+    Parameters
+    item : Item
+        the item to extract the key from
+    
+    Returns
+    int
+        the key of the item
+    """
+    return item.rarity
+
+def sort_player_key(player) -> int :
+    """The key used to sort players in a list of players
+
+    Parameters
+    player : Player
+        the player to extract the key from
+    
+    Returns
+    int
+        the key of the player
+    """
+    return sum([i.rarity for i in player.items])

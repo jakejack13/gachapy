@@ -217,4 +217,4 @@ class Player :
         str
             string representation of this object
         """
-        return self.name + "\nItems:\n" + "\n".join([str(elem) for elem in self.items]) + "\nMoney: " + str(self.money)
+        return self.name + "\nMoney: " + str(self.money) + "\nNet worth: " + str(sum([i.rarity for i in self.items])) + "\nItems:\n" + "\n".join([str(elem) for elem in self.items])
