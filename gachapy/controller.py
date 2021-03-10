@@ -242,7 +242,7 @@ class Controller :
         Optional[Item]
             the Item object representing the new item or None if the item already exists
         """
-        item = self.find_item_by_name(name)
+        item = self.find_item_by_id(id)
         if item != None :
             return None
         new_item = Item(name,id,rarity)
@@ -285,16 +285,16 @@ class Controller :
         start_money : float
             the amount of money the new player will start with
         items_str : List[str]
-            the list of the names of the items the player has
+            the list of the ids of the items the player has
         
         Returns
         Optional[Player]
             the Player object representing the new player or None if the player already exists
         """
-        player = self.find_player_by_name(name)
+        player = self.find_player_by_id(id)
         if player != None :
             return None
-        items_list = [self.find_item_by_name(i) for i in items_str]
+        items_list = [self.find_item_by_id(i) for i in items_str]
         new_player = Player(name,id,items_list,start_money)
         self.players.append(new_player)
         return new_player
@@ -371,7 +371,7 @@ class Controller :
             the banner created or None if a banner with the name specified already exists
         """
         item_list = random.choices(self.items,k=num_items)
-        item_list_str = [item.name for item in item_list]
+        item_list_str = [item.id for item in item_list]
         if price < 0 :
             price = 0
             for item in item_list :

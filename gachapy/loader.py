@@ -119,4 +119,4 @@ def load_players_from_file(filename,controller) -> List[Optional[Player]] :
     with open(filename) as f :
         j = json.load(f)
         player_str_list = j["players"]
-        return [controller.add_new_player(i["name"],i["id"],i["money"],[j["name"] for j in i["items"]]) for i in player_str_list]
+        return [controller.add_new_player(i["name"],i["id"],i["money"],[j["id"] for j in i["items"]]) for i in player_str_list]
