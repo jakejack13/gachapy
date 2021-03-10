@@ -2,16 +2,19 @@
     "items": [
         {
             "name":"Windowsill squirrel",
+            "id":"squirrel",
             "description":"A furry friend purched outside your window. Wonder if he'll say hi.",
             "rarity":100
         },
         {
             "name":"Desk lamp",
+            "id":"lamp",
             "description":"An old, barely functioning lamp. Seems like you can use it to study.",
             "rarity":2
         },
         {
             "name":"Burger",
+            "id":"burger",
             "description":"Just a plain old burger. I wouldn't eat it if I were you though...",
             "rarity":4
         }

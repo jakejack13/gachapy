@@ -25,9 +25,10 @@ class Item :
     Fields
     name : string
         name of the item
-    description : string
+    id : string
         description of the item
-    rarity : int
+        Invariant: must be unique
+    id : int
         rarity of the item where the higher the numer, the higher the rarity
 
     Methods
@@ -35,19 +36,19 @@ class Item :
         creates an item object
     """
 
-    def __init__(self, name, description, rarity) -> None :
+    def __init__(self, name, id, rarity) -> None :
         """Creates an Item object
 
         Parameters
         name : str
             name of the item
-        description : str
-            description of the item
+        id : str
+            id of the item
         rarity : int
             rarity of the item where the higher the numer, the higher the rarity
         """
         self.name = name
-        self.description = description
+        self.id = id
         self.rarity = rarity
     
     def __str__(self) -> str :
@@ -105,7 +106,7 @@ class Banner :
         """Creates a Banner object
 
         Parameters
-        name : string
+        name : str
             name of the banner
             Invariant: must be unique
         item_list : List[Item]
@@ -163,14 +164,29 @@ class Player :
     Fields
     name : str
         the name of the player
+    id : str
+        the id of the player
+        Invariant: must be unique
     items : List[Item]
         the list of items that the player owns
     money : float
         the amount of money that the player owns
     """
 
-    def __init__(self, name, items, money) -> None:
+    def __init__(self, name, id, items, money) -> None:
+        """Creates a Player object
+
+        name : str
+            the name of the player
+        id : str
+            the id of the player
+        items : List[Item]
+            the list of items that the player owns
+        money : float
+            the amount of money that the player owns
+        """
         self.name = name
+        self.id = id
         self.items = items
         self.money = money
     

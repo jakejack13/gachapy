@@ -4,16 +4,15 @@
             "name":"Demo banner",
             "items":[
                 {
-                    "name":"Windowsill squirrel"
+                    "id":"squirrel"
                 },
                 {
-                    "name":"Desk lamp"
+                    "id":"lamp"
                 },
                 {
-                    "name":"Burger"
+                    "id":"burger"
                 }
             ],
-            "modifier":1,
             "price":1
         }
     ]

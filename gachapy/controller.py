@@ -48,27 +48,31 @@ class Controller :
         the list of players enrolled in the gacha
     
     Methods
-    find_item(item_name) : Optional[Item]
+    find_item_by_name(item_name) : Optional[Item]
         Returns the Item object with the given name or None if not found
-    find_banner(banner_name) : Optional[Banner]
+    find_banner_by_name(banner_name) : Optional[Banner]
         Returns the Banner object with the given name or None if not found
-    find_player(player_name) : Optional[Banner]
+    find_player_by_name(player_name) : Optional[Banner]
         Returns the Player object with the given name or None if not found
-    pull(player_name,banner_name) : Optional[Item]
+    find_item_by_id(item_id) : Optional[Item]
+        Returns the Item object with the given id or None if not found
+    find_player_by_id(player_id) : Optional[Player]
+        Returns the Player object with the given id or None if not found
+    pull(player_id,banner_name) : Optional[Item]
         Pulls and returns an item from the specified banner for the specified player
-    change_money_player(player_name,amount) : bool
+    change_money_player(player_id,amount) : bool
         Changes the specified player's money by the amount specified
-    add_new_item(name,description,rarity) : Optional[Item]
+    add_new_item(name,id,rarity) : Optional[Item]
         Adds a new item to the gacha game
     add_new_banner(name,item_list_str,price) : Optional[Banner]
         Adds a new banner to the gacha game
-    add_new_player(name,start_money,items_str) : Optional[Player]
+    add_new_player(name,id,start_money,items_str) : Optional[Player]
         Adds a new player to the gacha game
-    remove_item(name) : Optional[Item]
+    remove_item(id) : Optional[Item]
         Removes the specified item from the gacha game
     remove_banner(name) : Optional[Banner]
         Removes the specified banner from the gacha game
-    remove_player(name) : Optional[Player]
+    remove_player(id) : Optional[Player]
         Removes the specified player from the gacha game
     create_random_banner(name,num_items,price) -> Optional[Banner]
         Creates a random banner with the given name and number of items
@@ -95,7 +99,7 @@ class Controller :
         self.banners = banners
         self.players = players
     
-    def find_item(self, item_name) -> Optional[Item]:
+    def find_item_by_name(self, item_name) -> Optional[Item]:
         """Returns the Item object with the given name or None if not found
 
         Parameters
@@ -111,7 +115,7 @@ class Controller :
             return None
         return items[0]
     
-    def find_banner(self, banner_name) -> Optional[Banner]:
+    def find_banner_by_name(self, banner_name) -> Optional[Banner]:
         """Returns the Banner object with the given name or None if not found
 
         Parameters
@@ -128,7 +132,7 @@ class Controller :
         return banners[0]
 
     
-    def find_player(self,player_name) -> Optional[Player]:
+    def find_player_by_name(self,player_name) -> Optional[Player]:
         """Returns the Player object with the given name or None if not found
 
         Parameters
@@ -144,12 +148,44 @@ class Controller :
             return None
         return players[0]
     
-    def pull(self,player_name,banner_name) -> Optional[Item] :
+    def find_item_by_id(self, item_id) -> Optional[Item]:
+        """Returns the Item object with the given id or None if not found
+
+        Parameters
+        item_id : str
+            the id of the item
+        
+        Returns
+        Optional[Item]
+            the item object with the given id or None if not found 
+        """
+        items = [i for i in self.items if i.id == item_id]
+        if len(items) < 1 :
+            return None
+        return items[0]
+    
+    def find_player_by_id(self,player_id) -> Optional[Player]:
+        """Returns the Player object with the given id or None if not found
+
+        Parameters
+        player_id : str
+            the id of the player
+        
+        Returns
+        Optional[player]
+            the player object with the given id or None if not found 
+        """
+        players = [i for i in self.players if i.id == player_id]
+        if len(players) < 1 :
+            return None
+        return players[0]
+
+    def pull(self,player_id,banner_name) -> Optional[Item] :
         """Pulls and returns an item from the specified banner for the specified player
 
         Parameters
-        player_name : str
-            the name of the selected player, must be valid
+        player_id : str
+            the id of the selected player, must be valid
         banner_name : str
             the name of the selected player, must be valid
 
@@ -160,10 +196,10 @@ class Controller :
         Raises
         PullError if player or banner are not valid
         """
-        player = self.find_player(player_name)
+        player = self.find_player_by_id(player_id)
         if player == None :
             raise PullError("Player not found")
-        banner = self.find_banner(banner_name)
+        banner = self.find_banner_by_name(banner_name)
         if banner == None :
             raise PullError("Banner not found")
         if player.change_money(-1 * banner.price) :
@@ -172,7 +208,7 @@ class Controller :
             return item
         return None
 
-    def change_money_player(self,player_name,amount) -> bool :
+    def change_money_player(self,player_id,amount) -> bool :
         """Changes the specified player's money by the amount specified
 
         Parameters
@@ -186,12 +222,12 @@ class Controller :
             True if the amount was able to be added or removed from account (does not create 
             negative money value), False otherwise
         """
-        player = self.find_player(player_name)
+        player = self.find_player_by_id(player_id)
         if player == None :
             return False
         return player.change_money(amount)
 
-    def add_new_item(self,name,description,rarity) -> Optional[Item] :
+    def add_new_item(self,name,id,rarity) -> Optional[Item] :
         """Adds a new item to the gacha game
 
         Parameters
@@ -206,10 +242,10 @@ class Controller :
         Optional[Item]
             the Item object representing the new item or None if the item already exists
         """
-        item = self.find_item(name)
+        item = self.find_item_by_name(name)
         if item != None :
             return None
-        new_item = Item(name,description,rarity)
+        new_item = Item(name,id,rarity)
         self.items.append(new_item)
         return new_item
     
@@ -220,7 +256,7 @@ class Controller :
         name : str
             the name of the new banner
         item_list_str : List[str]
-            the list of the names of the items in the banner
+            the list of the ids of the items in the banner
         price : float
             the price of pulling from the banner
         key : func
@@ -230,20 +266,22 @@ class Controller :
         Optional[Banner]
             the Banner object representing the new banner or None if the banner already exists
         """
-        banner = self.find_banner(name)
+        banner = self.find_banner_by_name(name)
         if banner != None :
             return None
-        item_list = [self.find_item(i) for i in item_list_str]
+        item_list = [self.find_item_by_id(i) for i in item_list_str]
         new_banner = Banner(name,item_list,price,key)
         self.banners.append(new_banner)
         return Banner
 
-    def add_new_player(self,name,start_money,items_str=[]) -> Optional[Player] :
+    def add_new_player(self,name,id,start_money,items_str=[]) -> Optional[Player] :
         """Adds a new player to the gacha game
 
         Parameters
         name : str
             the name of the new player
+        id : str
+            the id of the new player
         start_money : float
             the amount of money the new player will start with
         items_str : List[str]
@@ -253,19 +291,19 @@ class Controller :
         Optional[Player]
             the Player object representing the new player or None if the player already exists
         """
-        player = self.find_player(name)
+        player = self.find_player_by_name(name)
         if player != None :
             return None
-        items_list = [self.find_item(i) for i in items_str]
-        new_player = Player(name,items_list,start_money)
+        items_list = [self.find_item_by_name(i) for i in items_str]
+        new_player = Player(name,id,items_list,start_money)
         self.players.append(new_player)
         return new_player
 
-    def remove_item(self,name) -> Optional[Item]:
+    def remove_item(self,item_id) -> Optional[Item]:
         """Removes the specified item from the gacha game
 
         Parameters
-        name : str
+        item_id : str
             the name of the item to remove
 
         Returns
@@ -273,7 +311,7 @@ class Controller :
             the removed item or None if item does not exist
         """
         for item in self.items :
-            if item.name == name :
+            if item.id == item_id :
                 self.items.remove(item)
                 return item
         return None
@@ -296,19 +334,19 @@ class Controller :
                 return banner
         return None
     
-    def remove_player(self,name) -> Optional[Player] :
+    def remove_player(self,player_id) -> Optional[Player] :
         """Removes the specified player from the gacha game
 
         Parameters
-        name : str
-            the name of the player to remove
+        player_id : str
+            the id of the player to remove
 
         Returns
         Optional[Player]
             the removed player or None if player does not exist
         """
         for player in self.players :
-            if player.name == name :
+            if player.id == player_id :
                 self.players.remove(player)
                 return player
         return None
