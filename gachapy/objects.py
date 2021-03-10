@@ -18,7 +18,6 @@ player_str_net_worth(player) : str
 """
 import random
 from typing import List
-import math
 
 class Item :
     """A representation of an item in the gacha game
@@ -60,12 +59,14 @@ class Item :
         """
         return self.name + " (Rarity: " + str(self.rarity) + ")"
 
-def get_random_weights(items) -> List[float] :
+def get_random_weights(items,key) -> List[float] :
     """Returns the random weights of the items for the random function
 
     Parameters
     items : List[Item]
         list of items to find weights of
+    key : func
+        function that determines drop rate from rarity
 
     Returns
     List[float]
@@ -73,7 +74,7 @@ def get_random_weights(items) -> List[float] :
     """
     weights = []
     for i in range(len(items)) :
-        weights.append(1 / math.log(items[i].rarity))
+        weights.append(key(items[i].rarity))
     return weights
 
 
@@ -87,6 +88,11 @@ class Banner :
         the list of items in the banner 
     price : float
         the price of pulling from the banner
+    key : func
+        function that determines drop rate from rarity
+    weights : List[float]
+        list of drop weights for items
+        Invariant: weights[i] corresponds to item_list[i]
 
     Methods
     add_item(item) : None
@@ -95,7 +101,7 @@ class Banner :
         Returns a random item out of a banner randomized by weight
     """
 
-    def __init__(self, name, item_list, price) -> None :
+    def __init__(self, name, item_list, price, key) -> None :
         """Creates a Banner object
 
         Parameters
@@ -110,10 +116,14 @@ class Banner :
             Invariant: weights[i] is the drop weight for item_list[i]
         price : float
             the price of pulling from the banner
+        key : func
+            function that determines drop rate from rarity
+
         """
         self.name = name
         self.item_list = item_list
-        self.weights = get_random_weights(item_list)
+        self.key = key
+        self.weights = get_random_weights(item_list,key)
         self.price = price
 
     def add_item(self, item) -> None:

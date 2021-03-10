@@ -11,10 +11,25 @@ PullError
 Functions
 sort_player_key(player) : int
     The key used to sort players in a list of players
+default_key(rarity) : float
+    The default key function
 """
 
 from typing import Optional
 from gachapy.objects import *
+
+def default_key(rarity) -> float :
+    """The default key function
+
+    Parameters
+    rarity : float
+        the rarity of the item
+    
+    Returns
+    float
+        the weight for the rarity
+    """
+    return 1 / rarity
 
 class PullError(Exception) :
     """An exception thrown when pulling from a banner
@@ -198,7 +213,7 @@ class Controller :
         self.items.append(new_item)
         return new_item
     
-    def add_new_banner(self,name,item_list_str,price) -> Optional[Banner] :
+    def add_new_banner(self,name,item_list_str,price,key=default_key) -> Optional[Banner] :
         """Adds a new banner to the gacha game
 
         Parameters
@@ -208,6 +223,8 @@ class Controller :
             the list of the names of the items in the banner
         price : float
             the price of pulling from the banner
+        key : func
+            function that determines drop rate from rarity
         
         Return
         Optional[Banner]
@@ -296,7 +313,7 @@ class Controller :
                 return player
         return None
     
-    def create_random_banner(self,name,num_items,price=-1) -> Optional[Banner] :
+    def create_random_banner(self,name,num_items,price=-1,key=default_key) -> Optional[Banner] :
         """Creates a random banner with the given name and number of items
             The price is automatically determined by the average of the rarities of the items
             selected if a price is not specified
@@ -308,6 +325,8 @@ class Controller :
             the number of items in the banner
         price : float
             the price of the banner
+        key : func
+            function that determines drop rate from rarity
         
         Returns
         Optional[Banner]
