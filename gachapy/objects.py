@@ -53,7 +53,7 @@ class Item :
         str
             String representation of this object
         """
-        return self.name + "\n" + self.description + "\nRarity: " + str(self.rarity)
+        return self.name + " (Rarity: " + str(self.rarity) + ")"
 
 def get_random_weights(items, modifier) -> List[float] :
     """Returns the random weights of the items for the random function
@@ -162,7 +162,7 @@ class Banner :
         str
             String representation of this object
         """
-        return self.name + "\n" + "\n".join([str(elem) for elem in self.item_list])
+        return self.name + "\nItems:\n".join([str(elem) for elem in self.item_list])
 
 class Player :
     """A representation of a player in the gacha game
