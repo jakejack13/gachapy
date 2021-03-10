@@ -59,7 +59,7 @@ def save_controller(controller,items_filename,banners_filename,players_filename)
     with open(items_filename, "w") as f:
         json.dump(item_dict,f)
     banners_list = controller.banners
-    banner_dict = {"banners": [{"name":i.name,"items":[{"name":j.name} for j in i.item_list],"modifier":i.modifier,"price":i.price}] for i in banners_list}
+    banner_dict = {"banners": [{"name":i.name,"items":[{"name":j.name} for j in i.item_list],"modifier":i.modifier,"price":i.price} for i in banners_list]}
     with open(banners_filename, "w") as f:
         json.dump(banner_dict,f)
     players_list = controller.players
