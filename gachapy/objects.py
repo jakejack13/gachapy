@@ -1,6 +1,7 @@
 """Objects used for low level management and data storage of the gacha game
 
 Classes
+-------
 Item
     A representation of an item in the gacha game
 Banner
@@ -9,6 +10,7 @@ Player
     A representation of a player in the gacha game
 
 Functions
+---------
 get_random_weights(items) : List[float]
     Returns the random weights of the items for the random function
 sort_item_key(item) : int
@@ -23,6 +25,7 @@ class Item :
     """A representation of an item in the gacha game
 
     Fields
+    ------
     name : string
         name of the item
     id : string
@@ -32,6 +35,7 @@ class Item :
         rarity of the item where the higher the numer, the higher the rarity
 
     Methods
+    -------
     Item : Item
         creates an item object
     """
@@ -55,6 +59,7 @@ class Item :
         """Returns the string representation of this Item object
 
         Returns
+        -------
         str
             String representation of this object
         """
@@ -64,12 +69,14 @@ def get_random_weights(items,key) -> List[float] :
     """Returns the random weights of the items for the random function
 
     Parameters
+    ----------
     items : List[Item]
         list of items to find weights of
     key : func
         function that determines drop rate from rarity
 
     Returns
+    -------
     List[float]
         the list of weights of the items
     """
@@ -83,6 +90,7 @@ class Banner :
     """A representation of a banner in the gacha game
 
     Fields
+    ------
     name : string
         name of the banner
     item_list : List[Item]
@@ -96,6 +104,7 @@ class Banner :
         Invariant: weights[i] corresponds to item_list[i]
 
     Methods
+    -------
     add_item(item) : None
         Adds an item to the banner
     pull() : Item
@@ -106,6 +115,7 @@ class Banner :
         """Creates a Banner object
 
         Parameters
+        ----------
         name : str
             name of the banner
             Invariant: must be unique
@@ -119,7 +129,6 @@ class Banner :
             the price of pulling from the banner
         key : func
             function that determines drop rate from rarity
-
         """
         self.name = name
         self.item_list = item_list
@@ -131,10 +140,12 @@ class Banner :
         """Adds an item to the banner
 
         Parameters
+        ----------
         item : Item
             item to add to the banner
         
         Returns
+        -------
             None
         """
         self.item_list.append(item)
@@ -144,6 +155,7 @@ class Banner :
         """Returns a random item out of a banner randomized by weight
 
         Returns
+        -------
         Item
             the random item from the pull
         """
@@ -153,6 +165,7 @@ class Banner :
         """Returns the string representation of this Banner object
 
         Returns
+        -------
         str
             String representation of this object
         """
@@ -162,6 +175,7 @@ class Player :
     """A representation of a player in the gacha game
 
     Fields
+    ------
     name : str
         the name of the player
     id : str
@@ -176,6 +190,8 @@ class Player :
     def __init__(self, name, id, items, money) -> None:
         """Creates a Player object
 
+        Parameters
+        ----------
         name : str
             the name of the player
         id : str
@@ -194,10 +210,12 @@ class Player :
         """Adds an item to the player's inventory
 
         Parameters
+        ----------
         item : Item
             item to add to player inventory
 
         Returns
+        -------
         None
         """
         self.items.append(item)
@@ -206,10 +224,12 @@ class Player :
         """Adds or removes money from player
 
         Parameters
+        ----------
         amount : float
             the ammount to add or remove (positive if add, negative if remove)
 
-        Return
+        Returns
+        -------
         bool
             True if the amount was able to be added or removed from account (does not
             create a negative money value), False otherwise
@@ -223,6 +243,7 @@ class Player :
         """Returns the net worth of the player
 
         Returns
+        -------
         float
             the net worth of the player
         """
@@ -232,6 +253,7 @@ class Player :
         """Returns the string representation of this Player object
 
         Returns
+        -------
         str
             string representation of this object
         """
@@ -241,10 +263,12 @@ def sort_item_key(item) -> int:
     """The key used to sort items in a list of items
 
     Parameters
+    ----------
     item : Item
         the item to extract the key from
     
     Returns
+    -------
     int
         the key of the item
     """
@@ -254,10 +278,12 @@ def player_str_net_worth(player) -> str :
     """The string representation of a player and their net worth
 
     Parameters
+    ----------
     player : Player
         the player
     
     Returns
+    -------
     str
         the string representation of a player and their net work
     """

@@ -1,6 +1,7 @@
 """Collection of loader functions for loading gachapy objects from json files
 
 Functions
+---------
 load_controller(items_filename,banners_filename,players_filename) : Controller
     Creates a Controller object from the specified json files
 save_controller(controller,items_filename,banners_filename,players_filename) : None
@@ -21,6 +22,7 @@ def load_controller(items_filename,banners_filename,players_filename) -> Control
     """Creates a Controller object from the specified json files
 
     Parameters
+    ----------
     items_filename : str
         the path of the items json file
     banners_filename : str
@@ -29,6 +31,7 @@ def load_controller(items_filename,banners_filename,players_filename) -> Control
         the path of the players json file
     
     Returns
+    -------
     Controller
         the controller loaded from the specified files
     """
@@ -42,6 +45,7 @@ def save_controller(controller,items_filename,banners_filename,players_filename)
     """Saves the controller in json format into the specified files
 
     Parameters
+    ----------
     controller : Controller 
         the controller to save into files
     items_filename : str
@@ -51,7 +55,8 @@ def save_controller(controller,items_filename,banners_filename,players_filename)
     players_filename : str
         the path of the players json file
 
-    Return
+    Returns
+    -------
     None
     """
     items_list = controller.items
@@ -71,12 +76,14 @@ def load_items_from_file(filename,controller) -> List[Optional[Item]] :
     """Load items into controller from the specified json file
 
     Parameters
+    ----------
     filename : str
         the path of the json file to load
     controller : Controller
         the controller to load the items into
     
     Returns
+    -------
     List[Optional[Item]]
         the list of items loaded, elements are None if they already exist in controller
     """
@@ -89,12 +96,14 @@ def load_banners_from_file(filename,controller) -> List[Optional[Banner]] :
     """Load banners into controller from the specified json file
 
     Parameters
+    ----------
     filename : str
         the path of the json file to load
     controller : Controller
         the controller to load the banners into
 
     Returns
+    -------
     List[Optional[Banner]]
         the list of banners loaded, elements are None if they already exist in controller
     """
@@ -107,12 +116,14 @@ def load_players_from_file(filename,controller) -> List[Optional[Player]] :
     """Load players into controller from the specified json file
 
     Parameters
+    ----------
     filename : str
         the path of the json file to load
     controller : Controller
         the controller to load the players into
 
     Returns
+    -------
     List[Optional[Player]]
         the list of players loaded, elements are None if they already exist in controller
     """

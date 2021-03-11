@@ -1,14 +1,17 @@
 """The controller used for all high level management of the gacha game
 
 Classes
+-------
 Controller
     A controller for an instance of a gacha game
 
 Exceptions
+----------
 PullError
     An exception thrown when pulling from a banner
 
 Functions
+---------
 sort_player_key(player) : int
     The key used to sort players in a list of players
 default_key(rarity) : float
@@ -22,10 +25,12 @@ def default_key(rarity) -> float :
     """The default key function
 
     Parameters
+    ----------
     rarity : float
         the rarity of the item
     
     Returns
+    -------
     float
         the weight for the rarity
     """
@@ -40,6 +45,7 @@ class Controller :
     """A controller for an instance of a gacha game
 
     Fields
+    ------
     items : List[Item]
         the list of items that are in the item pool for the gacha
     banners : List[Banner]
@@ -48,6 +54,7 @@ class Controller :
         the list of players enrolled in the gacha
     
     Methods
+    -------
     find_item_by_name(item_name) : Optional[Item]
         Returns the Item object with the given name or None if not found
     find_banner_by_name(banner_name) : Optional[Banner]
@@ -88,6 +95,7 @@ class Controller :
         """Creates an instance of a gacha controller
 
         Parameters
+        ----------
         items : List[Item]
             the list of items that are in the item pool for the gacha
         banners : List[Banner]
@@ -103,10 +111,12 @@ class Controller :
         """Returns the Item object with the given name or None if not found
 
         Parameters
+        ----------
         item_name : str
             the name of the item
         
         Returns
+        -------
         Optional[Item]
             the item object with the given name or None if not found 
         """
@@ -119,10 +129,12 @@ class Controller :
         """Returns the Banner object with the given name or None if not found
 
         Parameters
+        ----------
         banner_name : str
             the name of the banner
         
         Returns
+        -------
         Optional[Banner]
             the banner object with the given name or None if not found 
         """
@@ -136,10 +148,12 @@ class Controller :
         """Returns the Player object with the given name or None if not found
 
         Parameters
+        ----------
         player_name : str
             the name of the player
         
         Returns
+        -------
         Optional[player]
             the player object with the given name or None if not found 
         """
@@ -152,10 +166,12 @@ class Controller :
         """Returns the Item object with the given id or None if not found
 
         Parameters
+        ----------
         item_id : str
             the id of the item
         
         Returns
+        -------
         Optional[Item]
             the item object with the given id or None if not found 
         """
@@ -168,10 +184,12 @@ class Controller :
         """Returns the Player object with the given id or None if not found
 
         Parameters
+        ----------
         player_id : str
             the id of the player
         
         Returns
+        -------
         Optional[player]
             the player object with the given id or None if not found 
         """
@@ -184,16 +202,19 @@ class Controller :
         """Pulls and returns an item from the specified banner for the specified player
 
         Parameters
+        ----------
         player_id : str
             the id of the selected player, must be valid
         banner_name : str
             the name of the selected player, must be valid
 
         Returns
+        -------
         Optional[Item]
             the item if the pull is successful or None if the player does not have enough money
         
         Raises
+        ------
         PullError if player or banner are not valid
         """
         player = self.find_player_by_id(player_id)
@@ -212,12 +233,14 @@ class Controller :
         """Changes the specified player's money by the amount specified
 
         Parameters
+        ----------
         player_name : str
             the name of the player
         amount : float
             the amount to change the money by (positive for add, negative for subtract)
 
-        Return
+        Returns
+        ------
         bool
             True if the amount was able to be added or removed from account (does not create 
             negative money value), False otherwise
@@ -231,6 +254,7 @@ class Controller :
         """Adds a new item to the gacha game
 
         Parameters
+        ----------
         name : str
             the name of the new item
         description : str
@@ -239,6 +263,7 @@ class Controller :
             the rarity of the item
 
         Returns
+        -------
         Optional[Item]
             the Item object representing the new item or None if the item already exists
         """
@@ -253,6 +278,7 @@ class Controller :
         """Adds a new banner to the gacha game
 
         Parameters
+        ----------
         name : str
             the name of the new banner
         item_list_str : List[str]
@@ -262,7 +288,8 @@ class Controller :
         key : func
             function that determines drop rate from rarity
         
-        Return
+        Returns
+        -------
         Optional[Banner]
             the Banner object representing the new banner or None if the banner already exists
         """
@@ -278,6 +305,7 @@ class Controller :
         """Adds a new player to the gacha game
 
         Parameters
+        ----------
         name : str
             the name of the new player
         id : str
@@ -288,6 +316,7 @@ class Controller :
             the list of the ids of the items the player has
         
         Returns
+        -------
         Optional[Player]
             the Player object representing the new player or None if the player already exists
         """
@@ -303,10 +332,12 @@ class Controller :
         """Removes the specified item from the gacha game
 
         Parameters
+        ----------
         item_id : str
             the name of the item to remove
 
         Returns
+        -------
         Optional[Item]
             the removed item or None if item does not exist
         """
@@ -321,10 +352,12 @@ class Controller :
         """Removes the specified banner from the gacha game
 
         Parameters
+        ----------
         name : str
             the name of the banner to remove
 
         Returns
+        -------
         Optional[Banner]
             the removed banner or None if banner does not exist
         """
@@ -338,10 +371,12 @@ class Controller :
         """Removes the specified player from the gacha game
 
         Parameters
+        ----------
         player_id : str
             the id of the player to remove
 
         Returns
+        -------
         Optional[Player]
             the removed player or None if player does not exist
         """
@@ -357,6 +392,7 @@ class Controller :
             selected if a price is not specified
 
         Parameters
+        ----------
         name : str
             the name of the random banner
         num_items : int
@@ -367,6 +403,7 @@ class Controller :
             function that determines drop rate from rarity
         
         Returns
+        -------
         Optional[Banner]
             the banner created or None if a banner with the name specified already exists
         """
@@ -383,6 +420,7 @@ class Controller :
         """Removes all of the banners in the game
 
         Returns
+        -------
         None
         """
         self.banners = []
@@ -391,10 +429,12 @@ class Controller :
         """Returns the top specified number of items in the game in terms of rarity
 
         Parameters
+        ----------
         num_items : int
             the number of items to return
         
-        Return 
+        Returns
+        -------
         List[Item]
             the list of top items
         """
@@ -405,10 +445,12 @@ class Controller :
         """Returns the top specified number of players in the game in terms of net worth
 
         Parameters
+        ----------
         num_players : int
             the number of players to return
         
-        Return 
+        Returns
+        -------
         List[Player]
             the list of top players
         """
@@ -419,10 +461,12 @@ def sort_player_key(player) -> int :
     """The key used to sort players in a list of players
 
     Parameters
+    ----------
     player : Player
         the player to extract the key from
     
     Returns
+    -------
     int
         the key of the player
     """
