@@ -39,6 +39,9 @@
                         <li>
                                 <a class="function" href="#Item.__init__">Item</a>
                         </li>
+                        <li>
+                                <a class="function" href="#Item.change_rarity">change_rarity</a>
+                        </li>
                 </ul>
 
             </li>
@@ -99,7 +102,13 @@
                     <h1 class="modulename">
 <a href="./../gachapy.html">gachapy</a>.objects    </h1>
 
-                        <div class="docstring"><p>Objects used for low level management and data storage of the gacha game</p>
+                        <div class="docstring"><p>Objects used for low level management and data storage of the gacha game 
+Instances of these classes should be created indirectly through a Controller 
+(see controller.py for more info) but can be modified directly through the use 
+of class methods. DO NOT directly edit fields or the invariants could be 
+disrupted (although viewing fields directly is permitted). </p>
+
+<p>These objects operate as the Model of a gachapy game </p>
 
 <h2 id="classes">Classes</h2>
 
@@ -122,7 +131,13 @@ player_str_net_worth(player) : str
 
                         <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;Objects used for low level management and data storage of the gacha game</span>
+            <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;Objects used for low level management and data storage of the gacha game </span>
+<span class="sd">Instances of these classes should be created indirectly through a Controller </span>
+<span class="sd">(see controller.py for more info) but can be modified directly through the use </span>
+<span class="sd">of class methods. DO NOT directly edit fields or the invariants could be </span>
+<span class="sd">disrupted (although viewing fields directly is permitted). </span>
+
+<span class="sd">These objects operate as the Model of a gachapy game </span>
 
 <span class="sd">Classes</span>
 <span class="sd">-------</span>
@@ -145,8 +160,11 @@ player_str_net_worth(player) : str
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 
-<span class="k">class</span> <span class="nc">Item</span> <span class="p">:</span>
+
+<span class="k">class</span> <span class="nc">Item</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A representation of an item in the gacha game</span>
+<span class="sd">    An item is something that players can collect and pull from banners. Each</span>
+<span class="sd">    item must be unique</span>
 
 <span class="sd">    Fields</span>
 <span class="sd">    ------</span>
@@ -157,17 +175,21 @@ player_str_net_worth(player) : str
 <span class="sd">        Invariant: must be unique</span>
 <span class="sd">    id : int</span>
 <span class="sd">        rarity of the item where the higher the numer, the higher the rarity</span>
+<span class="sd">        Invariant: must be &gt;= 1</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
 <span class="sd">    Item : Item</span>
 <span class="sd">        creates an item object</span>
+<span class="sd">    change_rarity(rarity) : bool</span>
+<span class="sd">        changes the rarity of the Item</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates an Item object</span>
 
 <span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            name of the item</span>
 <span class="sd">        id : str</span>
@@ -178,9 +200,29 @@ player_str_net_worth(player) : str
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rarity</span> <span class="o">=</span> <span class="n">rarity</span>
-    
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">change_rarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Changes the rarity of the Item</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rarity : int</span>
+<span class="sd">            new rarity of the item</span>
+<span class="sd">            Precondition: rarity must be &gt;= 1</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if the rarity successfully updated, false otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">rarity</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rarity</span> <span class="o">=</span> <span class="n">rarity</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the string representation of this Item object</span>
+<span class="sd">        self.name (Rarity: self.rarity)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -189,7 +231,8 @@ player_str_net_worth(player) : str
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; (Rarity: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rarity</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span>
 
-<span class="k">def</span> <span class="nf">get_random_weights</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="p">:</span>
+
+<span class="k">def</span> <span class="nf">get_random_weights</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Returns the random weights of the items for the random function</span>
 
 <span class="sd">    Parameters</span>
@@ -205,20 +248,24 @@ player_str_net_worth(player) : str
 <span class="sd">        the list of weights of the items</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">))</span> <span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)):</span>
         <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">rarity</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">weights</span>
 
 
-<span class="k">class</span> <span class="nc">Banner</span> <span class="p">:</span>
+<span class="k">class</span> <span class="nc">Banner</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A representation of a banner in the gacha game</span>
+<span class="sd">    A Banner is where players can choose to spend money in order to obtain</span>
+<span class="sd">    a random item from the specific item pool presented in the Banner. Each</span>
+<span class="sd">    Banner (should) contain different items and have different prices than</span>
+<span class="sd">    other banners to distinguish their offerings</span>
 
 <span class="sd">    Fields</span>
 <span class="sd">    ------</span>
 <span class="sd">    name : string</span>
 <span class="sd">        name of the banner</span>
 <span class="sd">    item_list : List[Item]</span>
-<span class="sd">        the list of items in the banner </span>
+<span class="sd">        the list of items in the banner</span>
 <span class="sd">    price : float</span>
 <span class="sd">        the price of pulling from the banner</span>
 <span class="sd">    key : func</span>
@@ -235,7 +282,7 @@ player_str_net_worth(player) : str
 <span class="sd">        Returns a random item out of a banner randomized by weight</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates a Banner object</span>
 
 <span class="sd">        Parameters</span>
@@ -257,7 +304,7 @@ player_str_net_worth(player) : str
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span> <span class="o">=</span> <span class="n">item_list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="n">item_list</span><span class="p">,</span><span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="n">item_list</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
 
     <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -267,7 +314,7 @@ player_str_net_worth(player) : str
 <span class="sd">        ----------</span>
 <span class="sd">        item : Item</span>
 <span class="sd">            item to add to the banner</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            None</span>
@@ -285,18 +332,34 @@ player_str_net_worth(player) : str
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the string representation of this Banner object</span>
+<span class="sd">        self.name</span>
+<span class="sd">        Price: self.price</span>
+<span class="sd">        Items:</span>
+<span class="sd">        .</span>
+<span class="sd">        .</span>
+<span class="sd">        .</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
 <span class="sd">            String representation of this object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Price: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Items:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Price: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Items:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">])</span>
+        <span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">Player</span> <span class="p">:</span>
+
+<span class="k">class</span> <span class="nc">Player</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A representation of a player in the gacha game</span>
+<span class="sd">    A Player is someone who can use money to purchase pulls from banners,</span>
+<span class="sd">    receive items from banners, and collect items. Each Player is unique</span>
+<span class="sd">    and may own different items from each other</span>
 
 <span class="sd">    Fields</span>
 <span class="sd">    ------</span>
@@ -329,8 +392,8 @@ player_str_net_worth(player) : str
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">=</span> <span class="n">money</span>
-    
-    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Adds an item to the player&#39;s inventory</span>
 
 <span class="sd">        Parameters</span>
@@ -344,27 +407,29 @@ player_str_net_worth(player) : str
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">change_money</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">amount</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">change_money</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Adds or removes money from player</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        amount : float</span>
-<span class="sd">            the ammount to add or remove (positive if add, negative if remove)</span>
+<span class="sd">            the amount to add or remove (positive if add, negative if remove)</span>
+<span class="sd">            Precondition: if amount removed, leftover amount must be nonnegative</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        bool</span>
-<span class="sd">            True if the amount was able to be added or removed from account (does not</span>
-<span class="sd">            create a negative money value), False otherwise</span>
+<span class="sd">            True if the amount was able to be added or removed from account</span>
+<span class="sd">            (does not create a negative money value), False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">-</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">-</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">+=</span> <span class="n">amount</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the net worth of the player</span>
+    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the net worth of the player, calculated by the sum of the</span>
+<span class="sd">        rarities of all of the items they own</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -372,16 +437,37 @@ player_str_net_worth(player) : str
 <span class="sd">            the net worth of the player</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">rarity</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">])</span>
-    
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the string representation of this Player object</span>
+<span class="sd">        Money: self.money</span>
+<span class="sd">        Net worth: self.get_net_worth()</span>
+<span class="sd">        Top 10 items:</span>
+<span class="sd">        .</span>
+<span class="sd">        .</span>
+<span class="sd">        .</span>
+<span class="sd">        Top items determined by rarity</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
 <span class="sd">            string representation of this object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Money: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">money</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Net worth: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_net_worth</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Top 10 items:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="n">sort_item_key</span><span class="p">,</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]])</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Money: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">money</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Net worth: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_net_worth</span><span class="p">())</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Top 10 items:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_item_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
 
 <span class="k">def</span> <span class="nf">sort_item_key</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;The key used to sort items in a list of items</span>
@@ -390,7 +476,7 @@ player_str_net_worth(player) : str
 <span class="sd">    ----------</span>
 <span class="sd">    item : Item</span>
 <span class="sd">        the item to extract the key from</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    int</span>
@@ -398,14 +484,16 @@ player_str_net_worth(player) : str
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">rarity</span>
 
-<span class="k">def</span> <span class="nf">player_str_net_worth</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="p">:</span>
+
+<span class="k">def</span> <span class="nf">player_str_net_worth</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;The string representation of a player and their net worth</span>
+<span class="sd">    Useful for leaderboards</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    player : Player</span>
 <span class="sd">        the player</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
@@ -428,8 +516,10 @@ player_str_net_worth(player) : str
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Item</span> <span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Item</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A representation of an item in the gacha game</span>
+<span class="sd">    An item is something that players can collect and pull from banners. Each</span>
+<span class="sd">    item must be unique</span>
 
 <span class="sd">    Fields</span>
 <span class="sd">    ------</span>
@@ -440,17 +530,21 @@ player_str_net_worth(player) : str
 <span class="sd">        Invariant: must be unique</span>
 <span class="sd">    id : int</span>
 <span class="sd">        rarity of the item where the higher the numer, the higher the rarity</span>
+<span class="sd">        Invariant: must be &gt;= 1</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
 <span class="sd">    Item : Item</span>
 <span class="sd">        creates an item object</span>
+<span class="sd">    change_rarity(rarity) : bool</span>
+<span class="sd">        changes the rarity of the Item</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates an Item object</span>
 
 <span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            name of the item</span>
 <span class="sd">        id : str</span>
@@ -461,9 +555,29 @@ player_str_net_worth(player) : str
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rarity</span> <span class="o">=</span> <span class="n">rarity</span>
-    
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">change_rarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Changes the rarity of the Item</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rarity : int</span>
+<span class="sd">            new rarity of the item</span>
+<span class="sd">            Precondition: rarity must be &gt;= 1</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if the rarity successfully updated, false otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">rarity</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rarity</span> <span class="o">=</span> <span class="n">rarity</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the string representation of this Item object</span>
+<span class="sd">        self.name (Rarity: self.rarity)</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -475,7 +589,9 @@ player_str_net_worth(player) : str
 
         </details>
 
-            <div class="docstring"><p>A representation of an item in the gacha game</p>
+            <div class="docstring"><p>A representation of an item in the gacha game
+An item is something that players can collect and pull from banners. Each
+item must be unique</p>
 
 <h2 id="fields">Fields</h2>
 
@@ -485,12 +601,15 @@ id : string
     description of the item
     Invariant: must be unique
 id : int
-    rarity of the item where the higher the numer, the higher the rarity</p>
+    rarity of the item where the higher the numer, the higher the rarity
+    Invariant: must be &gt;= 1</p>
 
 <h2 id="methods">Methods</h2>
 
 <p>Item : Item
-    creates an item object</p>
+    creates an item object
+change_rarity(rarity) : bool
+    changes the rarity of the Item</p>
 </div>
 
 
@@ -502,10 +621,11 @@ id : int
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="p">:</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates an Item object</span>
 
 <span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            name of the item</span>
 <span class="sd">        id : str</span>
@@ -522,13 +642,62 @@ id : int
 
             <div class="docstring"><p>Creates an Item object</p>
 
-<p>Parameters
-name : str
+<h2 id="parameters">Parameters</h2>
+
+<p>name : str
     name of the item
 id : str
     id of the item
 rarity : int
     rarity of the item where the higher the numer, the higher the rarity</p>
+</div>
+
+
+                            </div>
+                            <div id="Item.change_rarity" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Item.change_rarity">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">change_rarity</span><span class="signature">(self, rarity) -&gt; bool</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">change_rarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Changes the rarity of the Item</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rarity : int</span>
+<span class="sd">            new rarity of the item</span>
+<span class="sd">            Precondition: rarity must be &gt;= 1</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if the rarity successfully updated, false otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">rarity</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rarity</span> <span class="o">=</span> <span class="n">rarity</span>
+        <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Changes the rarity of the Item</p>
+
+<h2 id="parameters">Parameters</h2>
+
+<p>rarity : int
+    new rarity of the item
+    Precondition: rarity must be &gt;= 1</p>
+
+<h2 id="returns">Returns</h2>
+
+<p>bool
+    True if the rarity successfully updated, false otherwise</p>
 </div>
 
 
@@ -544,7 +713,7 @@ rarity : int
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_random_weights</span><span class="p">(</span><span class="n">items</span><span class="p">,</span><span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_random_weights</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Returns the random weights of the items for the random function</span>
 
 <span class="sd">    Parameters</span>
@@ -560,7 +729,7 @@ rarity : int
 <span class="sd">        the list of weights of the items</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">))</span> <span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)):</span>
         <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">rarity</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">weights</span>
 </pre></div>
@@ -595,15 +764,19 @@ key : func
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Banner</span> <span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Banner</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A representation of a banner in the gacha game</span>
+<span class="sd">    A Banner is where players can choose to spend money in order to obtain</span>
+<span class="sd">    a random item from the specific item pool presented in the Banner. Each</span>
+<span class="sd">    Banner (should) contain different items and have different prices than</span>
+<span class="sd">    other banners to distinguish their offerings</span>
 
 <span class="sd">    Fields</span>
 <span class="sd">    ------</span>
 <span class="sd">    name : string</span>
 <span class="sd">        name of the banner</span>
 <span class="sd">    item_list : List[Item]</span>
-<span class="sd">        the list of items in the banner </span>
+<span class="sd">        the list of items in the banner</span>
 <span class="sd">    price : float</span>
 <span class="sd">        the price of pulling from the banner</span>
 <span class="sd">    key : func</span>
@@ -620,7 +793,7 @@ key : func
 <span class="sd">        Returns a random item out of a banner randomized by weight</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates a Banner object</span>
 
 <span class="sd">        Parameters</span>
@@ -642,7 +815,7 @@ key : func
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span> <span class="o">=</span> <span class="n">item_list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="n">item_list</span><span class="p">,</span><span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="n">item_list</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
 
     <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -652,7 +825,7 @@ key : func
 <span class="sd">        ----------</span>
 <span class="sd">        item : Item</span>
 <span class="sd">            item to add to the banner</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            None</span>
@@ -670,27 +843,43 @@ key : func
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the string representation of this Banner object</span>
+<span class="sd">        self.name</span>
+<span class="sd">        Price: self.price</span>
+<span class="sd">        Items:</span>
+<span class="sd">        .</span>
+<span class="sd">        .</span>
+<span class="sd">        .</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
 <span class="sd">            String representation of this object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Price: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Items:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Price: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">price</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Items:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">])</span>
+        <span class="p">)</span>
 </pre></div>
 
         </details>
 
-            <div class="docstring"><p>A representation of a banner in the gacha game</p>
+            <div class="docstring"><p>A representation of a banner in the gacha game
+A Banner is where players can choose to spend money in order to obtain
+a random item from the specific item pool presented in the Banner. Each
+Banner (should) contain different items and have different prices than
+other banners to distinguish their offerings</p>
 
 <h2 id="fields">Fields</h2>
 
 <p>name : string
     name of the banner
 item_list : List[Item]
-    the list of items in the banner 
+    the list of items in the banner
 price : float
     the price of pulling from the banner
 key : func
@@ -716,7 +905,7 @@ pull() : Item
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="p">:</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates a Banner object</span>
 
 <span class="sd">        Parameters</span>
@@ -738,7 +927,7 @@ pull() : Item
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span> <span class="o">=</span> <span class="n">item_list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="n">item_list</span><span class="p">,</span><span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="n">item_list</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">price</span> <span class="o">=</span> <span class="n">price</span>
 </pre></div>
 
@@ -782,7 +971,7 @@ key : func
 <span class="sd">        ----------</span>
 <span class="sd">        item : Item</span>
 <span class="sd">            item to add to the banner</span>
-<span class="sd">        </span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">            None</span>
@@ -853,8 +1042,11 @@ key : func
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Player</span> <span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Player</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A representation of a player in the gacha game</span>
+<span class="sd">    A Player is someone who can use money to purchase pulls from banners,</span>
+<span class="sd">    receive items from banners, and collect items. Each Player is unique</span>
+<span class="sd">    and may own different items from each other</span>
 
 <span class="sd">    Fields</span>
 <span class="sd">    ------</span>
@@ -887,8 +1079,8 @@ key : func
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">=</span> <span class="n">money</span>
-    
-    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Adds an item to the player&#39;s inventory</span>
 
 <span class="sd">        Parameters</span>
@@ -902,27 +1094,29 @@ key : func
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">change_money</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">amount</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">change_money</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Adds or removes money from player</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        amount : float</span>
-<span class="sd">            the ammount to add or remove (positive if add, negative if remove)</span>
+<span class="sd">            the amount to add or remove (positive if add, negative if remove)</span>
+<span class="sd">            Precondition: if amount removed, leftover amount must be nonnegative</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        bool</span>
-<span class="sd">            True if the amount was able to be added or removed from account (does not</span>
-<span class="sd">            create a negative money value), False otherwise</span>
+<span class="sd">            True if the amount was able to be added or removed from account</span>
+<span class="sd">            (does not create a negative money value), False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">-</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">-</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">+=</span> <span class="n">amount</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the net worth of the player</span>
+    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the net worth of the player, calculated by the sum of the</span>
+<span class="sd">        rarities of all of the items they own</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -930,21 +1124,44 @@ key : func
 <span class="sd">            the net worth of the player</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">rarity</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">])</span>
-    
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the string representation of this Player object</span>
+<span class="sd">        Money: self.money</span>
+<span class="sd">        Net worth: self.get_net_worth()</span>
+<span class="sd">        Top 10 items:</span>
+<span class="sd">        .</span>
+<span class="sd">        .</span>
+<span class="sd">        .</span>
+<span class="sd">        Top items determined by rarity</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
 <span class="sd">            string representation of this object</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Money: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">money</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Net worth: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_net_worth</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Top 10 items:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="n">sort_item_key</span><span class="p">,</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]])</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Money: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">money</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Net worth: &quot;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_net_worth</span><span class="p">())</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Top 10 items:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_item_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 </pre></div>
 
         </details>
 
-            <div class="docstring"><p>A representation of a player in the gacha game</p>
+            <div class="docstring"><p>A representation of a player in the gacha game
+A Player is someone who can use money to purchase pulls from banners,
+receive items from banners, and collect items. Each Player is unique
+and may own different items from each other</p>
 
 <h2 id="fields">Fields</h2>
 
@@ -1016,7 +1233,7 @@ money : float
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Adds an item to the player&#39;s inventory</span>
 
 <span class="sd">        Parameters</span>
@@ -1057,21 +1274,22 @@ money : float
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">change_money</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">amount</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">change_money</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Adds or removes money from player</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        amount : float</span>
-<span class="sd">            the ammount to add or remove (positive if add, negative if remove)</span>
+<span class="sd">            the amount to add or remove (positive if add, negative if remove)</span>
+<span class="sd">            Precondition: if amount removed, leftover amount must be nonnegative</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        bool</span>
-<span class="sd">            True if the amount was able to be added or removed from account (does not</span>
-<span class="sd">            create a negative money value), False otherwise</span>
+<span class="sd">            True if the amount was able to be added or removed from account</span>
+<span class="sd">            (does not create a negative money value), False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">-</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">-</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">+=</span> <span class="n">amount</span>
         <span class="k">return</span> <span class="kc">True</span>
@@ -1084,13 +1302,14 @@ money : float
 <h2 id="parameters">Parameters</h2>
 
 <p>amount : float
-    the ammount to add or remove (positive if add, negative if remove)</p>
+    the amount to add or remove (positive if add, negative if remove)
+    Precondition: if amount removed, leftover amount must be nonnegative</p>
 
 <h2 id="returns">Returns</h2>
 
 <p>bool
-    True if the amount was able to be added or removed from account (does not
-    create a negative money value), False otherwise</p>
+    True if the amount was able to be added or removed from account
+    (does not create a negative money value), False otherwise</p>
 </div>
 
 
@@ -1105,8 +1324,9 @@ money : float
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the net worth of the player</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the net worth of the player, calculated by the sum of the</span>
+<span class="sd">        rarities of all of the items they own</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1118,7 +1338,8 @@ money : float
 
         </details>
 
-            <div class="docstring"><p>Returns the net worth of the player</p>
+            <div class="docstring"><p>Returns the net worth of the player, calculated by the sum of the
+rarities of all of the items they own</p>
 
 <h2 id="returns">Returns</h2>
 
@@ -1146,7 +1367,7 @@ money : float
 <span class="sd">    ----------</span>
 <span class="sd">    item : Item</span>
 <span class="sd">        the item to extract the key from</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    int</span>
@@ -1182,14 +1403,15 @@ money : float
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">player_str_net_worth</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="p">:</span>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">player_str_net_worth</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;The string representation of a player and their net worth</span>
+<span class="sd">    Useful for leaderboards</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    player : Player</span>
 <span class="sd">        the player</span>
-<span class="sd">    </span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    str</span>
@@ -1200,7 +1422,8 @@ money : float
 
         </details>
 
-            <div class="docstring"><p>The string representation of a player and their net worth</p>
+            <div class="docstring"><p>The string representation of a player and their net worth
+Useful for leaderboards</p>
 
 <h2 id="parameters">Parameters</h2>
 
