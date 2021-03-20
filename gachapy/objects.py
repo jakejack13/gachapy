@@ -145,6 +145,8 @@ class Banner:
     -------
     add_item(item) : None
         Adds an item to the banner
+    remove_item(item) : bool
+        Removes an item from the banner
     pull() : Item
         Returns a random item out of a banner randomized by weight
     """
@@ -194,6 +196,26 @@ class Banner:
         """
         self.item_list.append(item)
         self.weights = get_random_weights(self.item_list)
+
+    def remove_item(self, item: Item) -> bool:
+        """Removes an item from the banner
+
+        Parameters
+        ----------
+        item : Item
+            item to remove from the banner
+
+        Returns
+        -------
+        bool
+            True if item is found in banner, False if otherwise
+        """
+        try:
+            self.item_list.remove(item)
+            self.weights = get_random_weights(self.item_list)
+            return True
+        except:
+            return False
 
     def pull(self) -> Item:
         """Returns a random item out of a banner randomized by weight
@@ -245,6 +267,18 @@ class Player:
         the list of items that the player owns
     money : float
         the amount of money that the player owns
+
+    Methods
+    -------
+    add_item(item) : None
+        Adds an item to the player's inventory
+    remove_item(item) : bool
+        Removes an item from the player's inventory
+    change_money(amount) : bool
+        Adds or removes money from player
+    get_net_worth() : int
+        Returns the net worth of the player, calculated by the sum of the
+        rarities of all of the items they own
     """
 
     def __init__(self, name: str, id: str, items: List[Item], money: float) -> None:
@@ -280,6 +314,25 @@ class Player:
         """
         self.items.append(item)
 
+    def remove_item(self, item: Item) -> bool:
+        """Removes an item from the player's inventory
+
+        Parameters
+        ----------
+        item : Item
+            item to add to player inventory
+
+        Returns
+        -------
+        bool
+            True if item is found in inventory, False if not
+        """
+        try:
+            self.items.remove(item)
+            return True
+        except:
+            return False
+
     def change_money(self, amount: float) -> bool:
         """Adds or removes money from player
 
@@ -300,13 +353,13 @@ class Player:
         self.money += amount
         return True
 
-    def get_net_worth(self) -> float:
+    def get_net_worth(self) -> int:
         """Returns the net worth of the player, calculated by the sum of the
         rarities of all of the items they own
 
         Returns
         -------
-        float
+        int
             the net worth of the player
         """
         return sum([i.rarity for i in self.items])

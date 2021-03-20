@@ -58,6 +58,9 @@
                                 <a class="function" href="#Banner.add_item">add_item</a>
                         </li>
                         <li>
+                                <a class="function" href="#Banner.remove_item">remove_item</a>
+                        </li>
+                        <li>
                                 <a class="function" href="#Banner.pull">pull</a>
                         </li>
                 </ul>
@@ -71,6 +74,9 @@
                         </li>
                         <li>
                                 <a class="function" href="#Player.add_item">add_item</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Player.remove_item">remove_item</a>
                         </li>
                         <li>
                                 <a class="function" href="#Player.change_money">change_money</a>
@@ -278,6 +284,8 @@ player_str_net_worth(player) : str
 <span class="sd">    -------</span>
 <span class="sd">    add_item(item) : None</span>
 <span class="sd">        Adds an item to the banner</span>
+<span class="sd">    remove_item(item) : bool</span>
+<span class="sd">        Removes an item from the banner</span>
 <span class="sd">    pull() : Item</span>
 <span class="sd">        Returns a random item out of a banner randomized by weight</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -327,6 +335,26 @@ player_str_net_worth(player) : str
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Removes an item from the banner</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item : Item</span>
+<span class="sd">            item to remove from the banner</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if item is found in banner, False if otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Item</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a random item out of a banner randomized by weight</span>
@@ -378,6 +406,18 @@ player_str_net_worth(player) : str
 <span class="sd">        the list of items that the player owns</span>
 <span class="sd">    money : float</span>
 <span class="sd">        the amount of money that the player owns</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    add_item(item) : None</span>
+<span class="sd">        Adds an item to the player&#39;s inventory</span>
+<span class="sd">    remove_item(item) : bool</span>
+<span class="sd">        Removes an item from the player&#39;s inventory</span>
+<span class="sd">    change_money(amount) : bool</span>
+<span class="sd">        Adds or removes money from player</span>
+<span class="sd">    get_net_worth() : int</span>
+<span class="sd">        Returns the net worth of the player, calculated by the sum of the</span>
+<span class="sd">        rarities of all of the items they own</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">money</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -413,6 +453,25 @@ player_str_net_worth(player) : str
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Removes an item from the player&#39;s inventory</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item : Item</span>
+<span class="sd">            item to add to player inventory</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if item is found in inventory, False if not</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
     <span class="k">def</span> <span class="nf">change_money</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Adds or removes money from player</span>
 
@@ -433,13 +492,13 @@ player_str_net_worth(player) : str
         <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">+=</span> <span class="n">amount</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the net worth of the player, calculated by the sum of the</span>
 <span class="sd">        rarities of all of the items they own</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        float</span>
+<span class="sd">        int</span>
 <span class="sd">            the net worth of the player</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">rarity</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">])</span>
@@ -795,6 +854,8 @@ key : function : int -> float
 <span class="sd">    -------</span>
 <span class="sd">    add_item(item) : None</span>
 <span class="sd">        Adds an item to the banner</span>
+<span class="sd">    remove_item(item) : bool</span>
+<span class="sd">        Removes an item from the banner</span>
 <span class="sd">    pull() : Item</span>
 <span class="sd">        Returns a random item out of a banner randomized by weight</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -844,6 +905,26 @@ key : function : int -> float
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Removes an item from the banner</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item : Item</span>
+<span class="sd">            item to remove from the banner</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if item is found in banner, False if otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Item</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a random item out of a banner randomized by weight</span>
@@ -904,6 +985,8 @@ weights : List[float]
 
 <p>add_item(item) : None
     Adds an item to the banner
+remove_item(item) : bool
+    Removes an item from the banner
 pull() : Item
     Returns a random item out of a banner randomized by weight</p>
 </div>
@@ -1021,6 +1104,54 @@ key : function : int -> float
 
 
                             </div>
+                            <div id="Banner.remove_item" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Banner.remove_item">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">remove_item</span><span class="signature">(self, item: <a href="#Item">gachapy.objects.Item</a>) -&gt; bool</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Removes an item from the banner</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item : Item</span>
+<span class="sd">            item to remove from the banner</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if item is found in banner, False if otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">get_random_weights</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_list</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Removes an item from the banner</p>
+
+<h2 id="parameters">Parameters</h2>
+
+<p>item : Item
+    item to remove from the banner</p>
+
+<h2 id="returns">Returns</h2>
+
+<p>bool
+    True if item is found in banner, False if otherwise</p>
+</div>
+
+
+                            </div>
                             <div id="Banner.pull" class="classattr">
                                         <div class="attr function"><a class="headerlink" href="#Banner.pull">#&nbsp;&nbsp</a>
 
@@ -1083,6 +1214,18 @@ key : function : int -> float
 <span class="sd">        the list of items that the player owns</span>
 <span class="sd">    money : float</span>
 <span class="sd">        the amount of money that the player owns</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    add_item(item) : None</span>
+<span class="sd">        Adds an item to the player&#39;s inventory</span>
+<span class="sd">    remove_item(item) : bool</span>
+<span class="sd">        Removes an item from the player&#39;s inventory</span>
+<span class="sd">    change_money(amount) : bool</span>
+<span class="sd">        Adds or removes money from player</span>
+<span class="sd">    get_net_worth() : int</span>
+<span class="sd">        Returns the net worth of the player, calculated by the sum of the</span>
+<span class="sd">        rarities of all of the items they own</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">money</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1118,6 +1261,25 @@ key : function : int -> float
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Removes an item from the player&#39;s inventory</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item : Item</span>
+<span class="sd">            item to add to player inventory</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if item is found in inventory, False if not</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
     <span class="k">def</span> <span class="nf">change_money</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Adds or removes money from player</span>
 
@@ -1138,13 +1300,13 @@ key : function : int -> float
         <span class="bp">self</span><span class="o">.</span><span class="n">money</span> <span class="o">+=</span> <span class="n">amount</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the net worth of the player, calculated by the sum of the</span>
 <span class="sd">        rarities of all of the items they own</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        float</span>
+<span class="sd">        int</span>
 <span class="sd">            the net worth of the player</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">rarity</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">])</span>
@@ -1198,6 +1360,18 @@ items : List[Item]
     the list of items that the player owns
 money : float
     the amount of money that the player owns</p>
+
+<h2 id="methods">Methods</h2>
+
+<p>add_item(item) : None
+    Adds an item to the player's inventory
+remove_item(item) : bool
+    Removes an item from the player's inventory
+change_money(amount) : bool
+    Adds or removes money from player
+get_net_worth() : int
+    Returns the net worth of the player, calculated by the sum of the
+    rarities of all of the items they own</p>
 </div>
 
 
@@ -1294,6 +1468,53 @@ money : float
 
 
                             </div>
+                            <div id="Player.remove_item" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Player.remove_item">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">remove_item</span><span class="signature">(self, item: <a href="#Item">gachapy.objects.Item</a>) -&gt; bool</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Removes an item from the player&#39;s inventory</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item : Item</span>
+<span class="sd">            item to add to player inventory</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if item is found in inventory, False if not</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Removes an item from the player's inventory</p>
+
+<h2 id="parameters">Parameters</h2>
+
+<p>item : Item
+    item to add to player inventory</p>
+
+<h2 id="returns">Returns</h2>
+
+<p>bool
+    True if item is found in inventory, False if not</p>
+</div>
+
+
+                            </div>
                             <div id="Player.change_money" class="classattr">
                                         <div class="attr function"><a class="headerlink" href="#Player.change_money">#&nbsp;&nbsp</a>
 
@@ -1349,18 +1570,18 @@ money : float
 
         
             <span class="def">def</span>
-            <span class="name">get_net_worth</span><span class="signature">(self) -&gt; float</span>:
+            <span class="name">get_net_worth</span><span class="signature">(self) -&gt; int</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">get_net_worth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the net worth of the player, calculated by the sum of the</span>
 <span class="sd">        rarities of all of the items they own</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        float</span>
+<span class="sd">        int</span>
 <span class="sd">            the net worth of the player</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">rarity</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">])</span>
@@ -1373,7 +1594,7 @@ rarities of all of the items they own</p>
 
 <h2 id="returns">Returns</h2>
 
-<p>float
+<p>int
     the net worth of the player</p>
 </div>
 
