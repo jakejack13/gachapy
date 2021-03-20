@@ -29,7 +29,7 @@ from typing import Optional
 from gachapy.objects import *
 
 
-def default_key(rarity) -> float:
+def default_key(rarity: float) -> float:
     """The default function that converts rarity to drop rate (1/x)
 
     Parameters
@@ -99,7 +99,12 @@ class Controller:
         Returns the top specified number of players in the game in terms of net worth
     """
 
-    def __init__(self, items=[], banners=[], players=[]) -> None:
+    def __init__(
+        self,
+        items: List[Item] = [],
+        banners: List[Banner] = [],
+        players: List[Player] = [],
+    ) -> None:
         """Creates an instance of a gacha controller
 
         Parameters
@@ -115,7 +120,7 @@ class Controller:
         self.banners = banners
         self.players = players
 
-    def find_item_by_name(self, item_name) -> Optional[Item]:
+    def find_item_by_name(self, item_name: str) -> Optional[Item]:
         """Returns the Item object with the given name or None if not found
 
         Parameters
@@ -133,7 +138,7 @@ class Controller:
             return None
         return items[0]
 
-    def find_banner_by_name(self, banner_name) -> Optional[Banner]:
+    def find_banner_by_name(self, banner_name: str) -> Optional[Banner]:
         """Returns the Banner object with the given name or None if not found
 
         Parameters
@@ -151,7 +156,7 @@ class Controller:
             return None
         return banners[0]
 
-    def find_player_by_name(self, player_name) -> Optional[Player]:
+    def find_player_by_name(self, player_name: str) -> Optional[Player]:
         """Returns the Player object with the given name or None if not found
 
         Parameters
@@ -169,7 +174,7 @@ class Controller:
             return None
         return players[0]
 
-    def find_item_by_id(self, item_id) -> Optional[Item]:
+    def find_item_by_id(self, item_id: str) -> Optional[Item]:
         """Returns the Item object with the given id or None if not found
 
         Parameters
@@ -187,7 +192,7 @@ class Controller:
             return None
         return items[0]
 
-    def find_player_by_id(self, player_id) -> Optional[Player]:
+    def find_player_by_id(self, player_id: str) -> Optional[Player]:
         """Returns the Player object with the given id or None if not found
 
         Parameters
@@ -205,7 +210,7 @@ class Controller:
             return None
         return players[0]
 
-    def pull(self, player_id, banner_name) -> Optional[Item]:
+    def pull(self, player_id: str, banner_name: str) -> Optional[Item]:
         """Pulls and returns an item from the specified banner for the specified player
 
         Parameters
@@ -236,7 +241,7 @@ class Controller:
             return item
         return None
 
-    def add_new_item(self, name, id, rarity) -> Optional[Item]:
+    def add_new_item(self, name: str, id: str, rarity: int) -> Optional[Item]:
         """Adds a new item to the gacha game
 
         Parameters
@@ -261,7 +266,11 @@ class Controller:
         return new_item
 
     def add_new_banner(
-        self, name, item_list_str, price, key=default_key
+        self,
+        name: str,
+        item_list_str: List[str],
+        price: float,
+        key: Callable[[int], float] = default_key,
     ) -> Optional[Banner]:
         """Adds a new banner to the gacha game
 
@@ -273,8 +282,8 @@ class Controller:
             the list of the ids of the items in the banner
         price : float
             the price of pulling from the banner
-        key : func
-            function that converts rarity to drop rate
+        key : function : int -> float
+            function that takes in rarity and returns the drop rate of the item
 
         Returns
         -------
@@ -289,7 +298,9 @@ class Controller:
         self.banners.append(new_banner)
         return Banner
 
-    def add_new_player(self, name, id, start_money, items_str=[]) -> Optional[Player]:
+    def add_new_player(
+        self, name: str, id: str, start_money: float, items_str: List[str] = []
+    ) -> Optional[Player]:
         """Adds a new player to the gacha game
 
         Parameters
@@ -316,7 +327,7 @@ class Controller:
         self.players.append(new_player)
         return new_player
 
-    def remove_item(self, item_id) -> Optional[Item]:
+    def remove_item(self, item_id: str) -> Optional[Item]:
         """Removes the specified item from the gacha game
         WARNING: Will also remove from banners and players if found, costly operation
 
@@ -344,7 +355,7 @@ class Controller:
                 return item
         return None
 
-    def remove_banner(self, name) -> Optional[Banner]:
+    def remove_banner(self, name: str) -> Optional[Banner]:
         """Removes the specified banner from the gacha game
 
         Parameters
@@ -363,7 +374,7 @@ class Controller:
                 return banner
         return None
 
-    def remove_player(self, player_id) -> Optional[Player]:
+    def remove_player(self, player_id: str) -> Optional[Player]:
         """Removes the specified player from the gacha game
 
         Parameters
@@ -383,7 +394,11 @@ class Controller:
         return None
 
     def create_random_banner(
-        self, name, num_items, price=-1, key=default_key
+        self,
+        name: str,
+        num_items: int,
+        price: float = -1,
+        key: Callable[[int], float] = default_key,
     ) -> Optional[Banner]:
         """Creates a random banner with the given name and number of items
             The price is automatically determined by the average of the rarities of the items
@@ -397,8 +412,8 @@ class Controller:
             the number of items in the banner
         price : float
             the price of the banner
-        key : func
-            function that determines drop rate from rarity
+        key : function : int -> float
+            function that takes in rarity and returns the drop rate of the item
 
         Returns
         -------
@@ -423,7 +438,7 @@ class Controller:
         """
         self.banners = []
 
-    def top_items(self, num_items) -> List[Item]:
+    def top_items(self, num_items: int) -> List[Item]:
         """Returns the top specified number of items in the game in terms of rarity
 
         Parameters
@@ -439,7 +454,7 @@ class Controller:
         sort_list = sorted(self.items, key=sort_item_key, reverse=True)
         return sort_list[: num_items - 1]
 
-    def top_players(self, num_players) -> List[Player]:
+    def top_players(self, num_players: int) -> List[Player]:
         """Returns the top specified number of players in the game in terms of net worth
 
         Parameters
@@ -456,7 +471,7 @@ class Controller:
         return sort_list[: num_players - 1]
 
 
-def sort_player_key(player) -> int:
+def sort_player_key(player: Player) -> int:
     """The key used to sort players in a list of players
 
     Parameters

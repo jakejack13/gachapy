@@ -27,7 +27,9 @@ from gachapy.controller import *
 import json
 
 
-def load_controller(items_filename, banners_filename, players_filename) -> Controller:
+def load_controller(
+    items_filename: str, banners_filename: str, players_filename: str
+) -> Controller:
     """Creates a Controller object from the specified json files
     TOP LEVEL FUNCTION
 
@@ -53,7 +55,10 @@ def load_controller(items_filename, banners_filename, players_filename) -> Contr
 
 
 def save_controller(
-    controller, items_filename, banners_filename, players_filename
+    controller: Controller,
+    items_filename: str,
+    banners_filename: str,
+    players_filename: str,
 ) -> None:
     """Saves the controller in json format into the specified files
     TOP LEVEL FUNCTION
@@ -108,7 +113,7 @@ def save_controller(
         json.dump(player_dict, f)
 
 
-def load_items_from_file(filename, controller) -> List[Optional[Item]]:
+def load_items_from_file(filename: str, controller: Controller) -> List[Optional[Item]]:
     """Load items into controller from the specified json file
     DO NOT USE ALONE (unless you know what you're doing)
 
@@ -133,7 +138,9 @@ def load_items_from_file(filename, controller) -> List[Optional[Item]]:
         ]
 
 
-def load_banners_from_file(filename, controller) -> List[Optional[Banner]]:
+def load_banners_from_file(
+    filename: str, controller: Controller
+) -> List[Optional[Banner]]:
     """Load banners into controller from the specified json file
     DO NOT USE ALONE (unless you know what you're doing)
 
@@ -160,7 +167,9 @@ def load_banners_from_file(filename, controller) -> List[Optional[Banner]]:
         ]
 
 
-def load_players_from_file(filename, controller) -> List[Optional[Player]]:
+def load_players_from_file(
+    filename: str, controller: Controller
+) -> List[Optional[Player]]:
     """Load players into controller from the specified json file
     DO NOT USE ALONE (unless you know what you're doing)
 

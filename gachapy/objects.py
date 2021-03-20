@@ -25,7 +25,7 @@ player_str_net_worth(player) : str
     The string representation of a player and their net worth
 """
 import random
-from typing import List
+from typing import Callable, List
 
 
 class Item:
@@ -52,7 +52,7 @@ class Item:
         changes the rarity of the Item
     """
 
-    def __init__(self, name, id, rarity) -> None:
+    def __init__(self, name: str, id: str, rarity: int) -> None:
         """Creates an Item object
 
         Parameters
@@ -68,7 +68,7 @@ class Item:
         self.id = id
         self.rarity = rarity
 
-    def change_rarity(self, rarity) -> bool:
+    def change_rarity(self, rarity: int) -> bool:
         """Changes the rarity of the Item
 
         Parameters
@@ -99,15 +99,15 @@ class Item:
         return self.name + " (Rarity: " + str(self.rarity) + ")"
 
 
-def get_random_weights(items, key) -> List[float]:
+def get_random_weights(items, key: Callable[[int], float]) -> List[float]:
     """Returns the random weights of the items for the random function
 
     Parameters
     ----------
     items : List[Item]
         list of items to find weights of
-    key : func
-        function that determines drop rate from rarity
+    key : function : int -> float
+        function that takes in rarity and returns the drop rate of the item
 
     Returns
     -------
@@ -135,8 +135,8 @@ class Banner:
         the list of items in the banner
     price : float
         the price of pulling from the banner
-    key : func
-        function that determines drop rate from rarity
+    key : function : int -> float
+        function that takes in rarity and returns the drop rate of the item
     weights : List[float]
         list of drop weights for items
         Invariant: weights[i] corresponds to item_list[i]
@@ -149,7 +149,13 @@ class Banner:
         Returns a random item out of a banner randomized by weight
     """
 
-    def __init__(self, name, item_list, price, key) -> None:
+    def __init__(
+        self,
+        name: str,
+        item_list: List[Item],
+        price: float,
+        key: Callable[[int], float],
+    ) -> None:
         """Creates a Banner object
 
         Parameters
@@ -165,8 +171,8 @@ class Banner:
             Invariant: weights[i] is the drop weight for item_list[i]
         price : float
             the price of pulling from the banner
-        key : func
-            function that determines drop rate from rarity
+        key : function : int -> float
+            function that takes in rarity and returns the drop rate of the item
         """
         self.name = name
         self.item_list = item_list
@@ -174,7 +180,7 @@ class Banner:
         self.weights = get_random_weights(item_list, key)
         self.price = price
 
-    def add_item(self, item) -> None:
+    def add_item(self, item: Item) -> None:
         """Adds an item to the banner
 
         Parameters
@@ -241,7 +247,7 @@ class Player:
         the amount of money that the player owns
     """
 
-    def __init__(self, name, id, items, money) -> None:
+    def __init__(self, name: str, id: str, items: List[Item], money: float) -> None:
         """Creates a Player object
 
         Parameters
@@ -260,7 +266,7 @@ class Player:
         self.items = items
         self.money = money
 
-    def add_item(self, item) -> None:
+    def add_item(self, item: Item) -> None:
         """Adds an item to the player's inventory
 
         Parameters
@@ -274,7 +280,7 @@ class Player:
         """
         self.items.append(item)
 
-    def change_money(self, amount) -> bool:
+    def change_money(self, amount: float) -> bool:
         """Adds or removes money from player
 
         Parameters
@@ -336,7 +342,7 @@ class Player:
         )
 
 
-def sort_item_key(item) -> int:
+def sort_item_key(item: Item) -> int:
     """The key used to sort items in a list of items
 
     Parameters
@@ -352,7 +358,7 @@ def sort_item_key(item) -> int:
     return item.rarity
 
 
-def player_str_net_worth(player) -> str:
+def player_str_net_worth(player: Player) -> str:
     """The string representation of a player and their net worth
     Useful for leaderboards
 
