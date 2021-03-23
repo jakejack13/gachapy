@@ -96,7 +96,7 @@ class Item:
         str
             String representation of this object
         """
-        return self.name + " (Rarity: " + str(self.rarity) + ")"
+        return self.name + "\nID: " + self.id + "\nRarity: " + str(self.rarity)
 
 
 def get_random_weights(items, key: Callable[[int], float]) -> List[float]:
@@ -348,7 +348,7 @@ class Player:
             True if the amount was able to be added or removed from account
             (does not create a negative money value), False otherwise
         """
-        if amount < 0 and self.money - amount < 0:
+        if amount < 0 and self.money + amount < 0:
             return False
         self.money += amount
         return True
