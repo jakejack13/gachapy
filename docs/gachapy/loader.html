@@ -168,17 +168,18 @@ load_players_from_file(filename,controller) : List[Optional[Player]]
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">items_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">items</span>
+    <span class="n">items_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     <span class="n">item_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;rarity&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">rarity</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items_list</span><span class="p">]</span>
     <span class="p">}</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">items_filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">item_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-    <span class="n">banners_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">banners</span>
+    <span class="n">banners_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     <span class="n">banner_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;banners&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
                 <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
                 <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">j</span><span class="o">.</span><span class="n">id</span><span class="p">}</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">item_list</span><span class="p">],</span>
                 <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">price</span><span class="p">,</span>
             <span class="p">}</span>
@@ -187,7 +188,7 @@ load_players_from_file(filename,controller) : List[Optional[Player]]
     <span class="p">}</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">banners_filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">banner_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-    <span class="n">players_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">players</span>
+    <span class="n">players_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     <span class="n">player_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;players&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
@@ -219,13 +220,16 @@ load_players_from_file(filename,controller) : List[Optional[Player]]
 <span class="sd">    List[Optional[Item]]</span>
 <span class="sd">        the list of items loaded, elements are None if they already exist in controller</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">items_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">[</span>
-            <span class="n">controller</span><span class="o">.</span><span class="n">add_new_item</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;rarity&quot;</span><span class="p">])</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items_str_list</span>
-        <span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">items_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">controller</span><span class="o">.</span><span class="n">add_new_item</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;rarity&quot;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items_str_list</span>
+            <span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
 
 
 <span class="k">def</span> <span class="nf">load_banners_from_file</span><span class="p">(</span>
@@ -246,15 +250,18 @@ load_players_from_file(filename,controller) : List[Optional[Player]]
 <span class="sd">    List[Optional[Banner]]</span>
 <span class="sd">        the list of banners loaded, elements are None if they already exist in controller</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">banner_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;banners&quot;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">[</span>
-            <span class="n">controller</span><span class="o">.</span><span class="n">add_new_banner</span><span class="p">(</span>
-                <span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">banner_str_list</span>
-        <span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">banner_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;banners&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">controller</span><span class="o">.</span><span class="n">add_new_banner</span><span class="p">(</span>
+                    <span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">banner_str_list</span>
+            <span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
 
 
 <span class="k">def</span> <span class="nf">load_players_from_file</span><span class="p">(</span>
@@ -275,15 +282,18 @@ load_players_from_file(filename,controller) : List[Optional[Player]]
 <span class="sd">    List[Optional[Player]]</span>
 <span class="sd">        the list of players loaded, elements are None if they already exist in controller</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">player_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;players&quot;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">[</span>
-            <span class="n">controller</span><span class="o">.</span><span class="n">add_new_player</span><span class="p">(</span>
-                <span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;money&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]]</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">player_str_list</span>
-        <span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">player_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;players&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">controller</span><span class="o">.</span><span class="n">add_new_player</span><span class="p">(</span>
+                    <span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;money&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]]</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">player_str_list</span>
+            <span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
 </pre></div>
 
         </details>
@@ -391,17 +401,18 @@ players_filename : str
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">items_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">items</span>
+    <span class="n">items_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     <span class="n">item_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;rarity&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">rarity</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items_list</span><span class="p">]</span>
     <span class="p">}</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">items_filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">item_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-    <span class="n">banners_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">banners</span>
+    <span class="n">banners_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     <span class="n">banner_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;banners&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
                 <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
                 <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">j</span><span class="o">.</span><span class="n">id</span><span class="p">}</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">item_list</span><span class="p">],</span>
                 <span class="s2">&quot;price&quot;</span><span class="p">:</span> <span class="n">i</span><span class="o">.</span><span class="n">price</span><span class="p">,</span>
             <span class="p">}</span>
@@ -410,7 +421,7 @@ players_filename : str
     <span class="p">}</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">banners_filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">banner_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-    <span class="n">players_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">players</span>
+    <span class="n">players_list</span> <span class="o">=</span> <span class="n">controller</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     <span class="n">player_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;players&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
@@ -478,13 +489,16 @@ players_filename : str
 <span class="sd">    List[Optional[Item]]</span>
 <span class="sd">        the list of items loaded, elements are None if they already exist in controller</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">items_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">[</span>
-            <span class="n">controller</span><span class="o">.</span><span class="n">add_new_item</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;rarity&quot;</span><span class="p">])</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items_str_list</span>
-        <span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">items_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">controller</span><span class="o">.</span><span class="n">add_new_item</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;rarity&quot;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items_str_list</span>
+            <span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
 </pre></div>
 
         </details>
@@ -538,15 +552,18 @@ controller : Controller
 <span class="sd">    List[Optional[Banner]]</span>
 <span class="sd">        the list of banners loaded, elements are None if they already exist in controller</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">banner_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;banners&quot;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">[</span>
-            <span class="n">controller</span><span class="o">.</span><span class="n">add_new_banner</span><span class="p">(</span>
-                <span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">banner_str_list</span>
-        <span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">banner_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;banners&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">controller</span><span class="o">.</span><span class="n">add_new_banner</span><span class="p">(</span>
+                    <span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">banner_str_list</span>
+            <span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
 </pre></div>
 
         </details>
@@ -600,15 +617,18 @@ controller : Controller
 <span class="sd">    List[Optional[Player]]</span>
 <span class="sd">        the list of players loaded, elements are None if they already exist in controller</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="n">player_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;players&quot;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">[</span>
-            <span class="n">controller</span><span class="o">.</span><span class="n">add_new_player</span><span class="p">(</span>
-                <span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;money&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]]</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">player_str_list</span>
-        <span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="n">player_str_list</span> <span class="o">=</span> <span class="n">j</span><span class="p">[</span><span class="s2">&quot;players&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span>
+                <span class="n">controller</span><span class="o">.</span><span class="n">add_new_player</span><span class="p">(</span>
+                    <span class="n">i</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;money&quot;</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">i</span><span class="p">[</span><span class="s2">&quot;items&quot;</span><span class="p">]]</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">player_str_list</span>
+            <span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
 </pre></div>
 
         </details>

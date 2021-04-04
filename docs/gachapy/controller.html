@@ -38,6 +38,9 @@
                     <a class="function" href="#default_key">default_key</a>
             </li>
             <li>
+                    <a class="function" href="#sort_player_key">sort_player_key</a>
+            </li>
+            <li>
                     <a class="class" href="#PullError">PullError</a>
                             <ul class="memberlist">
                 </ul>
@@ -60,6 +63,9 @@
                         </li>
                         <li>
                                 <a class="function" href="#Controller.find_item_by_id">find_item_by_id</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Controller.find_banner_by_id">find_banner_by_id</a>
                         </li>
                         <li>
                                 <a class="function" href="#Controller.find_player_by_id">find_player_by_id</a>
@@ -99,9 +105,6 @@
                         </li>
                 </ul>
 
-            </li>
-            <li>
-                    <a class="function" href="#sort_player_key">sort_player_key</a>
             </li>
     </ul>
 
@@ -174,7 +177,7 @@ default_key(rarity) : float
 <span class="sd">    The default function that converts rarity to drop rate (1/x)</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">gachapy.objects</span> <span class="kn">import</span> <span class="o">*</span>
 
 
@@ -192,6 +195,22 @@ default_key(rarity) : float
 <span class="sd">        the drop rate of the item</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">rarity</span>
+
+
+<span class="k">def</span> <span class="nf">sort_player_key</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;The key used to sort players in a list of players</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    player : Player</span>
+<span class="sd">        the player to extract the key from</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        the key of the player</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">rarity</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="p">])</span>
 
 
 <span class="k">class</span> <span class="nc">PullError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -250,20 +269,20 @@ default_key(rarity) : float
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
-        <span class="n">banners</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Banner</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
-        <span class="n">players</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Player</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">items</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Item</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">banners</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Banner</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">players</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Player</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates an instance of a gacha controller</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        items : List[Item]</span>
-<span class="sd">            the list of items that are in the item pool for the gacha</span>
-<span class="sd">        banners : List[Banner]</span>
-<span class="sd">            the list of banners that are available for the gacha</span>
-<span class="sd">        players : List[Player]</span>
-<span class="sd">            the list of players enrolled in the gacha</span>
+<span class="sd">        items : Dict[str,Item]</span>
+<span class="sd">            the dict of id, item pairs that are in the item pool for the gacha</span>
+<span class="sd">        banners : Dict[str,Banner]</span>
+<span class="sd">            the dict of id, banner pairs that are available for the gacha</span>
+<span class="sd">        players : Dict,str[Player]</span>
+<span class="sd">            the dict of id, player pairs enrolled in the gacha</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="o">=</span> <span class="n">banners</span>
@@ -282,10 +301,10 @@ default_key(rarity) : float
 <span class="sd">        Optional[Item]</span>
 <span class="sd">            the item object with the given name or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">item_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">item_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">find_banner_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">banner_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the Banner object with the given name or None if not found</span>
@@ -300,10 +319,10 @@ default_key(rarity) : float
 <span class="sd">        Optional[Banner]</span>
 <span class="sd">            the banner object with the given name or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">banners</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">banner_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">banners</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">banner</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">banner_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">banner</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">banners</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">banner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">find_player_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the Player object with the given name or None if not found</span>
@@ -318,10 +337,10 @@ default_key(rarity) : float
 <span class="sd">        Optional[player]</span>
 <span class="sd">            the player object with the given name or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">players</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">player</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">find_item_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the Item object with the given id or None if not found</span>
@@ -336,10 +355,22 @@ default_key(rarity) : float
 <span class="sd">        Optional[Item]</span>
 <span class="sd">            the item object with the given id or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">find_banner_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">banner_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the Banner object with the given id or None if not found</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        banner_id : str</span>
+<span class="sd">            the id of the banner</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[Banner]</span>
+<span class="sd">            the banner object with the given id or None if not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">banner_id</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">find_player_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the Player object with the given id or None if not found</span>
@@ -354,20 +385,19 @@ default_key(rarity) : float
 <span class="sd">        Optional[player]</span>
 <span class="sd">            the player object with the given id or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">players</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">player_id</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">banner_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">banner_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Pulls and returns an item from the specified banner for the specified player</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        player_id : str</span>
-<span class="sd">            the id of the selected player, must be valid</span>
-<span class="sd">        banner_name : str</span>
-<span class="sd">            the name of the selected player, must be valid</span>
+<span class="sd">            the id of the selected player</span>
+<span class="sd">            Preconditon: must be a valid id</span>
+<span class="sd">        banner_id : str</span>
+<span class="sd">            the id of the selected banner</span>
+<span class="sd">            Preconditon: must be a valid id</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -381,7 +411,7 @@ default_key(rarity) : float
         <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_player_by_id</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">PullError</span><span class="p">(</span><span class="s2">&quot;Player not found&quot;</span><span class="p">)</span>
-        <span class="n">banner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_banner_by_name</span><span class="p">(</span><span class="n">banner_name</span><span class="p">)</span>
+        <span class="n">banner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_banner_by_id</span><span class="p">(</span><span class="n">banner_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">banner</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">PullError</span><span class="p">(</span><span class="s2">&quot;Banner not found&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player</span><span class="o">.</span><span class="n">change_money</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">banner</span><span class="o">.</span><span class="n">price</span><span class="p">):</span>
@@ -397,26 +427,29 @@ default_key(rarity) : float
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            the name of the new item</span>
-<span class="sd">        description : str</span>
-<span class="sd">            the description of the new item</span>
+<span class="sd">        id : str</span>
+<span class="sd">            the id of the new item</span>
+<span class="sd">            Precondition: must be unique</span>
 <span class="sd">        rarity : int</span>
 <span class="sd">            the rarity of the item</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Item]</span>
-<span class="sd">            the Item object representing the new item or None if the item already exists</span>
+<span class="sd">            the Item object representing the new item or None if an item</span>
+<span class="sd">            with the specified id already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_item_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">new_item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_item</span>
         <span class="k">return</span> <span class="n">new_item</span>
 
     <span class="k">def</span> <span class="nf">add_new_banner</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">item_list_str</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">price</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">key</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_key</span><span class="p">,</span>
@@ -427,6 +460,9 @@ default_key(rarity) : float
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            the name of the new banner</span>
+<span class="sd">        id : str</span>
+<span class="sd">            the id of the new banner</span>
+<span class="sd">            Precondition: must be unique</span>
 <span class="sd">        item_list_str : List[str]</span>
 <span class="sd">            the list of the ids of the items in the banner</span>
 <span class="sd">        price : float</span>
@@ -437,15 +473,16 @@ default_key(rarity) : float
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Banner]</span>
-<span class="sd">            the Banner object representing the new banner or None if the banner already exists</span>
+<span class="sd">            the Banner object representing the new banner or None if a banner</span>
+<span class="sd">            with the specified id already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">banner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_banner_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">banner</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">item_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">find_item_by_id</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">item_list_str</span><span class="p">]</span>
-        <span class="n">new_banner</span> <span class="o">=</span> <span class="n">Banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_banner</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Banner</span>
+        <span class="n">new_banner</span> <span class="o">=</span> <span class="n">Banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_banner</span>
+        <span class="k">return</span> <span class="n">new_banner</span>
 
     <span class="k">def</span> <span class="nf">add_new_player</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_money</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">items_str</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -466,14 +503,15 @@ default_key(rarity) : float
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Player]</span>
-<span class="sd">            the Player object representing the new player or None if the player already exists</span>
+<span class="sd">            the Player object representing the new player or None if a player</span>
+<span class="sd">            with the specified id already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_player_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">items_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">find_item_by_id</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items_str</span><span class="p">]</span>
         <span class="n">new_player</span> <span class="o">=</span> <span class="n">Player</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">items_list</span><span class="p">,</span> <span class="n">start_money</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_player</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_player</span>
         <span class="k">return</span> <span class="n">new_player</span>
 
     <span class="k">def</span> <span class="nf">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
@@ -490,38 +528,33 @@ default_key(rarity) : float
 <span class="sd">        Optional[Item]</span>
 <span class="sd">            the removed item or None if item does not exist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">banner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
-                            <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
-                            <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">item</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">item_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">item</span>
+        <span class="k">for</span> <span class="n">banner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
+                    <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
+                    <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">item</span>
 
-    <span class="k">def</span> <span class="nf">remove_banner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">remove_banner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">banner_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Removes the specified banner from the gacha game</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        name : str</span>
-<span class="sd">            the name of the banner to remove</span>
+<span class="sd">        banner_id : str</span>
+<span class="sd">            the id of the banner to remove</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Banner]</span>
 <span class="sd">            the removed banner or None if banner does not exist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">banner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">banner</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">banner</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">banner</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">banner_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">remove_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Removes the specified player from the gacha game</span>
@@ -536,15 +569,12 @@ default_key(rarity) : float
 <span class="sd">        Optional[Player]</span>
 <span class="sd">            the removed player or None if player does not exist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">player</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">player_id</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">player</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">create_random_banner</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">num_items</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">key</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_key</span><span class="p">,</span>
@@ -557,6 +587,9 @@ default_key(rarity) : float
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            the name of the random banner</span>
+<span class="sd">        id : str</span>
+<span class="sd">            the id of the random banner</span>
+<span class="sd">            Precondition: must be unique</span>
 <span class="sd">        num_items : int</span>
 <span class="sd">            the number of items in the banner</span>
 <span class="sd">        price : float</span>
@@ -569,14 +602,14 @@ default_key(rarity) : float
 <span class="sd">        Optional[Banner]</span>
 <span class="sd">            the banner created or None if a banner with the name specified already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">item_list</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">num_items</span><span class="p">)</span>
+        <span class="n">item_list</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">k</span><span class="o">=</span><span class="n">num_items</span><span class="p">)</span>
         <span class="n">item_list_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">item_list</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">price</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">price</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">item_list</span><span class="p">:</span>
                 <span class="n">price</span> <span class="o">+=</span> <span class="n">item</span><span class="o">.</span><span class="n">rarity</span>
             <span class="n">price</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">item_list</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_new_banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">item_list_str</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_new_banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">item_list_str</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">remove_all_banners</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Removes all of the banners in the game</span>
@@ -585,7 +618,7 @@ default_key(rarity) : float
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">top_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_items</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the top specified number of items in the game in terms of rarity</span>
@@ -600,7 +633,7 @@ default_key(rarity) : float
 <span class="sd">        List[Item]</span>
 <span class="sd">            the list of top items</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_item_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_item_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sort_list</span><span class="p">[:</span> <span class="n">num_items</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">top_players</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
@@ -616,24 +649,10 @@ default_key(rarity) : float
 <span class="sd">        List[Player]</span>
 <span class="sd">            the list of top players</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_player_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_player_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">sort_list</span><span class="p">[:</span> <span class="n">num_players</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-
-
-<span class="k">def</span> <span class="nf">sort_player_key</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;The key used to sort players in a list of players</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    player : Player</span>
-<span class="sd">        the player to extract the key from</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    int</span>
-<span class="sd">        the key of the player</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">rarity</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="p">])</span>
 </pre></div>
 
         </details>
@@ -678,6 +697,49 @@ default_key(rarity) : float
 
 <p>float
     the drop rate of the item</p>
+</div>
+
+
+                </section>
+                <section id="sort_player_key">
+                            <div class="attr function"><a class="headerlink" href="#sort_player_key">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">sort_player_key</span><span class="signature">(player: <a href="objects.html#Player">gachapy.objects.Player</a>) -&gt; int</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">sort_player_key</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;The key used to sort players in a list of players</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    player : Player</span>
+<span class="sd">        the player to extract the key from</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        the key of the player</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">rarity</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="p">])</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>The key used to sort players in a list of players</p>
+
+<h2 id="parameters">Parameters</h2>
+
+<p>player : Player
+    the player to extract the key from</p>
+
+<h2 id="returns">Returns</h2>
+
+<p>int
+    the key of the player</p>
 </div>
 
 
@@ -781,20 +843,20 @@ default_key(rarity) : float
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
-        <span class="n">banners</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Banner</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
-        <span class="n">players</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Player</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">items</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Item</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">banners</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Banner</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">players</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Player</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates an instance of a gacha controller</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        items : List[Item]</span>
-<span class="sd">            the list of items that are in the item pool for the gacha</span>
-<span class="sd">        banners : List[Banner]</span>
-<span class="sd">            the list of banners that are available for the gacha</span>
-<span class="sd">        players : List[Player]</span>
-<span class="sd">            the list of players enrolled in the gacha</span>
+<span class="sd">        items : Dict[str,Item]</span>
+<span class="sd">            the dict of id, item pairs that are in the item pool for the gacha</span>
+<span class="sd">        banners : Dict[str,Banner]</span>
+<span class="sd">            the dict of id, banner pairs that are available for the gacha</span>
+<span class="sd">        players : Dict,str[Player]</span>
+<span class="sd">            the dict of id, player pairs enrolled in the gacha</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="o">=</span> <span class="n">banners</span>
@@ -813,10 +875,10 @@ default_key(rarity) : float
 <span class="sd">        Optional[Item]</span>
 <span class="sd">            the item object with the given name or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">item_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">item_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">find_banner_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">banner_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the Banner object with the given name or None if not found</span>
@@ -831,10 +893,10 @@ default_key(rarity) : float
 <span class="sd">        Optional[Banner]</span>
 <span class="sd">            the banner object with the given name or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">banners</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">banner_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">banners</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">banner</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">banner_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">banner</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">banners</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">banner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">find_player_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the Player object with the given name or None if not found</span>
@@ -849,10 +911,10 @@ default_key(rarity) : float
 <span class="sd">        Optional[player]</span>
 <span class="sd">            the player object with the given name or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">players</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">player</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">find_item_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the Item object with the given id or None if not found</span>
@@ -867,10 +929,22 @@ default_key(rarity) : float
 <span class="sd">        Optional[Item]</span>
 <span class="sd">            the item object with the given id or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">find_banner_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">banner_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the Banner object with the given id or None if not found</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        banner_id : str</span>
+<span class="sd">            the id of the banner</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[Banner]</span>
+<span class="sd">            the banner object with the given id or None if not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">banner_id</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">find_player_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the Player object with the given id or None if not found</span>
@@ -885,20 +959,19 @@ default_key(rarity) : float
 <span class="sd">        Optional[player]</span>
 <span class="sd">            the player object with the given id or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">players</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">player_id</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">banner_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">banner_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Pulls and returns an item from the specified banner for the specified player</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        player_id : str</span>
-<span class="sd">            the id of the selected player, must be valid</span>
-<span class="sd">        banner_name : str</span>
-<span class="sd">            the name of the selected player, must be valid</span>
+<span class="sd">            the id of the selected player</span>
+<span class="sd">            Preconditon: must be a valid id</span>
+<span class="sd">        banner_id : str</span>
+<span class="sd">            the id of the selected banner</span>
+<span class="sd">            Preconditon: must be a valid id</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -912,7 +985,7 @@ default_key(rarity) : float
         <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_player_by_id</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">PullError</span><span class="p">(</span><span class="s2">&quot;Player not found&quot;</span><span class="p">)</span>
-        <span class="n">banner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_banner_by_name</span><span class="p">(</span><span class="n">banner_name</span><span class="p">)</span>
+        <span class="n">banner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_banner_by_id</span><span class="p">(</span><span class="n">banner_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">banner</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">PullError</span><span class="p">(</span><span class="s2">&quot;Banner not found&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player</span><span class="o">.</span><span class="n">change_money</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">banner</span><span class="o">.</span><span class="n">price</span><span class="p">):</span>
@@ -928,26 +1001,29 @@ default_key(rarity) : float
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            the name of the new item</span>
-<span class="sd">        description : str</span>
-<span class="sd">            the description of the new item</span>
+<span class="sd">        id : str</span>
+<span class="sd">            the id of the new item</span>
+<span class="sd">            Precondition: must be unique</span>
 <span class="sd">        rarity : int</span>
 <span class="sd">            the rarity of the item</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Item]</span>
-<span class="sd">            the Item object representing the new item or None if the item already exists</span>
+<span class="sd">            the Item object representing the new item or None if an item</span>
+<span class="sd">            with the specified id already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_item_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">new_item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_item</span>
         <span class="k">return</span> <span class="n">new_item</span>
 
     <span class="k">def</span> <span class="nf">add_new_banner</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">item_list_str</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">price</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">key</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_key</span><span class="p">,</span>
@@ -958,6 +1034,9 @@ default_key(rarity) : float
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            the name of the new banner</span>
+<span class="sd">        id : str</span>
+<span class="sd">            the id of the new banner</span>
+<span class="sd">            Precondition: must be unique</span>
 <span class="sd">        item_list_str : List[str]</span>
 <span class="sd">            the list of the ids of the items in the banner</span>
 <span class="sd">        price : float</span>
@@ -968,15 +1047,16 @@ default_key(rarity) : float
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Banner]</span>
-<span class="sd">            the Banner object representing the new banner or None if the banner already exists</span>
+<span class="sd">            the Banner object representing the new banner or None if a banner</span>
+<span class="sd">            with the specified id already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">banner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_banner_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">banner</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">item_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">find_item_by_id</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">item_list_str</span><span class="p">]</span>
-        <span class="n">new_banner</span> <span class="o">=</span> <span class="n">Banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_banner</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Banner</span>
+        <span class="n">new_banner</span> <span class="o">=</span> <span class="n">Banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_banner</span>
+        <span class="k">return</span> <span class="n">new_banner</span>
 
     <span class="k">def</span> <span class="nf">add_new_player</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start_money</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">items_str</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -997,14 +1077,15 @@ default_key(rarity) : float
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Player]</span>
-<span class="sd">            the Player object representing the new player or None if the player already exists</span>
+<span class="sd">            the Player object representing the new player or None if a player</span>
+<span class="sd">            with the specified id already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_player_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">items_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">find_item_by_id</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items_str</span><span class="p">]</span>
         <span class="n">new_player</span> <span class="o">=</span> <span class="n">Player</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">items_list</span><span class="p">,</span> <span class="n">start_money</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_player</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_player</span>
         <span class="k">return</span> <span class="n">new_player</span>
 
     <span class="k">def</span> <span class="nf">remove_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
@@ -1021,38 +1102,33 @@ default_key(rarity) : float
 <span class="sd">        Optional[Item]</span>
 <span class="sd">            the removed item or None if item does not exist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">banner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
-                            <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
-                            <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">item</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">item_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">item</span>
+        <span class="k">for</span> <span class="n">banner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
+                    <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
+                    <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">item</span>
 
-    <span class="k">def</span> <span class="nf">remove_banner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">remove_banner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">banner_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Removes the specified banner from the gacha game</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        name : str</span>
-<span class="sd">            the name of the banner to remove</span>
+<span class="sd">        banner_id : str</span>
+<span class="sd">            the id of the banner to remove</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Banner]</span>
 <span class="sd">            the removed banner or None if banner does not exist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">banner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">banner</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">banner</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">banner</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">banner_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">remove_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Removes the specified player from the gacha game</span>
@@ -1067,15 +1143,12 @@ default_key(rarity) : float
 <span class="sd">        Optional[Player]</span>
 <span class="sd">            the removed player or None if player does not exist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">player</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">player_id</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">player</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">create_random_banner</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">num_items</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">key</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_key</span><span class="p">,</span>
@@ -1088,6 +1161,9 @@ default_key(rarity) : float
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            the name of the random banner</span>
+<span class="sd">        id : str</span>
+<span class="sd">            the id of the random banner</span>
+<span class="sd">            Precondition: must be unique</span>
 <span class="sd">        num_items : int</span>
 <span class="sd">            the number of items in the banner</span>
 <span class="sd">        price : float</span>
@@ -1100,14 +1176,14 @@ default_key(rarity) : float
 <span class="sd">        Optional[Banner]</span>
 <span class="sd">            the banner created or None if a banner with the name specified already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">item_list</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">num_items</span><span class="p">)</span>
+        <span class="n">item_list</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">k</span><span class="o">=</span><span class="n">num_items</span><span class="p">)</span>
         <span class="n">item_list_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">item_list</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">price</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">price</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">item_list</span><span class="p">:</span>
                 <span class="n">price</span> <span class="o">+=</span> <span class="n">item</span><span class="o">.</span><span class="n">rarity</span>
             <span class="n">price</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">item_list</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_new_banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">item_list_str</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_new_banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">item_list_str</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">remove_all_banners</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Removes all of the banners in the game</span>
@@ -1116,7 +1192,7 @@ default_key(rarity) : float
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">def</span> <span class="nf">top_items</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_items</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Returns the top specified number of items in the game in terms of rarity</span>
@@ -1131,7 +1207,7 @@ default_key(rarity) : float
 <span class="sd">        List[Item]</span>
 <span class="sd">            the list of top items</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_item_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_item_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sort_list</span><span class="p">[:</span> <span class="n">num_items</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">top_players</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_players</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
@@ -1147,7 +1223,9 @@ default_key(rarity) : float
 <span class="sd">        List[Player]</span>
 <span class="sd">            the list of top players</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_player_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_player_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">sort_list</span><span class="p">[:</span> <span class="n">num_players</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
 </pre></div>
 
@@ -1207,29 +1285,29 @@ top_players(num_players) : List[Player]
         
             <span class="name">Controller</span><span class="signature">(
     self,
-    items: List[<a href="objects.html#Item">gachapy.objects.Item</a>] = [],
-    banners: List[<a href="objects.html#Banner">gachapy.objects.Banner</a>] = [],
-    players: List[<a href="objects.html#Player">gachapy.objects.Player</a>] = []
+    items: Dict[str, <a href="objects.html#Item">gachapy.objects.Item</a>] = {},
+    banners: Dict[str, <a href="objects.html#Banner">gachapy.objects.Banner</a>] = {},
+    players: Dict[str, <a href="objects.html#Player">gachapy.objects.Player</a>] = {}
 )</span>    </div>
 
                 <details>
             <summary>View Source</summary>
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
-        <span class="n">banners</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Banner</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
-        <span class="n">players</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Player</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+        <span class="n">items</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Item</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">banners</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Banner</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">players</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Player</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates an instance of a gacha controller</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        items : List[Item]</span>
-<span class="sd">            the list of items that are in the item pool for the gacha</span>
-<span class="sd">        banners : List[Banner]</span>
-<span class="sd">            the list of banners that are available for the gacha</span>
-<span class="sd">        players : List[Player]</span>
-<span class="sd">            the list of players enrolled in the gacha</span>
+<span class="sd">        items : Dict[str,Item]</span>
+<span class="sd">            the dict of id, item pairs that are in the item pool for the gacha</span>
+<span class="sd">        banners : Dict[str,Banner]</span>
+<span class="sd">            the dict of id, banner pairs that are available for the gacha</span>
+<span class="sd">        players : Dict,str[Player]</span>
+<span class="sd">            the dict of id, player pairs enrolled in the gacha</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="o">=</span> <span class="n">banners</span>
@@ -1242,12 +1320,12 @@ top_players(num_players) : List[Player]
 
 <h2 id="parameters">Parameters</h2>
 
-<p>items : List[Item]
-    the list of items that are in the item pool for the gacha
-banners : List[Banner]
-    the list of banners that are available for the gacha
-players : List[Player]
-    the list of players enrolled in the gacha</p>
+<p>items : Dict[str,Item]
+    the dict of id, item pairs that are in the item pool for the gacha
+banners : Dict[str,Banner]
+    the dict of id, banner pairs that are available for the gacha
+players : Dict,str[Player]
+    the dict of id, player pairs enrolled in the gacha</p>
 </div>
 
 
@@ -1275,10 +1353,10 @@ players : List[Player]
 <span class="sd">        Optional[Item]</span>
 <span class="sd">            the item object with the given name or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">item_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">item_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 
         </details>
@@ -1321,10 +1399,10 @@ players : List[Player]
 <span class="sd">        Optional[Banner]</span>
 <span class="sd">            the banner object with the given name or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">banners</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">banner_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">banners</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">banner</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">banner_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">banner</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">banners</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">banner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 
         </details>
@@ -1367,10 +1445,10 @@ players : List[Player]
 <span class="sd">        Optional[player]</span>
 <span class="sd">            the player object with the given name or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">players</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">player_name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">player</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 
         </details>
@@ -1413,10 +1491,7 @@ players : List[Player]
 <span class="sd">        Optional[Item]</span>
 <span class="sd">            the item object with the given id or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span>
 </pre></div>
 
         </details>
@@ -1432,6 +1507,49 @@ players : List[Player]
 
 <p>Optional[Item]
     the item object with the given id or None if not found</p>
+</div>
+
+
+                            </div>
+                            <div id="Controller.find_banner_by_id" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Controller.find_banner_by_id">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">find_banner_by_id</span><span class="signature">(self, banner_id: str) -&gt; Optional[<a href="objects.html#Banner">gachapy.objects.Banner</a>]</span>:
+    </div>
+
+                <details>
+            <summary>View Source</summary>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">find_banner_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">banner_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Returns the Banner object with the given id or None if not found</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        banner_id : str</span>
+<span class="sd">            the id of the banner</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[Banner]</span>
+<span class="sd">            the banner object with the given id or None if not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">banner_id</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Returns the Banner object with the given id or None if not found</p>
+
+<h2 id="parameters">Parameters</h2>
+
+<p>banner_id : str
+    the id of the banner</p>
+
+<h2 id="returns">Returns</h2>
+
+<p>Optional[Banner]
+    the banner object with the given id or None if not found</p>
 </div>
 
 
@@ -1459,10 +1577,7 @@ players : List[Player]
 <span class="sd">        Optional[player]</span>
 <span class="sd">            the player object with the given id or None if not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">players</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">player_id</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">players</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">return</span> <span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
 </pre></div>
 
         </details>
@@ -1490,21 +1605,23 @@ players : List[Player]
             <span class="name">pull</span><span class="signature">(
     self,
     player_id: str,
-    banner_name: str
+    banner_id: str
 ) -&gt; Optional[<a href="objects.html#Item">gachapy.objects.Item</a>]</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">banner_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">pull</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">banner_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Item</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Pulls and returns an item from the specified banner for the specified player</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        player_id : str</span>
-<span class="sd">            the id of the selected player, must be valid</span>
-<span class="sd">        banner_name : str</span>
-<span class="sd">            the name of the selected player, must be valid</span>
+<span class="sd">            the id of the selected player</span>
+<span class="sd">            Preconditon: must be a valid id</span>
+<span class="sd">        banner_id : str</span>
+<span class="sd">            the id of the selected banner</span>
+<span class="sd">            Preconditon: must be a valid id</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1518,7 +1635,7 @@ players : List[Player]
         <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_player_by_id</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">PullError</span><span class="p">(</span><span class="s2">&quot;Player not found&quot;</span><span class="p">)</span>
-        <span class="n">banner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_banner_by_name</span><span class="p">(</span><span class="n">banner_name</span><span class="p">)</span>
+        <span class="n">banner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_banner_by_id</span><span class="p">(</span><span class="n">banner_id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">banner</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">PullError</span><span class="p">(</span><span class="s2">&quot;Banner not found&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player</span><span class="o">.</span><span class="n">change_money</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">banner</span><span class="o">.</span><span class="n">price</span><span class="p">):</span>
@@ -1535,9 +1652,11 @@ players : List[Player]
 <h2 id="parameters">Parameters</h2>
 
 <p>player_id : str
-    the id of the selected player, must be valid
-banner_name : str
-    the name of the selected player, must be valid</p>
+    the id of the selected player
+    Preconditon: must be a valid id
+banner_id : str
+    the id of the selected banner
+    Preconditon: must be a valid id</p>
 
 <h2 id="returns">Returns</h2>
 
@@ -1573,21 +1692,23 @@ banner_name : str
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            the name of the new item</span>
-<span class="sd">        description : str</span>
-<span class="sd">            the description of the new item</span>
+<span class="sd">        id : str</span>
+<span class="sd">            the id of the new item</span>
+<span class="sd">            Precondition: must be unique</span>
 <span class="sd">        rarity : int</span>
 <span class="sd">            the rarity of the item</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Item]</span>
-<span class="sd">            the Item object representing the new item or None if the item already exists</span>
+<span class="sd">            the Item object representing the new item or None if an item</span>
+<span class="sd">            with the specified id already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_item_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">item</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">new_item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">rarity</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_item</span>
         <span class="k">return</span> <span class="n">new_item</span>
 </pre></div>
 
@@ -1599,15 +1720,17 @@ banner_name : str
 
 <p>name : str
     the name of the new item
-description : str
-    the description of the new item
+id : str
+    the id of the new item
+    Precondition: must be unique
 rarity : int
     the rarity of the item</p>
 
 <h2 id="returns">Returns</h2>
 
 <p>Optional[Item]
-    the Item object representing the new item or None if the item already exists</p>
+    the Item object representing the new item or None if an item
+    with the specified id already exists</p>
 </div>
 
 
@@ -1620,6 +1743,7 @@ rarity : int
             <span class="name">add_new_banner</span><span class="signature">(
     self,
     name: str,
+    id: str,
     item_list_str: List[str],
     price: float,
     key: Callable[[int], float] = &lt;function default_key&gt;
@@ -1631,6 +1755,7 @@ rarity : int
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">add_new_banner</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">item_list_str</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">price</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">key</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_key</span><span class="p">,</span>
@@ -1641,6 +1766,9 @@ rarity : int
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            the name of the new banner</span>
+<span class="sd">        id : str</span>
+<span class="sd">            the id of the new banner</span>
+<span class="sd">            Precondition: must be unique</span>
 <span class="sd">        item_list_str : List[str]</span>
 <span class="sd">            the list of the ids of the items in the banner</span>
 <span class="sd">        price : float</span>
@@ -1651,15 +1779,16 @@ rarity : int
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Banner]</span>
-<span class="sd">            the Banner object representing the new banner or None if the banner already exists</span>
+<span class="sd">            the Banner object representing the new banner or None if a banner</span>
+<span class="sd">            with the specified id already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">banner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_banner_by_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">banner</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">item_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">find_item_by_id</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">item_list_str</span><span class="p">]</span>
-        <span class="n">new_banner</span> <span class="o">=</span> <span class="n">Banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_banner</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Banner</span>
+        <span class="n">new_banner</span> <span class="o">=</span> <span class="n">Banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">item_list</span><span class="p">,</span> <span class="n">price</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_banner</span>
+        <span class="k">return</span> <span class="n">new_banner</span>
 </pre></div>
 
         </details>
@@ -1670,6 +1799,9 @@ rarity : int
 
 <p>name : str
     the name of the new banner
+id : str
+    the id of the new banner
+    Precondition: must be unique
 item_list_str : List[str]
     the list of the ids of the items in the banner
 price : float
@@ -1680,7 +1812,8 @@ key : function : int -> float
 <h2 id="returns">Returns</h2>
 
 <p>Optional[Banner]
-    the Banner object representing the new banner or None if the banner already exists</p>
+    the Banner object representing the new banner or None if a banner
+    with the specified id already exists</p>
 </div>
 
 
@@ -1720,14 +1853,15 @@ key : function : int -> float
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Player]</span>
-<span class="sd">            the Player object representing the new player or None if the player already exists</span>
+<span class="sd">            the Player object representing the new player or None if a player</span>
+<span class="sd">            with the specified id already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_player_by_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">player</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="n">items_list</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">find_item_by_id</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items_str</span><span class="p">]</span>
         <span class="n">new_player</span> <span class="o">=</span> <span class="n">Player</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">items_list</span><span class="p">,</span> <span class="n">start_money</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_player</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_player</span>
         <span class="k">return</span> <span class="n">new_player</span>
 </pre></div>
 
@@ -1749,7 +1883,8 @@ items_str : List[str]
 <h2 id="returns">Returns</h2>
 
 <p>Optional[Player]
-    the Player object representing the new player or None if the player already exists</p>
+    the Player object representing the new player or None if a player
+    with the specified id already exists</p>
 </div>
 
 
@@ -1778,19 +1913,18 @@ items_str : List[str]
 <span class="sd">        Optional[Item]</span>
 <span class="sd">            the removed item or None if item does not exist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">banner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
-                            <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
-                            <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">item</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">item_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">item</span>
+        <span class="k">for</span> <span class="n">banner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
+                    <span class="n">banner</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">item_id</span><span class="p">:</span>
+                    <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">item</span>
 </pre></div>
 
         </details>
@@ -1816,29 +1950,25 @@ WARNING: Will also remove from banners and players if found, costly operation</p
 
         
             <span class="def">def</span>
-            <span class="name">remove_banner</span><span class="signature">(self, name: str) -&gt; Optional[<a href="objects.html#Banner">gachapy.objects.Banner</a>]</span>:
+            <span class="name">remove_banner</span><span class="signature">(self, banner_id: str) -&gt; Optional[<a href="objects.html#Banner">gachapy.objects.Banner</a>]</span>:
     </div>
 
                 <details>
             <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">remove_banner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
+            <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">remove_banner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">banner_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Banner</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;Removes the specified banner from the gacha game</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        name : str</span>
-<span class="sd">            the name of the banner to remove</span>
+<span class="sd">        banner_id : str</span>
+<span class="sd">            the id of the banner to remove</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Optional[Banner]</span>
 <span class="sd">            the removed banner or None if banner does not exist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">banner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">banner</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">banner</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">banner</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">banner</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">banners</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">banner_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 </pre></div>
 
         </details>
@@ -1847,8 +1977,8 @@ WARNING: Will also remove from banners and players if found, costly operation</p
 
 <h2 id="parameters">Parameters</h2>
 
-<p>name : str
-    the name of the banner to remove</p>
+<p>banner_id : str
+    the id of the banner to remove</p>
 
 <h2 id="returns">Returns</h2>
 
@@ -1881,11 +2011,7 @@ WARNING: Will also remove from banners and players if found, costly operation</p
 <span class="sd">        Optional[Player]</span>
 <span class="sd">            the removed player or None if player does not exist</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">player</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">player_id</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">player</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 </pre></div>
 
         </details>
@@ -1913,6 +2039,7 @@ WARNING: Will also remove from banners and players if found, costly operation</p
             <span class="name">create_random_banner</span><span class="signature">(
     self,
     name: str,
+    id: str,
     num_items: int,
     price: float = -1,
     key: Callable[[int], float] = &lt;function default_key&gt;
@@ -1924,6 +2051,7 @@ WARNING: Will also remove from banners and players if found, costly operation</p
             <div class="codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">create_random_banner</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">num_items</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">price</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">key</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_key</span><span class="p">,</span>
@@ -1936,6 +2064,9 @@ WARNING: Will also remove from banners and players if found, costly operation</p
 <span class="sd">        ----------</span>
 <span class="sd">        name : str</span>
 <span class="sd">            the name of the random banner</span>
+<span class="sd">        id : str</span>
+<span class="sd">            the id of the random banner</span>
+<span class="sd">            Precondition: must be unique</span>
 <span class="sd">        num_items : int</span>
 <span class="sd">            the number of items in the banner</span>
 <span class="sd">        price : float</span>
@@ -1948,14 +2079,14 @@ WARNING: Will also remove from banners and players if found, costly operation</p
 <span class="sd">        Optional[Banner]</span>
 <span class="sd">            the banner created or None if a banner with the name specified already exists</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">item_list</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">num_items</span><span class="p">)</span>
+        <span class="n">item_list</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">k</span><span class="o">=</span><span class="n">num_items</span><span class="p">)</span>
         <span class="n">item_list_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">item_list</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">price</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">price</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">item_list</span><span class="p">:</span>
                 <span class="n">price</span> <span class="o">+=</span> <span class="n">item</span><span class="o">.</span><span class="n">rarity</span>
             <span class="n">price</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">item_list</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_new_banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">item_list_str</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_new_banner</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">item_list_str</span><span class="p">,</span> <span class="n">price</span><span class="p">)</span>
 </pre></div>
 
         </details>
@@ -1968,6 +2099,9 @@ WARNING: Will also remove from banners and players if found, costly operation</p
 
 <p>name : str
     the name of the random banner
+id : str
+    the id of the random banner
+    Precondition: must be unique
 num_items : int
     the number of items in the banner
 price : float
@@ -2000,7 +2134,7 @@ key : function : int -> float
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">banners</span> <span class="o">=</span> <span class="p">{}</span>
 </pre></div>
 
         </details>
@@ -2037,7 +2171,7 @@ key : function : int -> float
 <span class="sd">        List[Item]</span>
 <span class="sd">            the list of top items</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_item_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_item_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sort_list</span><span class="p">[:</span> <span class="n">num_items</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
 </pre></div>
 
@@ -2081,7 +2215,9 @@ key : function : int -> float
 <span class="sd">        List[Player]</span>
 <span class="sd">            the list of top players</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_player_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sort_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">key</span><span class="o">=</span><span class="n">sort_player_key</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">sort_list</span><span class="p">[:</span> <span class="n">num_players</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
 </pre></div>
 
@@ -2102,49 +2238,6 @@ key : function : int -> float
 
 
                             </div>
-                </section>
-                <section id="sort_player_key">
-                            <div class="attr function"><a class="headerlink" href="#sort_player_key">#&nbsp;&nbsp</a>
-
-        
-            <span class="def">def</span>
-            <span class="name">sort_player_key</span><span class="signature">(player: <a href="objects.html#Player">gachapy.objects.Player</a>) -&gt; int</span>:
-    </div>
-
-                <details>
-            <summary>View Source</summary>
-            <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">sort_player_key</span><span class="p">(</span><span class="n">player</span><span class="p">:</span> <span class="n">Player</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;The key used to sort players in a list of players</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    player : Player</span>
-<span class="sd">        the player to extract the key from</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    int</span>
-<span class="sd">        the key of the player</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="n">i</span><span class="o">.</span><span class="n">rarity</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">items</span><span class="p">])</span>
-</pre></div>
-
-        </details>
-
-            <div class="docstring"><p>The key used to sort players in a list of players</p>
-
-<h2 id="parameters">Parameters</h2>
-
-<p>player : Player
-    the player to extract the key from</p>
-
-<h2 id="returns">Returns</h2>
-
-<p>int
-    the key of the player</p>
-</div>
-
-
                 </section>
     </main>
 </body>

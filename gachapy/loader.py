@@ -78,17 +78,18 @@ def save_controller(
     -------
     None
     """
-    items_list = controller.items
+    items_list = controller.items.values()
     item_dict = {
         "items": [{"name": i.name, "id": i.id, "rarity": i.rarity} for i in items_list]
     }
     with open(items_filename, "w") as f:
         json.dump(item_dict, f)
-    banners_list = controller.banners
+    banners_list = controller.banners.values()
     banner_dict = {
         "banners": [
             {
                 "name": i.name,
+                "id": i.id,
                 "items": [{"id": j.id} for j in i.item_list],
                 "price": i.price,
             }
@@ -97,7 +98,7 @@ def save_controller(
     }
     with open(banners_filename, "w") as f:
         json.dump(banner_dict, f)
-    players_list = controller.players
+    players_list = controller.players.values()
     player_dict = {
         "players": [
             {
@@ -129,13 +130,16 @@ def load_items_from_file(filename: str, controller: Controller) -> List[Optional
     List[Optional[Item]]
         the list of items loaded, elements are None if they already exist in controller
     """
-    with open(filename) as f:
-        j = json.load(f)
-        items_str_list = j["items"]
-        return [
-            controller.add_new_item(i["name"], i["id"], i["rarity"])
-            for i in items_str_list
-        ]
+    try:
+        with open(filename) as f:
+            j = json.load(f)
+            items_str_list = j["items"]
+            return [
+                controller.add_new_item(i["name"], i["id"], i["rarity"])
+                for i in items_str_list
+            ]
+    except:
+        return []
 
 
 def load_banners_from_file(
@@ -156,15 +160,18 @@ def load_banners_from_file(
     List[Optional[Banner]]
         the list of banners loaded, elements are None if they already exist in controller
     """
-    with open(filename) as f:
-        j = json.load(f)
-        banner_str_list = j["banners"]
-        return [
-            controller.add_new_banner(
-                i["name"], [j["id"] for j in i["items"]], i["price"]
-            )
-            for i in banner_str_list
-        ]
+    try:
+        with open(filename) as f:
+            j = json.load(f)
+            banner_str_list = j["banners"]
+            return [
+                controller.add_new_banner(
+                    i["name"], i["id"], [j["id"] for j in i["items"]], i["price"]
+                )
+                for i in banner_str_list
+            ]
+    except:
+        return []
 
 
 def load_players_from_file(
@@ -185,12 +192,15 @@ def load_players_from_file(
     List[Optional[Player]]
         the list of players loaded, elements are None if they already exist in controller
     """
-    with open(filename) as f:
-        j = json.load(f)
-        player_str_list = j["players"]
-        return [
-            controller.add_new_player(
-                i["name"], i["id"], i["money"], [j["id"] for j in i["items"]]
-            )
-            for i in player_str_list
-        ]
+    try:
+        with open(filename) as f:
+            j = json.load(f)
+            player_str_list = j["players"]
+            return [
+                controller.add_new_player(
+                    i["name"], i["id"], i["money"], [j["id"] for j in i["items"]]
+                )
+                for i in player_str_list
+            ]
+    except:
+        return []

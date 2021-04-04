@@ -25,7 +25,7 @@ default_key(rarity) : float
     The default function that converts rarity to drop rate (1/x)
 """
 
-from typing import Optional
+from typing import Dict, Optional
 from gachapy.objects import *
 
 
@@ -43,6 +43,22 @@ def default_key(rarity: float) -> float:
         the drop rate of the item
     """
     return 1 / rarity
+
+
+def sort_player_key(player: Player) -> int:
+    """The key used to sort players in a list of players
+
+    Parameters
+    ----------
+    player : Player
+        the player to extract the key from
+
+    Returns
+    -------
+    int
+        the key of the player
+    """
+    return sum([i.rarity for i in player.items])
 
 
 class PullError(Exception):
@@ -101,20 +117,20 @@ class Controller:
 
     def __init__(
         self,
-        items: List[Item] = [],
-        banners: List[Banner] = [],
-        players: List[Player] = [],
+        items: Dict[str, Item] = {},
+        banners: Dict[str, Banner] = {},
+        players: Dict[str, Player] = {},
     ) -> None:
         """Creates an instance of a gacha controller
 
         Parameters
         ----------
-        items : List[Item]
-            the list of items that are in the item pool for the gacha
-        banners : List[Banner]
-            the list of banners that are available for the gacha
-        players : List[Player]
-            the list of players enrolled in the gacha
+        items : Dict[str,Item]
+            the dict of id, item pairs that are in the item pool for the gacha
+        banners : Dict[str,Banner]
+            the dict of id, banner pairs that are available for the gacha
+        players : Dict,str[Player]
+            the dict of id, player pairs enrolled in the gacha
         """
         self.items = items
         self.banners = banners
@@ -133,10 +149,10 @@ class Controller:
         Optional[Item]
             the item object with the given name or None if not found
         """
-        items = [i for i in self.items if i.name == item_name]
-        if len(items) < 1:
+        item = [i for i in self.items.values() if i.name == item_name]
+        if len(item) < 1:
             return None
-        return items[0]
+        return item[0]
 
     def find_banner_by_name(self, banner_name: str) -> Optional[Banner]:
         """Returns the Banner object with the given name or None if not found
@@ -151,10 +167,10 @@ class Controller:
         Optional[Banner]
             the banner object with the given name or None if not found
         """
-        banners = [i for i in self.banners if i.name == banner_name]
-        if len(banners) < 1:
+        banner = [i for i in self.banners.values() if i.name == banner_name]
+        if len(banner) < 1:
             return None
-        return banners[0]
+        return banner[0]
 
     def find_player_by_name(self, player_name: str) -> Optional[Player]:
         """Returns the Player object with the given name or None if not found
@@ -169,10 +185,10 @@ class Controller:
         Optional[player]
             the player object with the given name or None if not found
         """
-        players = [i for i in self.players if i.name == player_name]
-        if len(players) < 1:
+        player = [i for i in self.players.values() if i.name == player_name]
+        if len(player) < 1:
             return None
-        return players[0]
+        return player[0]
 
     def find_item_by_id(self, item_id: str) -> Optional[Item]:
         """Returns the Item object with the given id or None if not found
@@ -187,10 +203,22 @@ class Controller:
         Optional[Item]
             the item object with the given id or None if not found
         """
-        items = [i for i in self.items if i.id == item_id]
-        if len(items) < 1:
-            return None
-        return items[0]
+        return self.items.get(item_id)
+
+    def find_banner_by_id(self, banner_id: str) -> Optional[Banner]:
+        """Returns the Banner object with the given id or None if not found
+
+        Parameters
+        ----------
+        banner_id : str
+            the id of the banner
+
+        Returns
+        -------
+        Optional[Banner]
+            the banner object with the given id or None if not found
+        """
+        return self.banners.get(banner_id)
 
     def find_player_by_id(self, player_id: str) -> Optional[Player]:
         """Returns the Player object with the given id or None if not found
@@ -205,20 +233,19 @@ class Controller:
         Optional[player]
             the player object with the given id or None if not found
         """
-        players = [i for i in self.players if i.id == player_id]
-        if len(players) < 1:
-            return None
-        return players[0]
+        return self.players.get(player_id)
 
-    def pull(self, player_id: str, banner_name: str) -> Optional[Item]:
+    def pull(self, player_id: str, banner_id: str) -> Optional[Item]:
         """Pulls and returns an item from the specified banner for the specified player
 
         Parameters
         ----------
         player_id : str
-            the id of the selected player, must be valid
-        banner_name : str
-            the name of the selected player, must be valid
+            the id of the selected player
+            Preconditon: must be a valid id
+        banner_id : str
+            the id of the selected banner
+            Preconditon: must be a valid id
 
         Returns
         -------
@@ -232,7 +259,7 @@ class Controller:
         player = self.find_player_by_id(player_id)
         if player == None:
             raise PullError("Player not found")
-        banner = self.find_banner_by_name(banner_name)
+        banner = self.find_banner_by_id(banner_id)
         if banner == None:
             raise PullError("Banner not found")
         if player.change_money(-1 * banner.price):
@@ -248,26 +275,29 @@ class Controller:
         ----------
         name : str
             the name of the new item
-        description : str
-            the description of the new item
+        id : str
+            the id of the new item
+            Precondition: must be unique
         rarity : int
             the rarity of the item
 
         Returns
         -------
         Optional[Item]
-            the Item object representing the new item or None if the item already exists
+            the Item object representing the new item or None if an item
+            with the specified id already exists
         """
         item = self.find_item_by_id(id)
         if item != None:
             return None
         new_item = Item(name, id, rarity)
-        self.items.append(new_item)
+        self.items[id] = new_item
         return new_item
 
     def add_new_banner(
         self,
         name: str,
+        id: str,
         item_list_str: List[str],
         price: float,
         key: Callable[[int], float] = default_key,
@@ -278,6 +308,9 @@ class Controller:
         ----------
         name : str
             the name of the new banner
+        id : str
+            the id of the new banner
+            Precondition: must be unique
         item_list_str : List[str]
             the list of the ids of the items in the banner
         price : float
@@ -288,15 +321,16 @@ class Controller:
         Returns
         -------
         Optional[Banner]
-            the Banner object representing the new banner or None if the banner already exists
+            the Banner object representing the new banner or None if a banner
+            with the specified id already exists
         """
         banner = self.find_banner_by_name(name)
         if banner != None:
             return None
         item_list = [self.find_item_by_id(i) for i in item_list_str]
-        new_banner = Banner(name, item_list, price, key)
-        self.banners.append(new_banner)
-        return Banner
+        new_banner = Banner(name, id, item_list, price, key)
+        self.banners[id] = new_banner
+        return new_banner
 
     def add_new_player(
         self, name: str, id: str, start_money: float, items_str: List[str] = []
@@ -317,14 +351,15 @@ class Controller:
         Returns
         -------
         Optional[Player]
-            the Player object representing the new player or None if the player already exists
+            the Player object representing the new player or None if a player
+            with the specified id already exists
         """
         player = self.find_player_by_id(id)
         if player != None:
             return None
         items_list = [self.find_item_by_id(i) for i in items_str]
         new_player = Player(name, id, items_list, start_money)
-        self.players.append(new_player)
+        self.players[id] = new_player
         return new_player
 
     def remove_item(self, item_id: str) -> Optional[Item]:
@@ -341,38 +376,33 @@ class Controller:
         Optional[Item]
             the removed item or None if item does not exist
         """
-        for item in self.items:
-            if item.id == item_id:
-                self.items.remove(item)
-                for banner in self.banners:
-                    for item in banner.items:
-                        if item.id == item_id:
-                            banner.items.remove(item)
-                for player in self.players:
-                    for item in player.items:
-                        if item.id == item_id:
-                            player.items.remove(item)
-                return item
-        return None
+        item = self.items.pop(item_id, None)
+        if item == None:
+            return item
+        for banner in self.banners:
+            for item in banner.items:
+                if item.id == item_id:
+                    banner.items.remove(item)
+        for player in self.players:
+            for item in player.items:
+                if item.id == item_id:
+                    player.items.remove(item)
+        return item
 
-    def remove_banner(self, name: str) -> Optional[Banner]:
+    def remove_banner(self, banner_id: str) -> Optional[Banner]:
         """Removes the specified banner from the gacha game
 
         Parameters
         ----------
-        name : str
-            the name of the banner to remove
+        banner_id : str
+            the id of the banner to remove
 
         Returns
         -------
         Optional[Banner]
             the removed banner or None if banner does not exist
         """
-        for banner in self.banners:
-            if banner.name == name:
-                self.banner.remove(banner)
-                return banner
-        return None
+        return self.banners.pop(banner_id, None)
 
     def remove_player(self, player_id: str) -> Optional[Player]:
         """Removes the specified player from the gacha game
@@ -387,15 +417,12 @@ class Controller:
         Optional[Player]
             the removed player or None if player does not exist
         """
-        for player in self.players:
-            if player.id == player_id:
-                self.players.remove(player)
-                return player
-        return None
+        return self.players.pop(player_id, None)
 
     def create_random_banner(
         self,
         name: str,
+        id: str,
         num_items: int,
         price: float = -1,
         key: Callable[[int], float] = default_key,
@@ -408,6 +435,9 @@ class Controller:
         ----------
         name : str
             the name of the random banner
+        id : str
+            the id of the random banner
+            Precondition: must be unique
         num_items : int
             the number of items in the banner
         price : float
@@ -420,14 +450,14 @@ class Controller:
         Optional[Banner]
             the banner created or None if a banner with the name specified already exists
         """
-        item_list = random.choices(self.items, k=num_items)
+        item_list = random.choices(list(self.items.values()), k=num_items)
         item_list_str = [item.id for item in item_list]
         if price < 0:
             price = 0
             for item in item_list:
                 price += item.rarity
             price /= len(item_list)
-        return self.add_new_banner(name, item_list_str, price)
+        return self.add_new_banner(name, id, item_list_str, price)
 
     def remove_all_banners(self) -> None:
         """Removes all of the banners in the game
@@ -436,7 +466,7 @@ class Controller:
         -------
         None
         """
-        self.banners = []
+        self.banners = {}
 
     def top_items(self, num_items: int) -> List[Item]:
         """Returns the top specified number of items in the game in terms of rarity
@@ -451,7 +481,7 @@ class Controller:
         List[Item]
             the list of top items
         """
-        sort_list = sorted(self.items, key=sort_item_key, reverse=True)
+        sort_list = sorted(list(self.items.values()), key=sort_item_key, reverse=True)
         return sort_list[: num_items - 1]
 
     def top_players(self, num_players: int) -> List[Player]:
@@ -467,21 +497,7 @@ class Controller:
         List[Player]
             the list of top players
         """
-        sort_list = sorted(self.players, key=sort_player_key, reverse=True)
+        sort_list = sorted(
+            list(self.players.values()), key=sort_player_key, reverse=True
+        )
         return sort_list[: num_players - 1]
-
-
-def sort_player_key(player: Player) -> int:
-    """The key used to sort players in a list of players
-
-    Parameters
-    ----------
-    player : Player
-        the player to extract the key from
-
-    Returns
-    -------
-    int
-        the key of the player
-    """
-    return sum([i.rarity for i in player.items])

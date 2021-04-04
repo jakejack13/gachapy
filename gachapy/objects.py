@@ -21,8 +21,6 @@ get_random_weights(items) : List[float]
     Returns the random weights of the items for the random function
 sort_item_key(item) : int
     The key used to sort items in a list of items
-player_str_net_worth(player) : str
-    The string representation of a player and their net worth
 """
 import random
 from typing import Callable, List
@@ -46,8 +44,6 @@ class Item:
 
     Methods
     -------
-    Item : Item
-        creates an item object
     change_rarity(rarity) : bool
         changes the rarity of the Item
     """
@@ -61,6 +57,7 @@ class Item:
             name of the item
         id : str
             id of the item
+            Precondition: must be unique
         rarity : int
             rarity of the item where the higher the numer, the higher the rarity
         """
@@ -88,7 +85,7 @@ class Item:
         return True
 
     def __str__(self) -> str:
-        """Returns the string representation of this Item object
+        """Returns a string representation of this Item object
         self.name (Rarity: self.rarity)
 
         Returns
@@ -97,27 +94,6 @@ class Item:
             String representation of this object
         """
         return self.name + "\nID: " + self.id + "\nRarity: " + str(self.rarity)
-
-
-def get_random_weights(items, key: Callable[[int], float]) -> List[float]:
-    """Returns the random weights of the items for the random function
-
-    Parameters
-    ----------
-    items : List[Item]
-        list of items to find weights of
-    key : function : int -> float
-        function that takes in rarity and returns the drop rate of the item
-
-    Returns
-    -------
-    List[float]
-        the list of weights of the items
-    """
-    weights = []
-    for i in range(len(items)):
-        weights.append(key(items[i].rarity))
-    return weights
 
 
 class Banner:
@@ -129,8 +105,11 @@ class Banner:
 
     Fields
     ------
-    name : string
+    name : str
         name of the banner
+    id : str
+        id of the banner
+        Invariant: must be unique
     item_list : List[Item]
         the list of items in the banner
     price : float
@@ -154,6 +133,7 @@ class Banner:
     def __init__(
         self,
         name: str,
+        id: str,
         item_list: List[Item],
         price: float,
         key: Callable[[int], float],
@@ -164,19 +144,22 @@ class Banner:
         ----------
         name : str
             name of the banner
-            Invariant: must be unique
+        id : str
+            id of the banner
+            Precondition: must be unique
         item_list : List[Item]
             the list of items in the banner
-            Invariant: all items must be unique
+            Precondition: all items must be unique
         weights : List[float]
             the list of drop weights
-            Invariant: weights[i] is the drop weight for item_list[i]
+            Precondition: weights[i] is the drop weight for item_list[i]
         price : float
             the price of pulling from the banner
         key : function : int -> float
             function that takes in rarity and returns the drop rate of the item
         """
         self.name = name
+        self.id = id
         self.item_list = item_list
         self.key = key
         self.weights = get_random_weights(item_list, key)
@@ -228,7 +211,7 @@ class Banner:
         return random.choices(self.item_list, weights=self.weights, k=1)[0]
 
     def __str__(self) -> str:
-        """Returns the string representation of this Banner object
+        """Returns a string representation of this Banner object
         self.name
         Price: self.price
         Items:
@@ -365,7 +348,7 @@ class Player:
         return sum([i.rarity for i in self.items])
 
     def __str__(self) -> str:
-        """Returns the string representation of this Player object
+        """Returns a string representation of this Player object
         Money: self.money
         Net worth: self.get_net_worth()
         Top 10 items:
@@ -411,18 +394,22 @@ def sort_item_key(item: Item) -> int:
     return item.rarity
 
 
-def player_str_net_worth(player: Player) -> str:
-    """The string representation of a player and their net worth
-    Useful for leaderboards
+def get_random_weights(items, key: Callable[[int], float]) -> List[float]:
+    """Returns the random weights of the items for the random function
 
     Parameters
     ----------
-    player : Player
-        the player
+    items : List[Item]
+        list of items to find weights of
+    key : function : int -> float
+        function that takes in rarity and returns the drop rate of the item
 
     Returns
     -------
-    str
-        the string representation of a player and their net work
+    List[float]
+        the list of weights of the items
     """
-    return player.name + " (Net worth " + str(player.get_net_worth()) + ")"
+    weights = []
+    for i in range(len(items)):
+        weights.append(key(items[i].rarity))
+    return weights
