@@ -61,41 +61,6 @@ class Controller:
         the list of banners that are available for the gacha
     players : List[Player]
         the list of players enrolled in the gacha
-
-    Methods
-    -------
-    find_item_by_name(item_name) : Optional[Item]
-        Returns the Item object with the given name or None if not found
-    find_banner_by_name(banner_name) : Optional[Banner]
-        Returns the Banner object with the given name or None if not found
-    find_player_by_name(player_name) : Optional[Banner]
-        Returns the Player object with the given name or None if not found
-    find_item_by_id(item_id) : Optional[Item]
-        Returns the Item object with the given id or None if not found
-    find_player_by_id(player_id) : Optional[Player]
-        Returns the Player object with the given id or None if not found
-    pull(player_id,banner_name) : Optional[Item]
-        Pulls and returns an item from the specified banner for the specified player
-    add_new_item(name,id,rarity) : Optional[Item]
-        Adds a new item to the gacha game
-    add_new_banner(name,item_list_str,price) : Optional[Banner]
-        Adds a new banner to the gacha game
-    add_new_player(name,id,start_money,items_str) : Optional[Player]
-        Adds a new player to the gacha game
-    remove_item(id) : Optional[Item]
-        Removes the specified item from the gacha game
-    remove_banner(name) : Optional[Banner]
-        Removes the specified banner from the gacha game
-    remove_player(id) : Optional[Player]
-        Removes the specified player from the gacha game
-    create_random_banner(name,num_items,price) -> Optional[Banner]
-        Creates a random banner with the given name and number of items
-    remove_all_banners() : None
-        Removes all of the banners in the game
-    top_items(num_items) : List[Item]
-        Returns the top specified number of items in the game in terms of rarity
-    top_players(num_players) : List[Player]
-        Returns the top specified number of players in the game in terms of net worth
     """
 
     def __init__(

@@ -25,11 +25,6 @@ class Item:
     id : int
         rarity of the item where the higher the numer, the higher the rarity
         Invariant: must be >= 1
-
-    Methods
-    -------
-    change_rarity(rarity) : bool
-        changes the rarity of the Item
     """
 
     def __init__(self, name: str, id: str, rarity: int) -> None:
@@ -103,15 +98,6 @@ class Banner:
     weights : List[float]
         list of drop weights for items
         Invariant: weights[i] corresponds to item_list[i]
-
-    Methods
-    -------
-    add_item(item) : None
-        Adds an item to the banner
-    remove_item(item) : bool
-        Removes an item from the banner
-    pull() : Item
-        Returns a random item out of a banner randomized by weight
     """
 
     def __init__(
@@ -234,18 +220,6 @@ class Player:
         the list of items that the player owns
     money : float
         the amount of money that the player owns
-
-    Methods
-    -------
-    add_item(item) : None
-        Adds an item to the player's inventory
-    remove_item(item) : bool
-        Removes an item from the player's inventory
-    change_money(amount) : bool
-        Adds or removes money from player
-    get_net_worth() : int
-        Returns the net worth of the player, calculated by the sum of the
-        rarities of all of the items they own
     """
 
     def __init__(self, name: str, id: str, items: List[Item], money: float) -> None:
