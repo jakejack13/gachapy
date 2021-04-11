@@ -1,3 +1,9 @@
 # GachaPy
 
-A gacha engine built in Python for developing gacha games
+A Python engine for gacha games  
+
+##### Documentation
+[gachapy documentation](https://gachapy.readthedocs.io/)
+
+##### Download through pip
+[gachapy PyPi page](https://pypi.org/project/gachapy/)

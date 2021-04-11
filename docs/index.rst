@@ -1,10 +1,10 @@
-.. gachapy documentation master file, created by
-   sphinx-quickstart on Sun Apr 11 00:12:22 2021.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+gachapy - a Python engine for gacha games
+=========================================
 
-Welcome to gachapy's documentation!
-===================================
+Project Sources
+===============
+| `GitHub <https://github.com/jakejack13/gachapy>`_
+| `PyPi <https://pypi.org/project/gachapy/>`_
 
 .. toctree::
    :maxdepth: 2
