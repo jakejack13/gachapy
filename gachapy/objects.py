@@ -11,7 +11,7 @@ from typing import Callable, List
 
 
 class Item:
-    """A representation of an item in the gacha game
+    """A representation of an item in the gacha game.
     An item is something that players can collect and pull from banners. Each
     item must be unique
 
@@ -76,7 +76,7 @@ class Item:
 
 
 class Banner:
-    """A representation of a banner in the gacha game
+    """A representation of a banner in the gacha game.
     A Banner is where players can choose to spend money in order to obtain
     a random item from the specific item pool presented in the Banner. Each
     Banner (should) contain different items and have different prices than
@@ -204,7 +204,7 @@ class Banner:
 
 
 class Player:
-    """A representation of a player in the gacha game
+    """A representation of a player in the gacha game.
     A Player is someone who can use money to purchase pulls from banners,
     receive items from banners, and collect items. Each Player is unique
     and may own different items from each other

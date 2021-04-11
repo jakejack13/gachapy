@@ -51,7 +51,9 @@ class PullError(Exception):
 
 
 class Controller:
-    """A controller for an instance of a gacha game
+    """A controller used to control an instance of a gacha game. Used to
+    perform all actions needed in a game and manage game information in the
+    form of gachapy objects
 
     Fields
     ------
