@@ -7,19 +7,6 @@ functions. Using the other three helper functions seperately will result in an
 incomplete and uncoupled Controller. Only use if you know what you're doing
 
 These functions operate as the Loader of a gachapy game
-
-Functions
----------
-load_controller(items_filename,banners_filename,players_filename) : Controller
-    Creates a Controller object from the specified json files
-save_controller(controller,items_filename,banners_filename,players_filename) : None
-    Saves the controller in json format into the specified files
-load_items_from_file(filename,controller) : List[Optional[Item]]
-    Load items into controller from the specified json file
-load_banners_from_file(filename,controller) : List[Optional[Banner]]
-    Load banners into controller from the specified json file
-load_players_from_file(filename,controller) : List[Optional[Player]]
-    Load players into controller from the specified json file
 """
 
 from gachapy.objects import *

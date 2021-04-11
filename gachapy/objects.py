@@ -5,22 +5,6 @@ of class methods. DO NOT directly edit fields or the invariants could be
 disrupted (although viewing fields directly is permitted). 
 
 These objects operate as the Model of a gachapy game 
-
-Classes
--------
-Item
-    A representation of an item in the gacha game
-Banner
-    A representation of a banner in the gacha game
-Player
-    A representation of a player in the gacha game
-
-Functions
----------
-get_random_weights(items) : List[float]
-    Returns the random weights of the items for the random function
-sort_item_key(item) : int
-    The key used to sort items in a list of items
 """
 import random
 from typing import Callable, List

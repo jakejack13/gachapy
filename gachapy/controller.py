@@ -6,23 +6,6 @@ accessed, the objects can then be modified directly using class methods (see
 objects.py for more info).
 
 This object operates as the Controller of a gachapy game 
-
-Classes
--------
-Controller
-    A controller for an instance of a gacha game
-
-Exceptions
-----------
-PullError
-    An exception thrown when pulling from a banner
-
-Functions
----------
-sort_player_key(player) : int
-    The key used to sort players in a list of players
-default_key(rarity) : float
-    The default function that converts rarity to drop rate (1/x)
 """
 
 from typing import Dict, Optional
