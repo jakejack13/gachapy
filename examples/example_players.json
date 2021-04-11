@@ -1,10 +1,14 @@
 {
-    "players":[
+    "players": [
         {
-            "name":"JakeJack",
-            "id":"1",
-            "money":100,
-            "items":[]
+            "name": "JakeJack",
+            "id": "1",
+            "money": 100,
+            "items": [
+                {
+                    "id": "squirrel"
+                }
+            ]
         }
     ]
 }

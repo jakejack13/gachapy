@@ -1,19 +1,19 @@
 {
     "items": [
         {
-            "name":"Windowsill squirrel",
-            "id":"squirrel",
-            "rarity":100
+            "name": "Windowsill squirrel",
+            "id": "squirrel",
+            "rarity": 100
         },
         {
-            "name":"Desk lamp",
-            "id":"lamp",
-            "rarity":2
+            "name": "Desk lamp",
+            "id": "lamp",
+            "rarity": 2
         },
         {
-            "name":"Burger",
-            "id":"burger",
-            "rarity":4
+            "name": "Burger",
+            "id": "burger",
+            "rarity": 4
         }
     ]
 }

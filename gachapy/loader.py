@@ -65,40 +65,9 @@ def save_controller(
     -------
     None
     """
-    items_list = controller.items.values()
-    item_dict = {
-        "items": [{"name": i.name, "id": i.id, "rarity": i.rarity} for i in items_list]
-    }
-    with open(items_filename, "w") as f:
-        json.dump(item_dict, f)
-    banners_list = controller.banners.values()
-    banner_dict = {
-        "banners": [
-            {
-                "name": i.name,
-                "id": i.id,
-                "items": [{"id": j.id} for j in i.item_list],
-                "price": i.price,
-            }
-            for i in banners_list
-        ]
-    }
-    with open(banners_filename, "w") as f:
-        json.dump(banner_dict, f)
-    players_list = controller.players.values()
-    player_dict = {
-        "players": [
-            {
-                "name": i.name,
-                "id": i.id,
-                "money": i.money,
-                "items": [{"id": j.id} for j in i.items],
-            }
-            for i in players_list
-        ]
-    }
-    with open(players_filename, "w") as f:
-        json.dump(player_dict, f)
+    save_items_to_file(items_filename, controller)
+    save_banners_to_file(banners_filename, controller)
+    save_players_to_file(players_filename, controller)
 
 
 def load_items_from_file(filename: str, controller: Controller) -> List[Optional[Item]]:
@@ -191,3 +160,88 @@ def load_players_from_file(
             ]
     except:
         return []
+
+
+def save_items_to_file(filename: str, controller: Controller) -> None:
+    """Save items from controller into the specified json file
+    DO NOT USE ALONE (unless you know what you're doing)
+
+    Parameters
+    ----------
+    filename : str
+        the path of the json file to save
+    controller : Controller
+        the controller to load the items from
+
+    Returns
+    -------
+    None
+    """
+    items_list = controller.items.values()
+    item_dict = {
+        "items": [{"name": i.name, "id": i.id, "rarity": i.rarity} for i in items_list]
+    }
+    with open(filename, "w") as f:
+        json.dump(item_dict, f)
+
+
+def save_banners_to_file(filename: str, controller: Controller) -> None:
+    """Save banners from controller into the specified json file
+    DO NOT USE ALONE (unless you know what you're doing)
+
+    Parameters
+    ----------
+    filename : str
+        the path of the json file to save
+    controller : Controller
+        the controller to load the banners from
+
+    Returns
+    -------
+    None
+    """
+    banners_list = controller.banners.values()
+    banner_dict = {
+        "banners": [
+            {
+                "name": i.name,
+                "id": i.id,
+                "items": [{"id": j.id} for j in i.item_list],
+                "price": i.price,
+            }
+            for i in banners_list
+        ]
+    }
+    with open(filename, "w") as f:
+        json.dump(banner_dict, f)
+
+
+def save_players_to_file(filename: str, controller: Controller) -> None:
+    """Save players from controller into the specified json file
+    DO NOT USE ALONE (unless you know what you're doing)
+
+    Parameters
+    ----------
+    filename : str
+        the path of the json file to save
+    controller : Controller
+        the controller to load the players from
+
+    Returns
+    -------
+    None
+    """
+    players_list = controller.players.values()
+    player_dict = {
+        "players": [
+            {
+                "name": i.name,
+                "id": i.id,
+                "money": i.money,
+                "items": [{"id": j.id} for j in i.items],
+            }
+            for i in players_list
+        ]
+    }
+    with open(filename, "w") as f:
+        json.dump(player_dict, f)
