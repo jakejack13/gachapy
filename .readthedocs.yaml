@@ -20,4 +20,4 @@ python:
     - method: pip
       path: .
     - method: setuptools
-      path: gachapy
+      path: .
