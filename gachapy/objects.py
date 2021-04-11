@@ -1,4 +1,4 @@
-"""Objects used for low level management and data storage of the gacha game 
+"""Objects used for low level management and data storage of the gacha game. 
 Instances of these classes should be created indirectly through a Controller 
 (see controller.py for more info) but can be modified directly through the use 
 of class methods. DO NOT directly edit fields or the invariants could be 
@@ -410,6 +410,6 @@ def get_random_weights(items, key: Callable[[int], float]) -> List[float]:
         the list of weights of the items
     """
     weights = []
-    for i in range(len(items)):
-        weights.append(key(items[i].rarity))
+    for item in items:
+        weights.append(key(item.rarity))
     return weights

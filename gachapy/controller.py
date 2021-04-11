@@ -1,4 +1,4 @@
-"""The controller used for all high level management of the gacha game 
+"""The controller used for all high level management of the gacha game. 
 Instances of this class should be created for each instance of a gacha game 
 you would like to run. These instances should then be used to access and 
 manage the Item, Banner, and Player objects in the game directly. Once 
