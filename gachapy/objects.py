@@ -27,7 +27,7 @@ class Item:
         Invariant: must be >= 1
     """
 
-    def __init__(self, name: str, id: str, rarity: int) -> None:
+    def __init__(self, name: str, id: str, rarity: float) -> None:
         """Creates an Item object
 
         Parameters
@@ -37,19 +37,19 @@ class Item:
         id : str
             id of the item
             Precondition: must be unique
-        rarity : int
+        rarity : float
             rarity of the item where the higher the numer, the higher the rarity
         """
         self.name = name
         self.id = id
         self.rarity = rarity
 
-    def change_rarity(self, rarity: int) -> bool:
+    def change_rarity(self, rarity: float) -> bool:
         """Changes the rarity of the Item
 
         Parameters
         ----------
-        rarity : int
+        rarity : float
             new rarity of the item
             Precondition: rarity must be >= 1
 
@@ -106,7 +106,7 @@ class Banner:
         id: str,
         item_list: List[Item],
         price: float,
-        key: Callable[[int], float],
+        key: Callable[[float], float],
     ) -> None:
         """Creates a Banner object
 
@@ -336,8 +336,8 @@ class Player:
         )
 
 
-def sort_item_key(item: Item) -> int:
-    """The key used to sort items in a list of items
+def sort_item_key(item: Item) -> float:
+    """The function used to sort items in a list of items
 
     Parameters
     ----------
@@ -346,20 +346,20 @@ def sort_item_key(item: Item) -> int:
 
     Returns
     -------
-    int
+    float
         the key of the item
     """
     return item.rarity
 
 
-def get_random_weights(items, key: Callable[[int], float]) -> List[float]:
+def get_random_weights(items, key: Callable[[float], float]) -> List[float]:
     """Returns the random weights of the items for the random function
 
     Parameters
     ----------
     items : List[Item]
         list of items to find weights of
-    key : function : int -> float
+    key : function : float -> float
         function that takes in rarity and returns the drop rate of the item
 
     Returns

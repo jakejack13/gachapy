@@ -218,7 +218,7 @@ class Controller:
             return item
         return None
 
-    def add_new_item(self, name: str, id: str, rarity: int) -> Optional[Item]:
+    def add_new_item(self, name: str, id: str, rarity: float) -> Optional[Item]:
         """Adds a new item to the gacha game
 
         Parameters
@@ -228,7 +228,7 @@ class Controller:
         id : str
             the id of the new item
             Precondition: must be unique
-        rarity : int
+        rarity : float
             the rarity of the item
 
         Returns
@@ -314,7 +314,8 @@ class Controller:
 
     def remove_item(self, item_id: str) -> Optional[Item]:
         """Removes the specified item from the gacha game
-        WARNING: Will also remove from banners and players if found, costly operation
+        WARNING: Will also remove from banners and players if found,
+        costly operation
 
         Parameters
         ----------
@@ -407,7 +408,7 @@ class Controller:
             for item in item_list:
                 price += item.rarity
             price /= len(item_list)
-        return self.add_new_banner(name, id, item_list_str, price)
+        return self.add_new_banner(name, id, item_list_str, price, key)
 
     def remove_all_banners(self) -> None:
         """Removes all of the banners in the game
