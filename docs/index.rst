@@ -1,6 +1,10 @@
 gachapy - a Python engine for gacha games
 =========================================
 
+Install through pip
+===================
+| pip install gachapy
+
 Project Sources
 ===============
 | `GitHub <https://github.com/jakejack13/gachapy>`_
