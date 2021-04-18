@@ -5,6 +5,8 @@ of class methods. DO NOT directly edit fields or the invariants could be
 disrupted (although viewing fields directly is permitted). 
 
 These objects operate as the Model of a gachapy game 
+
+Author: Jacob Kerr, 2021
 """
 import random
 from typing import Callable, List
@@ -132,7 +134,7 @@ class Banner:
         self.id = id
         self.item_list = item_list
         self.key = key
-        self.weights = get_random_weights(item_list, key)
+        self.weights = _get_random_weights(item_list, key)
         self.price = price
 
     def add_item(self, item: Item) -> None:
@@ -148,7 +150,7 @@ class Banner:
             None
         """
         self.item_list.append(item)
-        self.weights = get_random_weights(self.item_list)
+        self.weights = _get_random_weights(self.item_list)
 
     def remove_item(self, item: Item) -> bool:
         """Removes an item from the banner
@@ -165,7 +167,7 @@ class Banner:
         """
         try:
             self.item_list.remove(item)
-            self.weights = get_random_weights(self.item_list)
+            self.weights = _get_random_weights(self.item_list)
             return True
         except:
             return False
@@ -330,13 +332,15 @@ class Player:
             + "\n".join(
                 [
                     str(elem)
-                    for elem in sorted(self.items, key=sort_item_key, reverse=True)[:10]
+                    for elem in sorted(self.items, key=_sort_item_key, reverse=True)[
+                        :10
+                    ]
                 ]
             )
         )
 
 
-def sort_item_key(item: Item) -> float:
+def _sort_item_key(item: Item) -> float:
     """The function used to sort items in a list of items
 
     Parameters
@@ -352,7 +356,7 @@ def sort_item_key(item: Item) -> float:
     return item.rarity
 
 
-def get_random_weights(items, key: Callable[[float], float]) -> List[float]:
+def _get_random_weights(items, key: Callable[[float], float]) -> List[float]:
     """Returns the random weights of the items for the random function
 
     Parameters

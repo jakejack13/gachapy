@@ -2,11 +2,10 @@
 These functions can be used to save and load Controller objects to and from
 json files. This should be used to save and load game state of active 
 gachapy games.
-WARNING: Only use load_controller and save_controller as your top-level loader 
-functions. Using the other three helper functions seperately will result in an 
-incomplete and uncoupled Controller. Only use if you know what you're doing
 
 These functions operate as the Loader of a gachapy game
+
+Author: Jacob Kerr, 2021
 """
 
 from gachapy.objects import *
@@ -18,7 +17,6 @@ def load_controller(
     items_filename: str, banners_filename: str, players_filename: str
 ) -> Controller:
     """Creates a Controller object from the specified json files
-    TOP LEVEL FUNCTION
 
     Parameters
     ----------
@@ -35,9 +33,9 @@ def load_controller(
         the controller loaded from the specified files
     """
     controller = Controller()
-    load_items_from_file(items_filename, controller)
-    load_banners_from_file(banners_filename, controller)
-    load_players_from_file(players_filename, controller)
+    _load_items_from_file(items_filename, controller)
+    _load_banners_from_file(banners_filename, controller)
+    _load_players_from_file(players_filename, controller)
     return controller
 
 
@@ -48,7 +46,6 @@ def save_controller(
     players_filename: str,
 ) -> None:
     """Saves the controller in json format into the specified files
-    TOP LEVEL FUNCTION
 
     Parameters
     ----------
@@ -65,14 +62,15 @@ def save_controller(
     -------
     None
     """
-    save_items_to_file(items_filename, controller)
-    save_banners_to_file(banners_filename, controller)
-    save_players_to_file(players_filename, controller)
+    _save_items_to_file(items_filename, controller)
+    _save_banners_to_file(banners_filename, controller)
+    _save_players_to_file(players_filename, controller)
 
 
-def load_items_from_file(filename: str, controller: Controller) -> List[Optional[Item]]:
+def _load_items_from_file(
+    filename: str, controller: Controller
+) -> List[Optional[Item]]:
     """Load items into controller from the specified json file
-    DO NOT USE ALONE (unless you know what you're doing)
 
     Parameters
     ----------
@@ -98,11 +96,10 @@ def load_items_from_file(filename: str, controller: Controller) -> List[Optional
         return []
 
 
-def load_banners_from_file(
+def _load_banners_from_file(
     filename: str, controller: Controller
 ) -> List[Optional[Banner]]:
     """Load banners into controller from the specified json file
-    DO NOT USE ALONE (unless you know what you're doing)
 
     Parameters
     ----------
@@ -130,11 +127,10 @@ def load_banners_from_file(
         return []
 
 
-def load_players_from_file(
+def _load_players_from_file(
     filename: str, controller: Controller
 ) -> List[Optional[Player]]:
     """Load players into controller from the specified json file
-    DO NOT USE ALONE (unless you know what you're doing)
 
     Parameters
     ----------
@@ -162,9 +158,8 @@ def load_players_from_file(
         return []
 
 
-def save_items_to_file(filename: str, controller: Controller) -> None:
+def _save_items_to_file(filename: str, controller: Controller) -> None:
     """Save items from controller into the specified json file
-    DO NOT USE ALONE (unless you know what you're doing)
 
     Parameters
     ----------
@@ -185,9 +180,8 @@ def save_items_to_file(filename: str, controller: Controller) -> None:
         json.dump(item_dict, f)
 
 
-def save_banners_to_file(filename: str, controller: Controller) -> None:
+def _save_banners_to_file(filename: str, controller: Controller) -> None:
     """Save banners from controller into the specified json file
-    DO NOT USE ALONE (unless you know what you're doing)
 
     Parameters
     ----------
@@ -216,9 +210,8 @@ def save_banners_to_file(filename: str, controller: Controller) -> None:
         json.dump(banner_dict, f)
 
 
-def save_players_to_file(filename: str, controller: Controller) -> None:
+def _save_players_to_file(filename: str, controller: Controller) -> None:
     """Save players from controller into the specified json file
-    DO NOT USE ALONE (unless you know what you're doing)
 
     Parameters
     ----------

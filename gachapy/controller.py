@@ -6,6 +6,8 @@ accessed, the objects can then be modified directly using class methods (see
 objects.py for more info).
 
 This object operates as the Controller of a gachapy game 
+
+Author: Jacob Kerr, 2021
 """
 
 from typing import Dict, Optional
@@ -28,7 +30,7 @@ def default_key(rarity: float) -> float:
     return 1 / rarity
 
 
-def sort_player_key(player: Player) -> int:
+def _sort_player_key(player: Player) -> int:
     """The key used to sort players in a list of players
 
     Parameters
@@ -88,6 +90,7 @@ class Controller:
 
     def find_item_by_name(self, item_name: str) -> Optional[Item]:
         """Returns the Item object with the given name or None if not found
+        DEPRICATED: consider using find_item_by_id
 
         Parameters
         ----------
@@ -106,6 +109,7 @@ class Controller:
 
     def find_banner_by_name(self, banner_name: str) -> Optional[Banner]:
         """Returns the Banner object with the given name or None if not found
+        DEPRICATED: consider using find_banner_by_id
 
         Parameters
         ----------
@@ -124,6 +128,7 @@ class Controller:
 
     def find_player_by_name(self, player_name: str) -> Optional[Player]:
         """Returns the Player object with the given name or None if not found
+        DEPRICATED: consider using find_player_by_id
 
         Parameters
         ----------
@@ -250,7 +255,7 @@ class Controller:
         id: str,
         item_list_str: List[str],
         price: float,
-        key: Callable[[int], float] = default_key,
+        key: Callable[[float], float] = default_key,
     ) -> Optional[Banner]:
         """Adds a new banner to the gacha game
 
@@ -420,7 +425,7 @@ class Controller:
         self.banners = {}
 
     def top_items(self, num_items: int) -> List[Item]:
-        """Returns the top specified number of items in the game in terms of rarity
+        """Returns the top specified number of items in the game sorted by rarity
 
         Parameters
         ----------
@@ -432,11 +437,11 @@ class Controller:
         List[Item]
             the list of top items
         """
-        sort_list = sorted(list(self.items.values()), key=sort_item_key, reverse=True)
+        sort_list = sorted(list(self.items.values()), key=_sort_item_key, reverse=True)
         return sort_list[: num_items - 1]
 
     def top_players(self, num_players: int) -> List[Player]:
-        """Returns the top specified number of players in the game in terms of net worth
+        """Returns the top specified number of players in the game sorted by net worth
 
         Parameters
         ----------
@@ -449,6 +454,6 @@ class Controller:
             the list of top players
         """
         sort_list = sorted(
-            list(self.players.values()), key=sort_player_key, reverse=True
+            list(self.players.values()), key=_sort_player_key, reverse=True
         )
         return sort_list[: num_players - 1]
