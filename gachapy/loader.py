@@ -1,4 +1,4 @@
-"""Collection of loader functions for loading gachapy objects from json files. 
+"""Library of loader functions for loading gachapy objects from json files. 
 These functions can be used to save and load Controller objects to and from
 json files. This should be used to save and load game state of active 
 gachapy games.
