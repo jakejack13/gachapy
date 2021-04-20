@@ -60,21 +60,18 @@ class Item:
         bool
             True if the rarity successfully updated, false otherwise
         """
-        if rarity < 1:
+        if rarity <= 0:
             return False
         self.rarity = rarity
         return True
 
     def __str__(self) -> str:
-        """Returns a string representation of this Item object
-        self.name (Rarity: self.rarity)
-
-        Returns
-        -------
-        str
-            String representation of this object
-        """
         return self.name + "\nID: " + self.id + "\nRarity: " + str(self.rarity)
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Item):
+            return False
+        return self.id == other.id
 
 
 class Banner:
@@ -122,22 +119,19 @@ class Banner:
         item_list : List[Item]
             the list of items in the banner
             Precondition: all items must be unique
-        weights : List[float]
-            the list of drop weights
-            Precondition: weights[i] is the drop weight for item_list[i]
         price : float
             the price of pulling from the banner
-        key : function : int -> float
+        key : function : float -> float
             function that takes in rarity and returns the drop rate of the item
         """
         self.name = name
         self.id = id
         self.item_list = item_list
+        self.price = price
         self.key = key
         self.weights = _get_random_weights(item_list, key)
-        self.price = price
 
-    def add_item(self, item: Item) -> None:
+    def add_item(self, item: Item) -> bool:
         """Adds an item to the banner
 
         Parameters
@@ -147,13 +141,13 @@ class Banner:
 
         Returns
         -------
-            None
+        None
         """
         self.item_list.append(item)
-        self.weights = _get_random_weights(self.item_list)
+        self.weights = _get_random_weights(self.item_list, self.key)
 
     def remove_item(self, item: Item) -> bool:
-        """Removes an item from the banner
+        """Removes the first occurence of an item from the banner
 
         Parameters
         ----------
@@ -167,7 +161,7 @@ class Banner:
         """
         try:
             self.item_list.remove(item)
-            self.weights = _get_random_weights(self.item_list)
+            self.weights = _get_random_weights(self.item_list, self.key)
             return True
         except:
             return False
@@ -183,19 +177,6 @@ class Banner:
         return random.choices(self.item_list, weights=self.weights, k=1)[0]
 
     def __str__(self) -> str:
-        """Returns a string representation of this Banner object
-        self.name
-        Price: self.price
-        Items:
-        .
-        .
-        .
-
-        Returns
-        -------
-        str
-            String representation of this object
-        """
         return (
             self.name
             + "\nPrice: "
@@ -203,6 +184,11 @@ class Banner:
             + "\nItems:\n"
             + "\n".join([str(elem) for elem in self.item_list])
         )
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Banner):
+            return False
+        return self.id == other.id
 
 
 class Player:
@@ -296,32 +282,18 @@ class Player:
         self.money += amount
         return True
 
-    def get_net_worth(self) -> int:
+    def get_net_worth(self) -> float:
         """Returns the net worth of the player, calculated by the sum of the
         rarities of all of the items they own
 
         Returns
         -------
-        int
+        float
             the net worth of the player
         """
         return sum([i.rarity for i in self.items])
 
     def __str__(self) -> str:
-        """Returns a string representation of this Player object
-        Money: self.money
-        Net worth: self.get_net_worth()
-        Top 10 items:
-        .
-        .
-        .
-        Top items determined by rarity
-
-        Returns
-        -------
-        str
-            string representation of this object
-        """
         return (
             self.name
             + "\n\nMoney: "
@@ -338,6 +310,11 @@ class Player:
                 ]
             )
         )
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Player):
+            return False
+        return self.id == other.id
 
 
 def _sort_item_key(item: Item) -> float:
