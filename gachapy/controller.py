@@ -336,10 +336,10 @@ class Controller:
         if item == None:
             return item
         for banner in self.banners:
-            while self.banners[banner].remove_item(item) != None:
+            while self.banners[banner].remove_item(item):
                 pass
         for player in self.players:
-            while self.players[player].remove_item(item) != None:
+            while self.players[player].remove_item(item):
                 pass
         return item
 
