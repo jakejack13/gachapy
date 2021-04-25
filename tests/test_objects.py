@@ -1,12 +1,13 @@
 """The test suite for objects.py
+
+Author: Jacob Kerr, 2021
 """
 import sys
 
 sys.path.insert(1, ".")
 
 import unittest
-from gachapy.objects import *
-from gachapy.controller import default_key
+from gachapy import *
 
 
 def test_item_change_rarity(test: unittest.TestCase, item: Item, rarity: float):
@@ -160,6 +161,8 @@ def test_player_net_worth(test: unittest.TestCase, player: Player, expected: flo
 
 
 class TestGachaObjects(unittest.TestCase):
+    """Test suite for objects.py"""
+
     def test_item_change_rarity_true(self):
         item = Item("test", "test", 1)
         test_item_change_rarity(self, item, 2)

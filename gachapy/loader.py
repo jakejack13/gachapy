@@ -3,13 +3,16 @@ These functions can be used to save and load Controller objects to and from
 json files. This should be used to save and load game state of active 
 gachapy games.
 
+Examples of the structure that gachapy json files should follow can be found
+in the examples directory
+
 These functions operate as the Loader of a gachapy game
 
 Author: Jacob Kerr, 2021
 """
 
-from gachapy.objects import *
-from gachapy.controller import *
+from .objects import *
+from .controller import *
 import json
 
 

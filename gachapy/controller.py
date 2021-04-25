@@ -11,7 +11,7 @@ Author: Jacob Kerr, 2021
 """
 
 from typing import Dict, Optional
-from gachapy.objects import *
+from .objects import *
 
 
 def default_key(rarity: float) -> float:
