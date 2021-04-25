@@ -131,5 +131,8 @@ dmypy.json
 # vscode
 .vscode/
 
-#testpypi api
+# testpypi api
 api.txt
+
+# scratch files
+scratch/

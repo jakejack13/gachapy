@@ -336,13 +336,11 @@ class Controller:
         if item == None:
             return item
         for banner in self.banners:
-            for item in banner.items:
-                if item.id == item_id:
-                    banner.items.remove(item)
+            while self.banners[banner].remove_item(item) != None:
+                pass
         for player in self.players:
-            for item in player.items:
-                if item.id == item_id:
-                    player.items.remove(item)
+            while self.players[player].remove_item(item) != None:
+                pass
         return item
 
     def remove_banner(self, banner_id: str) -> Optional[Banner]:
