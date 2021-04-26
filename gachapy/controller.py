@@ -59,11 +59,11 @@ class Controller:
 
     Fields
     ------
-    items : List[Item]
+    items : Dict[str,Item]
         the list of items that are in the item pool for the gacha
-    banners : List[Banner]
+    banners : Dict[str,Banner]
         the list of banners that are available for the gacha
-    players : List[Player]
+    players : Dict[str,Player]
         the list of players enrolled in the gacha
     """
 
