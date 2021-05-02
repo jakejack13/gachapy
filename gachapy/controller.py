@@ -30,7 +30,23 @@ def default_key(rarity: float) -> float:
     return 1 / rarity
 
 
-def _sort_player_key(player: Player) -> int:
+def _sort_item_key(item: Item) -> float:
+    """The key used to sort items in a list of items
+
+    Parameters
+    ----------
+    item : Item
+        the item to extract the key from
+
+    Returns
+    -------
+    float
+        the key of the item
+    """
+    return item.rarity
+
+
+def _sort_player_key(player: Player) -> float:
     """The key used to sort players in a list of players
 
     Parameters
@@ -40,10 +56,10 @@ def _sort_player_key(player: Player) -> int:
 
     Returns
     -------
-    int
+    float
         the key of the player
     """
-    return sum([i.rarity for i in player.items])
+    return player.get_net_worth()
 
 
 class PullError(Exception):
@@ -242,8 +258,7 @@ class Controller:
             the Item object representing the new item or None if an item
             with the specified id already exists
         """
-        item = self.find_item_by_id(id)
-        if item != None:
+        if id in self.items:
             return None
         new_item = Item(name, id, rarity)
         self.items[id] = new_item
@@ -279,8 +294,7 @@ class Controller:
             the Banner object representing the new banner or None if a banner
             with the specified id already exists
         """
-        banner = self.find_banner_by_name(name)
-        if banner != None:
+        if id in self.banners:
             return None
         item_list = [self.find_item_by_id(i) for i in item_list_str]
         new_banner = Banner(name, id, item_list, price, key)
@@ -309,8 +323,7 @@ class Controller:
             the Player object representing the new player or None if a player
             with the specified id already exists
         """
-        player = self.find_player_by_id(id)
-        if player != None:
+        if id in self.players:
             return None
         items_list = [self.find_item_by_id(i) for i in items_str]
         new_player = Player(name, id, items_list, start_money)
@@ -429,6 +442,7 @@ class Controller:
         ----------
         num_items : int
             the number of items to return
+            Precondition: must be >= 1
 
         Returns
         -------
@@ -436,7 +450,7 @@ class Controller:
             the list of top items
         """
         sort_list = sorted(list(self.items.values()), key=_sort_item_key, reverse=True)
-        return sort_list[: num_items - 1]
+        return sort_list[:num_items]
 
     def top_players(self, num_players: int) -> List[Player]:
         """Returns the top specified number of players in the game sorted by net worth
@@ -445,6 +459,7 @@ class Controller:
         ----------
         num_players : int
             the number of players to return
+            Precondition: must be >= 1
 
         Returns
         -------
@@ -454,4 +469,4 @@ class Controller:
         sort_list = sorted(
             list(self.players.values()), key=_sort_player_key, reverse=True
         )
-        return sort_list[: num_players - 1]
+        return sort_list[:num_players]
