@@ -60,7 +60,7 @@ class Item:
         bool
             True if the rarity successfully updated, false otherwise
         """
-        if rarity <= 0:
+        if rarity < 1:
             return False
         self.rarity = rarity
         return True
