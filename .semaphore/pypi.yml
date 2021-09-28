@@ -13,7 +13,7 @@ blocks:
         - name: Updating gachapy package on PyPi
           commands:
             - checkout
-            - sudo apt-get install python3-venv
+            - sudo apt-get update && sudo apt-get install -y python3-venv
             - python3 -m pip install --upgrade pip
             - python3 -m pip install --upgrade build
             - python3 -m build
