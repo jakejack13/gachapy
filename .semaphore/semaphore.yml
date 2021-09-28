@@ -10,6 +10,7 @@ blocks:
       jobs:
         - name: Run unittest
           commands:
+            - checkout
             - python3 -m unittest
 
 promotions:
