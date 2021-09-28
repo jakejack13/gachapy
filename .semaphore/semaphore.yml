@@ -10,6 +10,7 @@ blocks:
       jobs:
         - name: Run unittest
           commands:
+            - cd ~/gachapy
             - python3 -m unittest
 
 promotions:
