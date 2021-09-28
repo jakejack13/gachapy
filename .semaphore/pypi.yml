@@ -45,3 +45,5 @@ blocks:
             - docker push "$DOCKER_USERNAME"/gachapy
             - docker pull "$DOCKER_USERNAME"/gachapy
             - docker images
+      secrets:
+        - name: docker-hub
