@@ -10,7 +10,7 @@ blocks:
     dependencies: []
     task:
       jobs:
-        - name: Updating gachapy package on PyPi
+        - name: Uploading gachapy package to PyPi
           commands:
             - checkout
             - sudo apt-get update && sudo apt-get install -y python3-venv

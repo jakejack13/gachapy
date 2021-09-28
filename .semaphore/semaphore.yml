@@ -1,5 +1,5 @@
 version: v1.0
-name: Updating gachapy package
+name: Run unit test suite
 agent:
   machine:
     type: e1-standard-2
