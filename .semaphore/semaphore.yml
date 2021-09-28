@@ -10,7 +10,7 @@ blocks:
       jobs:
         - name: Run unittest
           commands:
-            - python3 -m unittest tests/
+            - python3 -m unittest
 
 promotions:
   - name: PyPi
