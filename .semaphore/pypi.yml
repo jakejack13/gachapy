@@ -23,8 +23,8 @@ blocks:
     dependencies: 
       - Updating gachapy package on PyPi
     task:
-    jobs:
-      - name: Verifying successful upload
-        commands:
-          - python3 -m pip install --upgrade pip
-          - python3 -m pip install gachapy
+      jobs:
+        - name: Verifying successful upload
+          commands:
+            - python3 -m pip install --upgrade pip
+            - python3 -m pip install gachapy
