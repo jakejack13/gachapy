@@ -16,4 +16,4 @@ promotions:
   - name: PyPi
     pipeline_file: pypi.yml
     auto_promote:
-      when: "result = 'passed' and (change_in(setup.cfg) or change_in(setup.py))"
+      when: "result = 'passed' and (change_in('setup.cfg') or change_in('setup.py'))"
