@@ -1,0 +1,19 @@
+version: v1.0
+name: Updating gachapy package
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks: 
+  - name: Run test suite
+    task:
+      jobs:
+        - name: Run unittest
+          commands:
+            - python3 -m unittest tests/
+
+promotions:
+  - name: PyPi
+    pipeline_file: pypi.yml
+    auto_promote:
+      when: "result = 'passed' and (change_in(setup.cfg) or change_in(setup.py))"
