@@ -1,5 +1,5 @@
 version: v1.0
-name: Updating gachapy package on PyPi
+name: Updating gachapy package images
 agent:
   machine:
     type: e1-standard-2
