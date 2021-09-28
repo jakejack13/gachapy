@@ -21,6 +21,7 @@ blocks:
             - python3 -m twine upload -u "$PYPI_USERNAME" -p "$PYPI_PASSWORD" dist/*
       secrets:
         - name: pypi
+  
   - name: Verifying successful upload
     dependencies: 
       - Updating gachapy package on PyPi
@@ -30,3 +31,17 @@ blocks:
           commands:
             - python3 -m pip install --upgrade pip
             - python3 -m pip install gachapy
+  
+  - name: Uploading gachapy Docker image
+    dependencies: []
+    task:
+      jobs:
+        - name: Uploading gachapy Docker image
+          commands:
+            - checkout
+            - echo $DOCKER_PASSWORD | docker login --username "$DOCKER_USERNAME" --password-stdin
+            - docker build -t gachapy .
+            - docker tag counter "$DOCKER_USERNAME"/gachapy
+            - docker push "$DOCKER_USERNAME"/gachapy
+            - docker pull "$DOCKER_USERNAME"/gachapy
+            - docker images
