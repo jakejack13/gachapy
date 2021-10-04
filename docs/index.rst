@@ -17,6 +17,7 @@ Project Sources
 Example Application
 ===================
 ::
+
    import gachapy
 
    # Creating controller
@@ -44,6 +45,7 @@ Example Application
 
    # Save controller into respective files
    gachapy.save_controller(controller,"items.json","banners.json","players.json")
+
 
 .. toctree::
    :maxdepth: 2
