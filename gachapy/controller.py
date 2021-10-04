@@ -12,6 +12,7 @@ Author: Jacob Kerr, 2021
 
 from typing import Dict, Optional
 from .objects import *
+import warnings
 
 
 def default_key(rarity: float) -> float:
@@ -118,6 +119,9 @@ class Controller:
         Optional[Item]
             the item object with the given name or None if not found
         """
+        warnings.warn(
+            "find_item_by_name is depricated, consider using find_item_by_id",
+            DeprecationWarning)
         item = [i for i in self.items.values() if i.name == item_name]
         if len(item) < 1:
             return None
@@ -137,6 +141,9 @@ class Controller:
         Optional[Banner]
             the banner object with the given name or None if not found
         """
+        warnings.warn(
+            "find_banner_by_name is depricated, consider using find_banner_by_id",
+            DeprecationWarning)
         banner = [i for i in self.banners.values() if i.name == banner_name]
         if len(banner) < 1:
             return None
@@ -156,6 +163,9 @@ class Controller:
         Optional[player]
             the player object with the given name or None if not found
         """
+        warnings.warn(
+            "find_player_by_name is depricated, consider using find_player_by_id",
+            DeprecationWarning)
         player = [i for i in self.players.values() if i.name == player_name]
         if len(player) < 1:
             return None
@@ -250,7 +260,8 @@ class Controller:
             the id of the new item
             Precondition: must be unique
         rarity : float
-            the rarity of the item
+            rarity of the item where the higher the number, the higher the rarity
+            Precondition: must be >= 1
 
         Returns
         -------

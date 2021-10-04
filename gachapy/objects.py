@@ -25,7 +25,7 @@ class Item:
         description of the item
         Invariant: must be unique
     id : int
-        rarity of the item where the higher the numer, the higher the rarity
+        rarity of the item where the higher the number, the higher the rarity
         Invariant: must be >= 1
     """
 
