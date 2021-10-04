@@ -41,7 +41,7 @@ blocks:
             - checkout
             - echo $DOCKER_PASSWORD | docker login --username "$DOCKER_USERNAME" --password-stdin
             - docker build -t gachapy .
-            - docker tag counter "$DOCKER_USERNAME"/gachapy
+            - docker tag gachapy "$DOCKER_USERNAME"/gachapy
             - docker push "$DOCKER_USERNAME"/gachapy
             - docker pull "$DOCKER_USERNAME"/gachapy
             - docker images
