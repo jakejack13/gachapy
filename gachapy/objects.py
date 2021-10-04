@@ -1,8 +1,8 @@
 """Objects used for low level management and data storage of the gacha game. 
-Instances of these classes should be created indirectly through a Controller 
-(see controller.py for more info) but can be modified directly through the use 
-of class methods. DO NOT directly edit fields or the invariants could be 
-disrupted (although viewing fields directly is permitted). 
+These objects store information about items, banners, and players in an easy to
+use format. It is recommended to use a Controller found in gachapy.controller
+for easy storage and access of these objects unless you know what you're doing
+(i.e. threading, etc.)
 
 These objects operate as the Model of a gachapy game 
 

@@ -1,10 +1,11 @@
 """Library of loader functions for loading gachapy objects from json files. 
 These functions can be used to save and load Controller objects to and from
 json files. This should be used to save and load game state of active 
-gachapy games.
+gachapy games. Loading and saving objects lower than the Controller (Items, 
+Banners, Players) separately is not supported. 
 
 Examples of the structure that gachapy json files should follow can be found
-in the examples directory
+in the examples/ directory
 
 These functions operate as the Loader of a gachapy game
 
