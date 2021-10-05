@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="gachapy",
-    version="0.2.7",
+    version="0.2.8",
     author="Jacob Kerr",
     author_email="jck268@cornell.edu",
     description="A gacha engine built in Python for developing gacha games",
