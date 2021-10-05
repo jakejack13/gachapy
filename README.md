@@ -41,4 +41,7 @@ jacob = controller.find_player_by_id("j")
 print(jacob)
 
 # Save controller into respective files
-gachapy.save_controller(controller,"items.json","banners.json","players.json")```
+gachapy.save_controller(controller,"items.json","banners.json","players.json")
+```
+
+More examples can be found in the examples/ directory

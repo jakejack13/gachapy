@@ -279,7 +279,7 @@ class Controller:
         self,
         name: str,
         id: str,
-        item_list_str: List[str],
+        items_str: List[str],
         price: float,
         key: Callable[[float], float] = default_key,
     ) -> Optional[Banner]:
@@ -292,7 +292,7 @@ class Controller:
         id : str
             the id of the new banner
             Precondition: must be unique
-        item_list_str : List[str]
+        items_str : List[str]
             the list of the ids of the items in the banner
         price : float
             the price of pulling from the banner
@@ -307,8 +307,8 @@ class Controller:
         """
         if id in self.banners:
             return None
-        item_list = [self.find_item_by_id(i) for i in item_list_str]
-        new_banner = Banner(name, id, item_list, price, key)
+        items = [self.find_item_by_id(i) for i in items_str]
+        new_banner = Banner(name, id, items, price, key)
         self.banners[id] = new_banner
         return new_banner
 
@@ -428,14 +428,14 @@ class Controller:
         Optional[Banner]
             the banner created or None if a banner with the name specified already exists
         """
-        item_list = random.choices(list(self.items.values()), k=num_items)
-        item_list_str = [item.id for item in item_list]
+        items = random.choices(list(self.items.values()), k=num_items)
+        items_str = [item.id for item in items]
         if price < 0:
             price = 0
-            for item in item_list:
+            for item in items:
                 price += item.rarity
-            price /= len(item_list)
-        return self.add_new_banner(name, id, item_list_str, price, key)
+            price /= len(items)
+        return self.add_new_banner(name, id, items_str, price, key)
 
     def remove_all_banners(self) -> None:
         """Removes all of the banners in the game

@@ -1,0 +1,51 @@
+{
+    "items": [
+        {
+            "name": "Windowsill squirrel",
+            "id": "squirrel",
+            "rarity": 100
+        },
+        {
+            "name": "Desk lamp",
+            "id": "lamp",
+            "rarity": 2
+        },
+        {
+            "name": "Burger",
+            "id": "burger",
+            "rarity": 4
+        }
+    ], 
+
+    "banners": [
+        {
+            "name": "Demo banner",
+            "id": "demo",
+            "items": [
+                {
+                    "id": "squirrel"
+                },
+                {
+                    "id": "lamp"
+                },
+                {
+                    "id": "burger"
+                }
+            ],
+            "price": 1
+        }
+    ],
+
+    "players": [
+        {
+            "name": "JakeJack",
+            "id": "1",
+            "money": 100,
+            "items": [
+                {
+                    "id": "squirrel"
+                }
+            ]
+        }
+    ]
+}

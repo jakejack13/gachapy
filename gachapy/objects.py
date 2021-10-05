@@ -88,22 +88,22 @@ class Banner:
     id : str
         id of the banner
         Invariant: must be unique
-    item_list : List[Item]
+    items : List[Item]
         the list of items in the banner
     price : float
         the price of pulling from the banner
     key : function : int -> float
         function that takes in rarity and returns the drop rate of the item
-    weights : List[float]
+    _weights : List[float]
         list of drop weights for items
-        Invariant: weights[i] corresponds to item_list[i]
+        Invariant: weights[i] corresponds to items[i]
     """
 
     def __init__(
         self,
         name: str,
         id: str,
-        item_list: List[Item],
+        items: List[Item],
         price: float,
         key: Callable[[float], float],
     ) -> None:
@@ -116,7 +116,7 @@ class Banner:
         id : str
             id of the banner
             Precondition: must be unique
-        item_list : List[Item]
+        items : List[Item]
             the list of items in the banner
             Precondition: all items must be unique
         price : float
@@ -126,10 +126,10 @@ class Banner:
         """
         self.name = name
         self.id = id
-        self.item_list = item_list
+        self.items = items
         self.price = price
         self.key = key
-        self.weights = _get_random_weights(item_list, key)
+        self._weights = _get_random_weights(items, key)
 
     def add_item(self, item: Item) -> bool:
         """Adds an item to the banner
@@ -143,8 +143,8 @@ class Banner:
         -------
         None
         """
-        self.item_list.append(item)
-        self.weights = _get_random_weights(self.item_list, self.key)
+        self.items.append(item)
+        self._weights = _get_random_weights(self.items, self.key)
 
     def remove_item(self, item: Item) -> bool:
         """Removes the first occurence of an item from the banner
@@ -160,8 +160,8 @@ class Banner:
             True if item is found in banner, False if otherwise
         """
         try:
-            self.item_list.remove(item)
-            self.weights = _get_random_weights(self.item_list, self.key)
+            self.items.remove(item)
+            self._weights = _get_random_weights(self.items, self.key)
             return True
         except:
             return False
@@ -174,7 +174,7 @@ class Banner:
         Item
             the random item from the pull
         """
-        return random.choices(self.item_list, weights=self.weights, k=1)[0]
+        return random.choices(self.items, weights=self._weights, k=1)[0]
 
     def __str__(self) -> str:
         return (
@@ -182,7 +182,7 @@ class Banner:
             + "\nPrice: "
             + str(self.price)
             + "\nItems:\n"
-            + "\n".join([str(elem) for elem in self.item_list])
+            + "\n".join([str(elem) for elem in self.items])
         )
 
     def __eq__(self, other) -> bool:
