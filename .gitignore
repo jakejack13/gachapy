@@ -137,3 +137,6 @@ api.txt
 
 # scratch files
 scratch/
+
+# Mac files
+.DS_Store
