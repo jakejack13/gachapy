@@ -35,7 +35,7 @@ def load_controller(
     controller = None
     with open(filename, 'r') as f:
         controller = Controller()
-        json_obj = json.load(filename)
+        json_obj = json.load(f)
         
         items = json_obj["items"]
         for item in items:
@@ -48,7 +48,7 @@ def load_controller(
                 banner["name"],
                 banner["id"],
                 [item["id"] for item in banner["items"]],
-                float(item["price"]))
+                float(banner["price"]))
         
         players = json_obj["players"]
         for player in players:

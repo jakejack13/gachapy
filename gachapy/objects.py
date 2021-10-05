@@ -66,8 +66,8 @@ class Item:
         return True
 
     def __str__(self) -> str:
-        return self.name + "\nID: " + self.id + "\nRarity: " + str(self.rarity)
-
+        return f'{self.name}\nID: {self.id}\nRarity: {self.rarity}'
+        
     def __eq__(self, other) -> bool:
         if not isinstance(other, Item):
             return False
@@ -177,13 +177,10 @@ class Banner:
         return random.choices(self.items, weights=self._weights, k=1)[0]
 
     def __str__(self) -> str:
-        return (
-            self.name
-            + "\nPrice: "
-            + str(self.price)
-            + "\nItems:\n"
-            + "\n".join([str(elem) for elem in self.items])
-        )
+        return f"""{self.name}\n
+        ID: {self.id}\n
+        Price: {self.price}\n
+        Items: {' '.join([str(item) for item in self.items])}"""
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Banner):
@@ -294,22 +291,13 @@ class Player:
         return sum([i.rarity for i in self.items])
 
     def __str__(self) -> str:
-        return (
-            self.name
-            + "\n\nMoney: "
-            + str(self.money)
-            + "\n\nNet worth: "
-            + str(self.get_net_worth())
-            + "\n\nTop 10 items:\n"
-            + "\n".join(
-                [
-                    str(elem)
-                    for elem in sorted(self.items, key=_sort_item_key, reverse=True)[
-                        :10
-                    ]
-                ]
-            )
-        )
+        return f"""{self.name}\n
+        ID: {self.id}\n
+        Money: {self.money}\n
+        Net worth: {self.get_net_worth()}\n
+        Top 10 items: {' '.join([str(elem) for elem in sorted(
+            self.items, key=_sort_item_key, reverse=True
+            )[:10]])}"""
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Player):

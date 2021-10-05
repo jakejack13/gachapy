@@ -481,3 +481,8 @@ class Controller:
             list(self.players.values()), key=_sort_player_key, reverse=True
         )
         return sort_list[:num_players]
+
+    def __str__(self) -> str:
+        return f"""Items\n{[str(item) for item in self.items.values()]}\n
+        Banners\n{[str(banner) for banner in self.banners.values()]}\n
+        Players\n{[str(player) for player in self.players.values()]}"""
