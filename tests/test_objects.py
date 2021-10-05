@@ -62,11 +62,11 @@ def test_banner_add_item(test: unittest.TestCase, banner: Banner, item: Item):
     item : Item
         the item to add to the banner
     """
-    num_items = len(banner.item_list)
+    num_items = len(banner.items)
     banner.add_item(item)
-    test.assertEqual(len(banner.item_list), num_items + 1)
-    test.assertEqual(len(banner.weights), len(banner.item_list))
-    test.assertTrue(item in banner.item_list)
+    test.assertEqual(len(banner.items), num_items + 1)
+    test.assertEqual(len(banner._weights), len(banner.items))
+    test.assertTrue(item in banner.items)
 
 
 def test_banner_remove_item(test: unittest.TestCase, banner: Banner, item: Item):
@@ -82,10 +82,10 @@ def test_banner_remove_item(test: unittest.TestCase, banner: Banner, item: Item)
     item : Item
         the item to remove from the banner
     """
-    num_items = len(banner.item_list)
+    num_items = len(banner.items)
     banner.remove_item(item)
-    test.assertEqual(len(banner.item_list), num_items - 1)
-    test.assertEqual(len(banner.weights), len(banner.item_list))
+    test.assertEqual(len(banner.items), num_items - 1)
+    test.assertEqual(len(banner._weights), len(banner.items))
 
 
 def test_player_add_item(test: unittest.TestCase, player: Player, item: Item):
@@ -176,7 +176,7 @@ class TestGachaObjects(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=1,
             key=default_key,
         )
@@ -187,7 +187,7 @@ class TestGachaObjects(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=1,
             key=default_key,
         )
@@ -198,7 +198,7 @@ class TestGachaObjects(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=1,
             key=default_key,
         )

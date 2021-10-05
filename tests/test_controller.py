@@ -224,7 +224,7 @@ def test_add_new_banner(
     controller: Controller,
     name: str,
     id: str,
-    item_list_str: List[str],
+    items_str: List[str],
     price: float,
     output: Optional[Banner],
 ):
@@ -241,14 +241,14 @@ def test_add_new_banner(
         the name of the banner
     id : str
         the id of the banner
-    item_list_str : List[str]
+    items_str : List[str]
         the list of ids of the items in the banner
     price : float
         the price of the banner
     output : Optional[Banner]
         the expected banner to be created
     """
-    item = controller.add_new_banner(name, id, item_list_str, price)
+    item = controller.add_new_banner(name, id, items_str, price)
     test.assertEqual(item, output)
 
 
@@ -455,7 +455,7 @@ class TestGachaController1(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=1,
             key=default_key,
         )
@@ -467,7 +467,7 @@ class TestGachaController1(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=1,
             key=default_key,
         )
@@ -513,7 +513,7 @@ class TestGachaController1(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=1,
             key=default_key,
         )
@@ -525,7 +525,7 @@ class TestGachaController1(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=1,
             key=default_key,
         )
@@ -553,7 +553,7 @@ class TestGachaController1(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=1,
             key=default_key,
         )
@@ -568,7 +568,7 @@ class TestGachaController1(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=100,
             key=default_key,
         )
@@ -583,7 +583,7 @@ class TestGachaController1(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=100,
             key=default_key,
         )
@@ -598,7 +598,7 @@ class TestGachaController1(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=100,
             key=default_key,
         )
@@ -613,7 +613,7 @@ class TestGachaController1(unittest.TestCase):
         banner = Banner(
             name="btest",
             id="btest",
-            item_list=[item],
+            items=[item],
             price=100,
             key=default_key,
         )
