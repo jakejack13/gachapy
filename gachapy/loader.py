@@ -48,7 +48,7 @@ def load_controller(
                 banner["name"],
                 banner["id"],
                 [item["id"] for item in banner["items"]],
-                float(banner["price"]))
+                float(banner["price"]), banner["key"])
         
         players = json_obj["players"]
         for player in players:
@@ -92,7 +92,8 @@ def save_controller(
                 "name":banner.name,
                 "id":banner.id,
                 "items":[{"id":item.id} for item in banner.items],
-                "price":banner.price}
+                "price":banner.price,
+                "key":banner.key}
             banners_list.append(banner_dict)
         
         players_list = []

@@ -8,6 +8,7 @@ These objects operate as the Model of a gachapy game
 
 Author: Jacob Kerr, 2021
 """
+from .keylang import *
 import random
 from typing import Callable, List
 
@@ -92,8 +93,9 @@ class Banner:
         the list of items in the banner
     price : float
         the price of pulling from the banner
-    key : function : int -> float
-        function that takes in rarity and returns the drop rate of the item
+    key : str
+        function that takes in rarity and returns the drop rate of the item,
+        written in KeyLang
     _weights : List[float]
         list of drop weights for items
         Invariant: weights[i] corresponds to items[i]
@@ -105,7 +107,7 @@ class Banner:
         id: str,
         items: List[Item],
         price: float,
-        key: Callable[[float], float],
+        key: str,
     ) -> None:
         """Creates a Banner object
 
@@ -121,8 +123,9 @@ class Banner:
             Precondition: all items must be unique
         price : float
             the price of pulling from the banner
-        key : function : float -> float
-            function that takes in rarity and returns the drop rate of the item
+        key : str
+            function that takes in rarity and returns the drop rate of the item,
+            written in KeyLang
         """
         self.name = name
         self.id = id
@@ -321,22 +324,24 @@ def _sort_item_key(item: Item) -> float:
     return item.rarity
 
 
-def _get_random_weights(items, key: Callable[[float], float]) -> List[float]:
+def _get_random_weights(items, key: str) -> List[float]:
     """Returns the random weights of the items for the random function
 
     Parameters
     ----------
     items : List[Item]
         list of items to find weights of
-    key : function : float -> float
-        function that takes in rarity and returns the drop rate of the item
+    key : str
+        function that takes in rarity and returns the drop rate of the item,
+        written in KeyLang
 
     Returns
     -------
     List[float]
         the list of weights of the items
     """
+    ast = parse(key)
     weights = []
     for item in items:
-        weights.append(key(item.rarity))
+        weights.append(interpret(ast,item.rarity))
     return weights

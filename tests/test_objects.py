@@ -178,7 +178,7 @@ class TestGachaObjects(unittest.TestCase):
             id="btest",
             items=[item],
             price=1,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         test_banner_add_item(self, banner, item)
 
@@ -189,7 +189,7 @@ class TestGachaObjects(unittest.TestCase):
             id="btest",
             items=[item],
             price=1,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         test_banner_remove_item(self, banner, item)
 
@@ -200,7 +200,7 @@ class TestGachaObjects(unittest.TestCase):
             id="btest",
             items=[item],
             price=1,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         test_banner_pull(self, banner, "test")
 

@@ -457,7 +457,7 @@ class TestGachaController1(unittest.TestCase):
             id="btest",
             items=[item],
             price=1,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         controller = Controller(items={"test": item}, banners={"btest": banner})
         test_find_banner_by_name(self, controller, "not_test", None)
@@ -469,7 +469,7 @@ class TestGachaController1(unittest.TestCase):
             id="btest",
             items=[item],
             price=1,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         controller = Controller(items={"test": item}, banners={"btest": banner})
         test_find_banner_by_name(self, controller, "btest", banner)
@@ -515,7 +515,7 @@ class TestGachaController1(unittest.TestCase):
             id="btest",
             items=[item],
             price=1,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         controller = Controller(items={"test": item}, banners={"btest": banner})
         test_find_banner_by_id(self, controller, "not_test", None)
@@ -527,7 +527,7 @@ class TestGachaController1(unittest.TestCase):
             id="btest",
             items=[item],
             price=1,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         controller = Controller(items={"test": item}, banners={"btest": banner})
         test_find_banner_by_id(self, controller, "btest", banner)
@@ -555,7 +555,7 @@ class TestGachaController1(unittest.TestCase):
             id="btest",
             items=[item],
             price=1,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         player = Player("ptest", "ptest", [item], 100)
         controller = Controller(
@@ -570,7 +570,7 @@ class TestGachaController1(unittest.TestCase):
             id="btest",
             items=[item],
             price=100,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         player = Player("ptest", "ptest", [item], 1)
         controller = Controller(
@@ -585,7 +585,7 @@ class TestGachaController1(unittest.TestCase):
             id="btest",
             items=[item],
             price=100,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         player = Player("ptest", "ptest", [item], 1)
         controller = Controller(
@@ -600,7 +600,7 @@ class TestGachaController1(unittest.TestCase):
             id="btest",
             items=[item],
             price=100,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         player = Player("ptest", "ptest", [item], 1)
         controller = Controller(
@@ -615,7 +615,7 @@ class TestGachaController1(unittest.TestCase):
             id="btest",
             items=[item],
             price=100,
-            key=default_key,
+            key=DEFAULT_KEY,
         )
         player = Player("ptest", "ptest", [item], 1)
         controller = Controller(
@@ -640,12 +640,12 @@ class TestGachaController2(unittest.TestCase):
     def test_add_banner_empty(self):
         item = Item("test", "test", 1)
         controller = Controller(items={"test": item})
-        banner = Banner("btest", "btest", [item], 100, default_key)
+        banner = Banner("btest", "btest", [item], 100, DEFAULT_KEY)
         test_add_new_banner(self, controller, "btest", "btest", ["test"], 100, banner)
 
     def test_add_banner_full(self):
         item = Item("test", "test", 1)
-        banner = Banner("btest", "btest", [item], 100, default_key)
+        banner = Banner("btest", "btest", [item], 100, DEFAULT_KEY)
         controller = Controller(items={"test": item}, banners={"btest": banner})
         test_add_new_banner(self, controller, "btest", "btest", ["test"], 100, None)
 
@@ -666,7 +666,7 @@ class TestGachaController2(unittest.TestCase):
 
     def test_remove_banner_full(self):
         item = Item("test", "test", 1)
-        banner = Banner("btest", "btest", [item], 100, default_key)
+        banner = Banner("btest", "btest", [item], 100, DEFAULT_KEY)
         controller = Controller(items={"test": item}, banners={"btest": banner})
         test_remove_banner(self, controller, "btest", banner)
 
@@ -694,7 +694,7 @@ class TestGachaController2(unittest.TestCase):
 
     def test_create_random_banner_full(self):
         item = Item("test", "test", 1)
-        banner = Banner("2btest", "2btest", [item], 100, default_key)
+        banner = Banner("2btest", "2btest", [item], 100, DEFAULT_KEY)
         controller = Controller(items={"test": item}, banners={"2btest": banner})
         test_create_random_banner(self, controller, "2btest", "2btest", 1, True)
 
@@ -704,7 +704,7 @@ class TestGachaController2(unittest.TestCase):
 
     def test_remove_all_banners_full(self):
         item = Item("test", "test", 1)
-        banner = Banner("3btest", "3btest", [item], 100, default_key)
+        banner = Banner("3btest", "3btest", [item], 100, DEFAULT_KEY)
         controller = Controller(items={"test": item}, banners={"3btest": banner})
         test_remove_all_banners(self, controller)
 

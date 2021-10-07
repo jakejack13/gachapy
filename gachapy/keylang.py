@@ -10,6 +10,8 @@ Base -> Const | ( Expr )
 Const -> <float literal> | <rarity>
 Rar -> <rarity>
 
+Example: 2 * (1 + R) / 5 ^ 2 where R = rarity
+
 Author: Jacob Kerr, 2021
 """
 from typing import *

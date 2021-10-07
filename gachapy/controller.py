@@ -15,20 +15,8 @@ from .objects import *
 import warnings
 
 
-def default_key(rarity: float) -> float:
-    """The default function that converts rarity to drop rate (1/x)
-
-    Parameters
-    ----------
-    rarity : float
-        the rarity of the item
-
-    Returns
-    -------
-    float
-        the drop rate of the item
-    """
-    return 1 / rarity
+DEFAULT_KEY = "1 / R"
+"""The default key function converting rarity to drop rate (1 / rarity"""
 
 
 def _sort_item_key(item: Item) -> float:
@@ -281,7 +269,7 @@ class Controller:
         id: str,
         items_str: List[str],
         price: float,
-        key: Callable[[float], float] = default_key,
+        key: str = DEFAULT_KEY,
     ) -> Optional[Banner]:
         """Adds a new banner to the gacha game
 
@@ -296,8 +284,9 @@ class Controller:
             the list of the ids of the items in the banner
         price : float
             the price of pulling from the banner
-        key : function : int -> float
-            function that takes in rarity and returns the drop rate of the item
+        key : str
+            function that takes in rarity and returns the drop rate of the 
+            item, written in KeyLang
 
         Returns
         -------
@@ -403,7 +392,7 @@ class Controller:
         id: str,
         num_items: int,
         price: float = -1,
-        key: Callable[[int], float] = default_key,
+        key: str = DEFAULT_KEY,
     ) -> Optional[Banner]:
         """Creates a random banner with the given name and number of items
             The price is automatically determined by the average of the rarities of the items
@@ -420,8 +409,9 @@ class Controller:
             the number of items in the banner
         price : float
             the price of the banner
-        key : function : int -> float
-            function that takes in rarity and returns the drop rate of the item
+        key : str
+            function that takes in rarity and returns the drop rate of the item,
+            written in KeyLang
 
         Returns
         -------
