@@ -11,7 +11,10 @@ blocks:
         - name: Run unittest
           commands:
             - checkout
-            - python3 -m unittest
+            - echo $DOCKER_PASSWORD | docker login --username "$DOCKER_USERNAME" --password-stdin
+            - docker build -t gachapy .
+      secrets:
+        - name: docker-hub
 
 promotions:
   - name: Update Images
