@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.10
 COPY . .
 RUN python3 -m unittest 
 RUN python3 -m pip install --upgrade pip setuptools wheel build

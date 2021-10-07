@@ -15,3 +15,4 @@ Author: Jacob Kerr, 2021
 from .objects import *
 from .controller import *
 from .loader import *
+from .keylang import *
