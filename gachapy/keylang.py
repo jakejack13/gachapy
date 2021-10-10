@@ -1,5 +1,17 @@
 """The tokenizer, parser, and interpreter for KeyLang, the language used by 
-gachapy to save and load custom rarity to drop rate conversions
+gachapy to save and load custom rarity to drop rate functions
+KeyLang is a simple calculator-based language. Each token in the language must
+be separated by a space. The expressions follow standard order of operations. 
+The following are allowed operations:
++ : addition 
+- : subtraction 
+* : multiplication 
+/ : division 
+^ : exponent 
+( ... ) : parentheses (for overriding order of operations), where ... is any
+expression 
+any float literal 
+R : rarity, to be substituted upon interpretation time 
 
 KeyLang Grammar
 -------------------
@@ -10,7 +22,7 @@ Base -> Const | ( Expr )
 Const -> <float literal> | <rarity>
 Rar -> <rarity>
 
-Example: 2 * (1 + R) / 5 ^ 2 where R = rarity
+Example: 2 * ( 1 + R ) / 5 ^ 2 where R = rarity
 
 Author: Jacob Kerr, 2021
 """
@@ -60,6 +72,18 @@ class Rar(Ast):
         return "R"
 
 def parse(s: str) -> Ast:
+    """Parses the inputed KeyLang expression into a KeyLang abstract syntax 
+    tree
+    
+    Parameters
+    ----------
+    s : str
+        the expression to parse
+        
+    Returns
+    -------
+    Ast
+        the KeyLang AST representative of the expression"""
     return _parse_tokens(_tokenize(s))
 
 def _tokenize(s: str) -> List[str]:
@@ -209,7 +233,19 @@ def _parse_const(tokens: str) -> Ast:
                 raise SyntaxError(f'Float literal not found -> {" ".join(tokens)}')
 
 def interpret(ast: Ast, rarity: float) -> float:
-    """Interprets the ast """
+    """Evaluates the KeyLang AST to a value using the rarity
+    
+    Parameters
+    ----------
+    ast : Ast
+        the AST of the expression
+    rarity : float
+        the value for the rarity
+        
+    Returns
+    -------
+    float
+        the result of the expression"""
     match ast:
         case Expr():
             if ast.data == "+":
