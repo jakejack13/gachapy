@@ -1,4 +1,4 @@
-"""A Python engine for gacha games
+"""A gacha engine built in Python for developing gacha games
 
 Directory
 ---------
@@ -8,6 +8,9 @@ objects
     Objects used for low level management and data storage of the gacha game
 loader
     Library of loader functions for loading gachapy objects from json files
+keylang
+    The tokenizer, parser, and interpreter for KeyLang, the language used by 
+gachapy to save and load custom rarity to drop rate functions
 
 Author: Jacob Kerr, 2021
 """
