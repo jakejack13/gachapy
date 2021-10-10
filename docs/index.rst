@@ -55,6 +55,7 @@ Example Application
    modules/gachapy.objects
    modules/gachapy.controller
    modules/gachapy.loader
+   modules/gachapy.keylang
 
 
 Indices and tables
