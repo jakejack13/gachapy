@@ -102,12 +102,18 @@ def _parse_expr(tokens: List[str]) -> Ast:
     -------
     Ast
         the abstract syntax tree representative of the expression"""
-    match tokens:
-        case [a, "+", *b] | [a, "-", *b]:
-            expr = Expr(_parse_term(a), _parse_expr(b), tokens[1])
+    term = _parse_term(tokens)
+    if len(tokens) == 0:
+        return term
+    match tokens[0]:
+        case '+':
+            tokens.pop(0)
+            return Expr(term, _parse_expr(tokens), '+')
+        case '-':
+            tokens.pop(0)
+            return Expr(term, _parse_expr(tokens), '-')
         case _:
-            expr = _parse_term(tokens)
-    return expr
+            return term
 
 def _parse_term(tokens: List[str]) -> Ast:
     """Parses the inputted tokens as a term
@@ -121,12 +127,18 @@ def _parse_term(tokens: List[str]) -> Ast:
     -------
     Ast
         the abstract syntax tree representative of the term"""
-    match tokens:
-        case [a, "*", *b] | [a, "/", *b]:
-            term = Term(_parse_factor(a), _parse_term(b), tokens[1])
+    factor = _parse_factor(tokens)
+    if len(tokens) == 0:
+        return factor
+    match tokens[0]:
+        case '*':
+            tokens.pop(0)
+            return Term(factor, _parse_term(tokens), '*')
+        case '/':
+            tokens.pop(0)
+            return Term(factor, _parse_term(tokens), '/')
         case _:
-            term = _parse_factor(tokens)
-    return term
+            return factor
 
 def _parse_factor(tokens: List[str]) -> Ast:
     """Parses the inputted tokens as a factor
@@ -140,12 +152,15 @@ def _parse_factor(tokens: List[str]) -> Ast:
     -------
     Ast
         the abstract syntax tree representative of the factor"""
-    match tokens:
-        case [a, "^", *b]:
-            factor = Factor(_parse_base(a), _parse_factor(b), tokens[1])
+    base = _parse_base(tokens)
+    if len(tokens) == 0:
+        return base
+    match tokens[0]:
+        case '^':
+            tokens.pop(0)
+            return Factor(base, _parse_factor(tokens), '^')
         case _:
-            factor = _parse_base(tokens)
-    return factor
+            return base
 
 def _parse_base(tokens: List[str]) -> Ast:
     """Parses the inputted tokens as a base
@@ -159,12 +174,17 @@ def _parse_base(tokens: List[str]) -> Ast:
     -------
     Ast
         the abstract syntax tree representative of the base"""
-    match tokens:
-        case ["(", *a, ")"]:
-            base = _parse_expr(a)
+    if len(tokens) == 0:
+        raise SyntaxError(f'Abrupt end of expression found')
+    match tokens[0]:
+        case '(':
+            tokens.pop(0)
+            base = _parse_expr(tokens)
+            if tokens.pop(0) != ')':
+                raise SyntaxError(f'Mismatched parentheses at -> {" ".join(tokens)}')
+            return base
         case _:
-            base = _parse_const(tokens[0])
-    return base
+            return _parse_const(tokens)
 
 def _parse_const(tokens: str) -> Ast:
     """Parses the inputted tokens as a constant
@@ -178,15 +198,15 @@ def _parse_const(tokens: str) -> Ast:
     -------
     Ast
         the abstract syntax tree representative of the constant"""
-    match tokens:
+    match tokens[0]:
         case "R":
-            const = Rar()
-        case tokens:
+            return Rar()
+        case _:
             try:
-                const = Float(data=float(tokens))
+                num = tokens.pop(0)
+                return Float(data=float(num))
             except:
-                raise SyntaxError(f'Float literal not found in place of constant: {tokens}')
-    return const
+                raise SyntaxError(f'Float literal not found -> {" ".join(tokens)}')
 
 def interpret(ast: Ast, rarity: float) -> float:
     """Interprets the ast """

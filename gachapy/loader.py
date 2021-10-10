@@ -105,6 +105,6 @@ def save_controller(
                 "items":[{"id":item.id} for item in player.items]}
             players_list.append(player_dict)
 
-    controller_dict = {
+        controller_dict = {
         "items":items_list,"banners":banners_list,"players":players_list}
-    json.dump(controller_dict,f)
+        json.dump(controller_dict,f)

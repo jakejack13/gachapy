@@ -25,7 +25,7 @@ def test_lang(test: unittest.TestCase, program: str, rarity: float, expected: fl
         the expected value of the program"""
     ast = parse(program)
     result = interpret(ast, rarity)
-    test.assertEqual(result,expected)
+    test.assertEqual(result,expected, f'Expression = {program}, AST = ({ast})')
 
 
 class TestKeyLang(unittest.TestCase):
@@ -48,3 +48,13 @@ class TestKeyLang(unittest.TestCase):
 
     def test_1_plus_rarity(self):
         test_lang(self, "1 + R", 1, 2)
+    
+    def test_1_plus_2_times_3(self):
+        test_lang(self, "1 + 2 * 3",0,7)
+    
+    def test_2_times_3_plus_1(self):
+        test_lang(self, "2 * 3 + 1",0,7)
+
+
+if __name__ == "__main__":
+    unittest.main()
