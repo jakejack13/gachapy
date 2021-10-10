@@ -3,11 +3,10 @@
 Author: Jacob Kerr, 2021
 """
 import sys
-
 sys.path.insert(1, ".")
+from gachapy import *
 
 import unittest
-from gachapy import *
 
 
 def test_item_change_rarity(test: unittest.TestCase, item: Item, rarity: float):

@@ -3,11 +3,10 @@
 Author: Jacob Kerr, 2021
 """
 import sys
-
 sys.path.insert(1, ".")
+from gachapy import *
 
 import unittest
-from gachapy import *
 
 
 def test_lang(test: unittest.TestCase, program: str, rarity: float, expected: float):
