@@ -26,7 +26,7 @@ controller.add_new_item("banana","b",3)
 controller.add_new_item("carrot","c",10)
 
 # Create new banner with the items that have already been added and cost of 5
-controller.add_new_banner("food","f",["a","b","c"],5)
+controller.add_new_banner("food","f",["a","b","c"],5,"1 + 1 / R")
 
 # Create new player with 100 starting money and no starting items
 controller.add_new_player("jacob","j",100)
