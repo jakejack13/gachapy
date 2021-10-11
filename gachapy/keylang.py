@@ -26,7 +26,7 @@ Example: 2 * ( 1 + R ) / 5 ^ 2 where R = rarity
 
 Author: Jacob Kerr, 2021
 """
-from typing import *
+from typing import List
 
 
 class SyntaxError(BaseException):
