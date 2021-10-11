@@ -41,31 +41,31 @@ class Ast(object):
         self.right = right
         self.data = data
 
-class Expr(Ast):
+class _Expr(Ast):
     """An expression in the KeyLang grammar"""
     
     def __str__(self) -> str:
         return f'{self.left} {self.data} {self.right}'
 
-class Term(Ast):
+class _Term(Ast):
     """A term in the KeyLang grammar"""
     
     def __str__(self) -> str:
         return f'{self.left} {self.data} {self.right}'
 
-class Factor(Ast):
+class _Factor(Ast):
     """A factor in the KeyLang grammar"""
     
     def __str__(self) -> str:
         return f'{self.left} {self.data} {self.right}'
 
-class Float(Ast):
+class _Float(Ast):
     """A float literal in the KeyLang grammar"""
     
     def __str__(self) -> str:
         return f'{self.data}'
 
-class Rar(Ast):
+class _Rar(Ast):
     """A rarity variable in the KeyLang grammar"""
     
     def __str__(self) -> str:
@@ -132,10 +132,10 @@ def _parse_expr(tokens: List[str]) -> Ast:
     match tokens[0]:
         case '+':
             tokens.pop(0)
-            return Expr(term, _parse_expr(tokens), '+')
+            return _Expr(term, _parse_expr(tokens), '+')
         case '-':
             tokens.pop(0)
-            return Expr(term, _parse_expr(tokens), '-')
+            return _Expr(term, _parse_expr(tokens), '-')
         case _:
             return term
 
@@ -157,10 +157,10 @@ def _parse_term(tokens: List[str]) -> Ast:
     match tokens[0]:
         case '*':
             tokens.pop(0)
-            return Term(factor, _parse_term(tokens), '*')
+            return _Term(factor, _parse_term(tokens), '*')
         case '/':
             tokens.pop(0)
-            return Term(factor, _parse_term(tokens), '/')
+            return _Term(factor, _parse_term(tokens), '/')
         case _:
             return factor
 
@@ -182,7 +182,7 @@ def _parse_factor(tokens: List[str]) -> Ast:
     match tokens[0]:
         case '^':
             tokens.pop(0)
-            return Factor(base, _parse_factor(tokens), '^')
+            return _Factor(base, _parse_factor(tokens), '^')
         case _:
             return base
 
@@ -224,11 +224,11 @@ def _parse_const(tokens: str) -> Ast:
         the abstract syntax tree representative of the constant"""
     match tokens[0]:
         case "R":
-            return Rar()
+            return _Rar()
         case _:
             try:
                 num = tokens.pop(0)
-                return Float(data=float(num))
+                return _Float(data=float(num))
             except:
                 raise SyntaxError(f'Float literal not found -> {" ".join(tokens)}')
 
@@ -247,19 +247,19 @@ def interpret(ast: Ast, rarity: float) -> float:
     float
         the result of the expression"""
     match ast:
-        case Expr():
+        case _Expr():
             if ast.data == "+":
                 return interpret(ast.left, rarity) + interpret(ast.right, rarity)
             else: 
                 return interpret(ast.left, rarity) - interpret(ast.right, rarity)
-        case Term():
+        case _Term():
             if ast.data == "*":
                 return interpret(ast.left, rarity) * interpret(ast.right, rarity)
             else: 
                 return interpret(ast.left, rarity) / interpret(ast.right, rarity)
-        case Factor():
+        case _Factor():
             return interpret(ast.left, rarity) ** interpret(ast.right, rarity)
-        case Float():
+        case _Float():
             return ast.data
-        case Rar():
+        case _Rar():
             return rarity
