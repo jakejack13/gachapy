@@ -16,7 +16,7 @@ import warnings
 
 
 DEFAULT_KEY = "1 / R"
-"""The default key function converting rarity to drop rate (1 / rarity"""
+"""The default key function converting rarity to drop rate (1 / rarity)"""
 
 
 def _sort_item_key(item: Item) -> float:
