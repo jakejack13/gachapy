@@ -72,6 +72,13 @@ class Controller:
         the list of players enrolled in the gacha
     """
 
+    items: Dict[str, Item]
+    """The list of items that are in the item pool for the gacha"""
+    banners: Dict[str, Banner]
+    """The list of banners that are available for the gacha"""
+    players: Dict[str, Player]
+    """The list of players enrolled in the gacha"""
+
     def __init__(
         self,
         items: Dict[str, Item] = {},

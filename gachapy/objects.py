@@ -10,7 +10,7 @@ Author: Jacob Kerr, 2021
 """
 from .keylang import *
 import random
-from typing import Callable, List
+from typing import List
 
 
 class Item:
@@ -21,14 +21,23 @@ class Item:
     Fields
     ------
     name : string
-        name of the item
+        the name of the item
     id : string
-        description of the item
+        the id of the item
         Invariant: must be unique
-    id : int
+    rarity : int
         rarity of the item where the higher the number, the higher the rarity
         Invariant: must be >= 1
     """
+
+    name: str
+    """The name of the item"""
+    id: str
+    """The id of the item
+        Invariant: must be unique"""
+    rarity: int
+    """Rarity of the item where the higher the number, the higher the rarity
+        Invariant: must be >= 1"""
 
     def __init__(self, name: str, id: str, rarity: float) -> None:
         """Creates an Item object
@@ -100,6 +109,22 @@ class Banner:
         list of drop weights for items
         Invariant: weights[i] corresponds to items[i]
     """
+
+    name: str
+    """Name of the banner"""
+    id: str
+    """The id of the banner
+        Invariant: must be unique"""
+    items: List[Item]
+    """The list of the items in the banner"""
+    price: float
+    """The price of pulling from the banner"""
+    key: str
+    """Function that takes in rarity and returns the drop rate of the item,
+        written in keylang"""
+    _weights: List[float]
+    """List of drop weights for items
+        Invariant: weights[i" corresponds to items[i]"""
 
     def __init__(
         self,
@@ -209,6 +234,16 @@ class Player:
     money : float
         the amount of money that the player owns
     """
+
+    name: str
+    """The name of the player"""
+    id: str
+    """The id of the player
+        Invariant: must be unique"""
+    items: List[Item]
+    """The list of iterms that the player owns"""
+    money: float
+    """The amount of money that the player owns"""
 
     def __init__(self, name: str, id: str, items: List[Item], money: float) -> None:
         """Creates a Player object
