@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.14-rc-slim
 COPY . .
 RUN python3 -m unittest 
 RUN python3 -m pip install --upgrade pip setuptools wheel build
